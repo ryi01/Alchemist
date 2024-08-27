@@ -34,9 +34,22 @@ public:
 	class APlayerController* player;
 	UPROPERTY(EditAnywhere)
 	bool bActive = false;
-	// 클릭되면 활성화될 함수
+	// 클릭되면 활성화될 함수 = 인라인 함수사용
 	UFUNCTION()
-	void ChangeMyCamera(bool OnClick);
+	void ChangeMyCamera(bool OnClick)
+	{
+		// 책상 클릭시 카메라 변경
+		if (OnClick)
+		{
+			// 데스크 카메라 활성화
+			player->SetViewTarget(DeskCameraComponent->GetOwner());
+		}
+		else
+		{
+			// 플레이어 카메라 활성화
+			player->SetViewTarget(PlayerCamera->GetOwner());
+		}
+	}
 	// 카메라 찾는 함수
 	void FindDeskCam();
 

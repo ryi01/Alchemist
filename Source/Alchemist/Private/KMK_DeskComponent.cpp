@@ -38,8 +38,8 @@ void UKMK_DeskComponent::BeginPlay()
 void UKMK_DeskComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+	// 변경된 카메라 활성 시키는 함수
 	ChangeMyCamera(bActive);
-	// 3. 오브젝트들 생성
 }
 
 void UKMK_DeskComponent::FindDeskCam()
@@ -65,7 +65,6 @@ void UKMK_DeskComponent::FindDeskCam()
 				{
 					DeskCameraComponent = CamComp;
 					// 비활성화
-					GEngine->AddOnScreenDebugMessage(1, 1, FColor::Emerald, FString::Printf(TEXT("%s"), *Actor->GetName()));
 					DeskCameraComponent->SetActive(false);
 				}
 			}
@@ -73,15 +72,7 @@ void UKMK_DeskComponent::FindDeskCam()
 	}
 }
 
-void UKMK_DeskComponent::ChangeMyCamera(bool OnClick)
-{
-	UE_LOG(LogTemp, Warning, TEXT(" 호출"));
-	if (OnClick)
-	{
-		player->SetViewTarget(DeskCameraComponent->GetOwner());
-	}
-	else
-	{
-		player->SetViewTarget(PlayerCamera->GetOwner());
-	}
-}
+//void UKMK_DeskComponent::ChangeMyCamera(bool OnClick)
+//{
+//
+//}
