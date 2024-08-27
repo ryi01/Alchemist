@@ -71,8 +71,3 @@ void UKMK_DeskComponent::FindDeskCam()
 		}
 	}
 }
-
-//void UKMK_DeskComponent::ChangeMyCamera(bool OnClick)
-//{
-//
-//}
