@@ -1,7 +1,7 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+ï»¿// Fill out your copyright notice in the Description page of Project Settings.
 
-#include "Blueprint/UserWidget.h"
 #include "KMK_SingleIntaraction.h"
+#include "Blueprint/UserWidget.h"
 
 
 
@@ -10,7 +10,7 @@ UKMK_SingleIntaraction::UKMK_SingleIntaraction()
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
-	PrimaryComponentTick.bCanEverTick = true;
+	PrimaryComponentTick.bCanEverTick = false;
 
 	// ...
 }
@@ -18,7 +18,7 @@ UKMK_SingleIntaraction::UKMK_SingleIntaraction()
 void UKMK_SingleIntaraction::BeginPlay()
 {
 	Super::BeginPlay();
-	// ¿À³ÊÀÇ widget µé°í¿À±â
+	// ì˜¤ë„ˆì˜ widget ë“¤ê³ ì˜¤ê¸°
 	auto* owner = GetOwner()->FindComponentByClass< UWidgetComponent>();
 	if (owner)
 	{
@@ -37,8 +37,6 @@ void UKMK_SingleIntaraction::BeginPlay()
 void UKMK_SingleIntaraction::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-	if(widgetFact != nullptr) OnCreateMyWidget(bClickActor, widgetFact);
-	if (textWidget != nullptr)OnCreateNameWidget(bMouseOnActor);
 }
 
 

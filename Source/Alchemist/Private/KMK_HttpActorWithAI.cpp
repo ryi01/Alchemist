@@ -1,10 +1,11 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+Ôªø// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "KMK_HttpActorWithAI.h"
 #include "HttpModule.h"
+#include "Json.h"
 #include "HttpFwd.h"
-
+#include "KMK_JsonParseLib.h"
 // Sets default values
 AKMK_HttpActorWithAI::AKMK_HttpActorWithAI()
 {
@@ -28,18 +29,20 @@ void AKMK_HttpActorWithAI::Tick(float DeltaTime)
 
 void AKMK_HttpActorWithAI::ReqPostAI(FString json)
 {
-	// HTTP ∏µ‚ ª˝º∫
+	// HTTP Î™®Îìà ÏÉùÏÑ±
 	FHttpModule& httpModule = FHttpModule::Get();
 	TSharedRef<IHttpRequest> req = httpModule.CreateRequest();
-	// ø‰√ª«“ ¡§∫∏∏¶ º≥¡§
-	req->SetURL(Aurl);
+	// ÏöîÏ≤≠Ìï† Ï†ïÎ≥¥Î•º ÏÑ§Ï†ï
+	TMap<FString, FString> data;
+	data.Add(TEXT("key"), json);
+	req->SetURL("https://cf78-222-103-183-137.ngrok-free.app/posttest");
 	req->SetVerb(TEXT("POST"));
 	req->SetHeader(TEXT("content-type"), TEXT("application/json"));
-	req->SetContentAsString(json);
+	req->SetContentAsString(UKMK_JsonParseLib::MakeJson(data));
 
-	// ¿¿¥‰πﬁ¿ª «‘ºˆ∏¶ ø¨∞·
+	// ÏùëÎãµÎ∞õÏùÑ Ìï®ÏàòÎ•º Ïó∞Í≤∞
 	req->OnProcessRequestComplete().BindUObject(this, &AKMK_HttpActorWithAI::OnResPostAi);
-	// º≠πˆø° ø‰√ª
+	// ÏÑúÎ≤ÑÏóê ÏöîÏ≤≠
 	req->ProcessRequest();
 	UE_LOG(LogTemp, Warning, TEXT("Conncting with AI"));
 }
@@ -48,13 +51,13 @@ void AKMK_HttpActorWithAI::OnResPostAi(FHttpRequestPtr Request, FHttpResponsePtr
 {
 	if (bConnectedSuccessfully)
 	{
-		// º∫∞¯
-		FString result = Response->GetContentAsString();
+		// ÏÑ±Í≥µ
+		// FString result = Response->GetContentAsString();
 		UE_LOG(LogTemp, Warning, TEXT("OnResNewBookInfo Succed"));
 	}
 	else 
 	{
-		// Ω«∆–
+		// Ïã§Ìå®
 		UE_LOG(LogTemp, Warning, TEXT("OnResNewBookInfo Failed..."));
 	}
 }

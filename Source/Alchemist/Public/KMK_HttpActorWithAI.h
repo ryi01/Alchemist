@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+ï»¿// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
@@ -25,12 +25,12 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	// aiÀÇ url ´ãÀ» º¯¼ö
+	// aiì˜ url ë‹´ì„ ë³€ìˆ˜
 	UPROPERTY(EditAnywhere, Category = "AI_URL")
 	FString Aurl;
 
-	// SendButtÀ» ´­·¶À» ¶§, ¿äÃ»ÇÒ ÇÔ¼ö
+	// SendButtì„ ëˆŒë €ì„ ë•Œ, ìš”ì²­í•  í•¨ìˆ˜
 	void ReqPostAI(FString json);
-	// ÀÀ´ä¹ŞÀ» ÇÔ¼ö
+	// ì‘ë‹µë°›ì„ í•¨ìˆ˜
 	void OnResPostAi(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully);
 };
