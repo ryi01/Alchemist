@@ -3,8 +3,18 @@
 
 #include "SYH/CameraWidget.h"
 
+#include "Blueprint/WidgetLayoutLibrary.h"
+#include "Components/Image.h"
 #include "Components/ProgressBar.h"
 #include "Components/Slider.h"
+#include "Components/TextBlock.h"
+#include "Kismet/GameplayStatics.h"
+
+void UCameraWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
+{
+	Super::NativeTick(MyGeometry, InDeltaTime);
+	UpdateTextVisibility();
+}
 
 void UCameraWidget::NativeConstruct()
 {
@@ -31,5 +41,54 @@ void UCameraWidget::OnSliderValueChanged(float value)
 		{
 			CameraManager->SetFOV(NewFOV);
 		}
+	}
+}
+
+bool UCameraWidget::IsTaggedActorInView()
+{
+	if(!CameraImage)
+	{
+		return false;
+	}
+	TArray<AActor*> TaggedActors;
+	UGameplayStatics::GetAllActorsWithTag(GetWorld(),"CameraObject",TaggedActors);
+
+	APlayerController* player =  GetWorld()->GetFirstPlayerController();
+	if(!player) return false;
+
+	for(AActor* actor : TaggedActors)
+	{
+		if(actor)
+		{
+			FVector2D ScreenPos;
+			FVector ActorPos = actor->GetActorLocation();
+			if(player->ProjectWorldLocationToScreen(ActorPos,ScreenPos))
+			{
+				FVector2D CameraPos = CameraImage->GetCachedGeometry().GetAbsolutePosition();
+				FVector2D CameraSize = CameraImage->GetCachedGeometry().GetLocalSize();
+
+				if(ScreenPos.X >= CameraPos.X && ScreenPos.X <= CameraPos.X + CameraSize.X &&
+					ScreenPos.Y >= CameraPos.Y && ScreenPos.Y <= CameraPos.Y + CameraSize.Y)
+				{
+					return true;
+				}
+			}
+		}
+	}
+
+	return false;
+}
+
+void UCameraWidget::UpdateTextVisibility()
+{
+	if(IsTaggedActorInView())
+	{
+		Yes->SetVisibility(ESlateVisibility::Visible);
+		No->SetVisibility(ESlateVisibility::Hidden);
+	}
+	else
+	{
+		Yes->SetVisibility(ESlateVisibility::Hidden);
+		No->SetVisibility(ESlateVisibility::Visible);
 	}
 }
