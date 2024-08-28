@@ -3,6 +3,7 @@
 
 #include "Alchemist/CHJ/Illustrated_Guide/Guide_Component/GuideComponent.h"
 
+
 // Sets default values for this component's properties
 UGuideComponent::UGuideComponent()
 {
@@ -10,16 +11,14 @@ UGuideComponent::UGuideComponent()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
 
-	// ...
+	
 }
-
-
 // Called when the game starts
 void UGuideComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// ...
+	
 	
 }
 
@@ -31,4 +30,5 @@ void UGuideComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 
 	// ...
 }
+
 

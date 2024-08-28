@@ -6,14 +6,24 @@
 #include "Components/ActorComponent.h"
 #include "GuideComponent.generated.h"
 
+UENUM(BlueprintType)
+enum class EElementTypes : uint8 // 원소 타입 Enum
+{
+	Aluminum,
+	Helium,
+	Gold,
+	Steel,
+	
+};
+
 USTRUCT(BlueprintType)
 struct FElementDatas : public FTableRowBase
 {
 	GENERATED_BODY()
 public:
-	//UPROPERTY(EditAnywhere)
-	//EItemType type;
-
+	UPROPERTY(EditAnywhere)
+	EElementTypes ElementTypes;
+	
 	UPROPERTY(EditAnywhere)
 	UTexture2D* Element_thumbnail;
 
@@ -39,6 +49,7 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 public:
-	//UPROPERTY(EditAnywhere)
-	//TArray<FItemDatas> myItems;
+	UPROPERTY(EditAnywhere)
+	TArray<FElementDatas> myItems;
+	
 };

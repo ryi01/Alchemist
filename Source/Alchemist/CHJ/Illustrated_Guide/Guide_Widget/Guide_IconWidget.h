@@ -9,7 +9,7 @@
 class UImage;
 class USizeBox;
 /**
- * 
+ * 아이콘 위젯은 아이템 위젯
  */
 UCLASS()
 class ALCHEMIST_API UGuide_IconWidget : public UUserWidget
@@ -18,15 +18,7 @@ class ALCHEMIST_API UGuide_IconWidget : public UUserWidget
 
 	virtual void NativeConstruct() override;
 
-	virtual void NativeOnMouseEnter(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;
-
-	virtual void NativeOnMouseLeave(const FPointerEvent& InMouseEvent) override;
-
-	virtual FReply NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;
-
-	virtual void NativeOnDragDetected(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent, UDragDropOperation*& OutOperation) override;
-
-	virtual void NativeOnDragCancelled(const FDragDropEvent& InDragDropEvent, UDragDropOperation* InOperation) override;
+	
 
 public:
 	UPROPERTY(meta = (BindWidget))
