@@ -17,6 +17,9 @@ class ALCHEMIST_API UKMK_ChatBotWidget : public UUserWidget
 public:
 	virtual void NativeConstruct() override;
 
+	UPROPERTY()
+	class AKMK_HttpActorWithAI* httpActor;
+
 	UPROPERTY(EditAnywhere, meta = (BindWidget))
 	class UButton* SendButt;
 	UPROPERTY(EditAnywhere, meta = (BindWidget))
@@ -28,5 +31,8 @@ public:
 
 	UFUNCTION()
 	void OnClickSendButt();
+
+	UFUNCTION(BlueprintCallable)
+	void SetHttpActor(AKMK_HttpActorWithAI* actor);
 
 };

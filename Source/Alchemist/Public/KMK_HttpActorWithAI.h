@@ -30,7 +30,7 @@ public:
 	FString Aurl;
 
 	// SendButt을 눌렀을 때, 요청할 함수
-	void ReqPostAI(FString url, FString json);
+	void ReqPostAI(FString json);
 	// 응답받을 함수
 	void OnResPostAi(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully);
 };

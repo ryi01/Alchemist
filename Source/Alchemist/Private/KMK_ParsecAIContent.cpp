@@ -42,14 +42,15 @@ TMap<FString, FString> UKMK_ParsecAIContent::ChatBotParsec(const FString& json, 
 
 	if (FJsonSerializer::Deserialize(reader, response))
 	{
-		FString menu = response->GetStringField(TEXT("food_name"));
-		FString recipe = response->GetStringField(TEXT("recipe"));
-
+		/*FString menu = response->GetStringField(TEXT("food_name"));
+		FString recipe = response->GetStringField(TEXT("recipe"));*/
+		GEngine->AddOnScreenDebugMessage(2, 5, FColor::Blue,FString::Printf(TEXT("AI Connect")));
 	}
 	return result;
 }
 
 TMap<FString, FString> UKMK_ParsecAIContent::ResultAlchemistParsec(const FString& json, FString ResultAlchemist)
 {
-
+	TMap<FString, FString> result;
+	return result;
 }

@@ -26,14 +26,13 @@ void AKMK_HttpActorWithAI::Tick(float DeltaTime)
 
 }
 
-void AKMK_HttpActorWithAI::ReqPostAI(FString url, FString json)
+void AKMK_HttpActorWithAI::ReqPostAI(FString json)
 {
 	// HTTP 모듈 생성
 	FHttpModule& httpModule = FHttpModule::Get();
 	TSharedRef<IHttpRequest> req = httpModule.CreateRequest();
-
 	// 요청할 정보를 설정
-	req->SetURL(url);
+	req->SetURL(Aurl);
 	req->SetVerb(TEXT("POST"));
 	req->SetHeader(TEXT("content-type"), TEXT("application/json"));
 	req->SetContentAsString(json);
@@ -41,8 +40,8 @@ void AKMK_HttpActorWithAI::ReqPostAI(FString url, FString json)
 	// 응답받을 함수를 연결
 	req->OnProcessRequestComplete().BindUObject(this, &AKMK_HttpActorWithAI::OnResPostAi);
 	// 서버에 요청
-
 	req->ProcessRequest();
+	UE_LOG(LogTemp, Warning, TEXT("Conncting with AI"));
 }
 
 void AKMK_HttpActorWithAI::OnResPostAi(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully)
@@ -51,6 +50,7 @@ void AKMK_HttpActorWithAI::OnResPostAi(FHttpRequestPtr Request, FHttpResponsePtr
 	{
 		// 성공
 		FString result = Response->GetContentAsString();
+		UE_LOG(LogTemp, Warning, TEXT("OnResNewBookInfo Succed"));
 	}
 	else 
 	{

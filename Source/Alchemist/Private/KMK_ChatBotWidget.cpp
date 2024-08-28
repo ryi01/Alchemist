@@ -6,6 +6,7 @@
 #include "Components/ScrollBox.h"
 #include "Components/EditableText.h"
 #include "KMK_TextWidget.h"
+#include "KMK_HttpActorWithAI.h"
 
 void UKMK_ChatBotWidget::NativeConstruct()
 {
@@ -23,6 +24,9 @@ void UKMK_ChatBotWidget::OnClickSendButt()
         auto* widget = Cast<UKMK_TextWidget>(CreateWidget(GetWorld(), ChatTextWidFact));
         if (widget)
         {
+            // AI에게 정보값 보내기
+            httpActor->ReqPostAI(*PlayerChat->GetText().ToString());
+            UE_LOG(LogTemp, Warning, TEXT("SendText"));
             // 위잿 텍스트 작성
             widget->SetChatText(PlayerChat->GetText());
             widget->AddToViewport();
@@ -31,4 +35,9 @@ void UKMK_ChatBotWidget::OnClickSendButt()
             PlayerChat->SetText(FText::GetEmpty());
         }
     }
+}
+
+void UKMK_ChatBotWidget::SetHttpActor(AKMK_HttpActorWithAI* actor)
+{
+    httpActor = actor;
 }
