@@ -48,6 +48,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* IA_Camera;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* IA_Mouse;
 public:
 	ASYH_Player();
 	
@@ -57,6 +60,13 @@ public:
 	class APlayerController* player;
 	UPROPERTY(BlueprintReadWrite, Category = "UI")
 	UUserWidget* CameraWidget;
+	UPROPERTY()
+	FHitResult HitResult;
+	UPROPERTY()
+	class UKMK_SingleIntaraction* interActor;
+	UPROPERTY()
+	FHitResult curHitRes;
+
 protected:
 
 	/** Called for movement input */
@@ -67,12 +77,18 @@ protected:
 			
 	void Camera(const FInputActionValue& Value);
 
+	void OnClickedLeft(const FInputActionValue& Value);
+	
+	int count = 0;
+
 protected:
 	// APawn interface
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	
 	// To add mapping context
 	virtual void BeginPlay();
+
+	virtual void Tick(float DeltaTime) override;
 
 public:
 	/** Returns CameraBoom subobject **/

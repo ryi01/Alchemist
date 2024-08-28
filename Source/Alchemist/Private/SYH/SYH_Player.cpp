@@ -13,6 +13,7 @@
 #include "Blueprint/UserWidget.h"
 #include "SYH/CameraWidget.h"
 #include "SYH/SYH_PlayerAnim.h"
+#include "KMK_SingleIntaraction.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -76,6 +77,40 @@ void ASYH_Player::BeginPlay()
 	}
 }
 
+
+void ASYH_Player::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	Cast<APlayerController>(Controller)->GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, false, HitResult);
+	if ( HitResult.bBlockingHit )
+	{
+		// Ŭ���� ������Ʈ�� ���� �޾ƿ���
+		AActor* HitActor = HitResult.GetActor();
+		if ( curHitRes.GetActor() != nullptr && HitActor != curHitRes.GetActor() )
+		{
+			UKMK_SingleIntaraction* preActor = curHitRes.GetActor()->GetComponentByClass<UKMK_SingleIntaraction>();
+			if ( preActor->bMouseOnActor )
+			{
+				preActor->OnCreateNameWidget(false);
+				preActor->bMouseOnActor = false;
+			}
+		}
+		if ( HitActor )
+		{
+			count = 0;
+			interActor = HitActor->GetComponentByClass<UKMK_SingleIntaraction>();
+			if ( interActor )
+			{
+				interActor->OnCreateNameWidget(true);
+				interActor->bMouseOnActor = true;
+				curHitRes = HitResult;
+			}
+
+		}
+	}
+}
+
 // Input
 
 void ASYH_Player::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -104,6 +139,9 @@ void ASYH_Player::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 
 		// Camera
 		EnhancedInputComponent->BindAction(IA_Camera, ETriggerEvent::Started, this, &ASYH_Player::Camera);
+
+		// 마우스 클릭
+		EnhancedInputComponent->BindAction(IA_Mouse, ETriggerEvent::Started, this, &ASYH_Player::OnClickedLeft);
 	}
 	else
 	{
@@ -170,5 +208,25 @@ void ASYH_Player::Camera(const FInputActionValue& Value)
 			}
 		}
 	}
+}
+
+void ASYH_Player::OnClickedLeft(const FInputActionValue& Value)
+{
+
+	if ( HitResult.bBlockingHit )
+	{
+		// Ŭ���� ������Ʈ�� ���� �޾ƿ���
+		AActor* HitActor = HitResult.GetActor();
+		if ( HitActor )
+		{
+			count = 0;
+			auto* actorClass = HitActor->GetComponentByClass<UKMK_SingleIntaraction>();
+			if ( actorClass )
+			{
+				actorClass->OnCreateMyWidget(true);
+			}
+		}
+	}
+
 }
 

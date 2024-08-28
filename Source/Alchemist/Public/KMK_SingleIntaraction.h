@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+ï»¿// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
@@ -27,10 +27,10 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 	
-	// ¿¢ÅÍ¿¡ ºÙ¾îÀÖ´Â Ä£±¸
-	// °¢°¢ widgetÀ» ¼³Á¤ÇØÁà¾ßÇÔ => ÇÃ·¹ÀÌ¾î Å¬¸¯¿¡ µû¶ó ´Ş¶óÁö±â ¶§¹®
+	// ì—‘í„°ì— ë¶™ì–´ìˆëŠ” ì¹œêµ¬
+	// ê°ê° widgetì„ ì„¤ì •í•´ì¤˜ì•¼í•¨ => í”Œë ˆì´ì–´ í´ë¦­ì— ë”°ë¼ ë‹¬ë¼ì§€ê¸° ë•Œë¬¸
 	UPROPERTY(EditAnywhere, Category = "WidgetBluePrint")
-	class UUserWidget* widgetFact;
+	TSubclassOf<class UUserWidget>widgetFact;
 	UPROPERTY(EditAnywhere, Category = "WidgetBluePrint")
 	class UKMK_TextWidget* textWidget;
 
@@ -41,17 +41,18 @@ public:
 	bool bMouseOnActor = false;
 
 	UFUNCTION()
-	void OnCreateMyWidget(bool bMake, UUserWidget* wid, int num = 0)
+	void OnCreateMyWidget(bool bMake, int num = 0)
 	{
-		// Ã¥»ó Å¬¸¯½Ã Ä«¸Ş¶ó º¯°æ
+		auto* wid = CreateWidget(GetWorld(), widgetFact);
+		// ì±…ìƒ í´ë¦­ì‹œ ì¹´ë©”ë¼ ë³€ê²½
 		if (bMake)
 		{
-			// µ¥½ºÅ© Ä«¸Ş¶ó È°¼ºÈ­
+			// ë°ìŠ¤í¬ ì¹´ë©”ë¼ í™œì„±í™”
 			wid->AddToViewport(num);
 		}
 		else
 		{
-			// ÇÃ·¹ÀÌ¾î Ä«¸Ş¶ó È°¼ºÈ­
+			// í”Œë ˆì´ì–´ ì¹´ë©”ë¼ í™œì„±í™”
 			wid->RemoveFromParent();
 		}
 	}
