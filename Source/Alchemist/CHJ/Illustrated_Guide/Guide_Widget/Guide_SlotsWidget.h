@@ -46,4 +46,9 @@ private:
 	
 	const int X_COUNT = 4;
 	const int Y_COUNT = 2;
+
+public:
+	void CreateEmptySlots();
+
+	void CreateEntrySlot(int32 X, int32 Y);
 };
