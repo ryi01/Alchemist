@@ -18,7 +18,7 @@ public:
 	virtual void NativeConstruct() override;
 	UPROPERTY(EditAnywhere, meta = (BindWidget))
 	class UTextBlock* PopUpText;
-	UPROPERTY(EditAnywhere, meta = (BindWidget))
+	UPROPERTY(EditAnywhere, meta = (BindWidget),BlueprintReadWrite)
 	class UButton* YesButt;
 	UPROPERTY(EditAnywhere, meta = (BindWidget))
 	class UButton* NoButt;
