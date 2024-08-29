@@ -81,10 +81,17 @@ void ASYH_Player::BeginPlay()
 	{
 		anim = Cast<USYH_PlayerAnim>(animinstance);
 	}
-	player = Cast<APlayerController>(Controller);
-	if ( player )
+	if (IsLocallyControlled())
 	{
-		player->SetShowMouseCursor(true);
+		player = Cast<APlayerController>(Controller);
+		if(player)
+		{
+			player->SetShowMouseCursor(true);
+			if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(player->GetLocalPlayer()))
+			{
+				Subsystem->AddMappingContext(IMC_Player, 0);
+			}
+		}
 	}
 	// 클라이언트 위젯
 	if(!HasAuthority())
@@ -97,31 +104,25 @@ void ASYH_Player::BeginPlay()
 void ASYH_Player::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	if(UGameplayStatics::GetCurrentLevelName(GetWorld())!="Room")
+	if(IsLocallyControlled())
 	{
-		return;
-	}
-	player->GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, false, HitResult);
-
-    if ( HitResult.GetActor() != nullptr && HitResult.bBlockingHit )
-    {
-		OnMyCheckActor();
-    }
+		if(UGameplayStatics::GetCurrentLevelName(GetWorld())!="Room")
+		{
+			return;
+		}
+		player->GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, false, HitResult);
 	
+		if (HitResult.GetActor() != nullptr && HitResult.bBlockingHit)
+		{
+			OnMyCheckActor();
+		}
+	}
 }
 
 // Input
 
 void ASYH_Player::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
-	// Add Input Mapping Context
-	if (APlayerController* PlayerController = Cast<APlayerController>(GetController()))
-	{
-		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
-		{
-			Subsystem->AddMappingContext(IMC_Player, 0);
-		}
-	}
 	
 	// Set up action bindings
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent)) {
@@ -218,9 +219,9 @@ void ASYH_Player::OnClickedLeft(const FInputActionValue& Value)
 		{
 			count = 0;
 			auto* actorClass = HitActor->GetComponentByClass<UKMK_SingleIntaraction>();
-			if ( actorClass )
+			if ( actorClass && bCreateWidget )
 			{
-				// actorClass->CreatePlayerWidget(true);
+				actorClass->CreatePlayerWidget(true,0);
 				player->SetPause(true);
 				
 			}
@@ -253,6 +254,6 @@ void ASYH_Player::OnMyCheckActor()
 void ASYH_Player::CreatePopUpWidget()
 {
 	if(!IsLocallyControlled()) return;
-	
+	bCreateWidget = true;
 }
 

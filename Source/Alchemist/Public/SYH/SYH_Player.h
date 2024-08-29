@@ -82,6 +82,7 @@ protected:
 	void CreatePopUpWidget();
 	
 	int count = 0;
+	bool bCreateWidget = false;
 
 protected:
 	// APawn interface
