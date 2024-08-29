@@ -1,22 +1,22 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+ï»¿// Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "KMK_PopUpWidget.h"
+#include "KMK/KMK_PopUpWidget.h"
 #include "Components/Button.h"
 #include "Components/TextBlock.h"
 
 void UKMK_PopUpWidget::NativeConstruct()
 {
     Super::NativeConstruct();
-    // ¹öÆ° ¹ÙÀÎµù
+    // ë²„íŠ¼ ë°”ì¸ë”©
     if (YesButt)
     {
-        // ¹öÆ° ¹ÙÀÎµù
+        // ë²„íŠ¼ ë°”ì¸ë”©
         YesButt->OnClicked.AddDynamic(this, &UKMK_PopUpWidget::OnClickedYesButt);
     }
     if (NoButt)
     {
-        // ¹öÆ° ¹ÙÀÎµù
+        // ë²„íŠ¼ ë°”ì¸ë”©
         NoButt->OnClicked.AddDynamic(this, &UKMK_PopUpWidget::OnClickedNobutt);
     }
 }

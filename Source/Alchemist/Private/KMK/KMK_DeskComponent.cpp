@@ -1,7 +1,7 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+ï»¿// Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "KMK_DeskComponent.h"
+#include "KMK/KMK_DeskComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Camera/CameraActor.h"
 #include "Camera/CameraComponent.h"
@@ -20,7 +20,7 @@ UKMK_DeskComponent::UKMK_DeskComponent()
 void UKMK_DeskComponent::BeginPlay()
 {
 	Super::BeginPlay();	
-	// Ã¥»óÀ» ºñÃß´Â Ä«¸Ş¶ó¸¦ Ã£°í ºñÈ°¼ºÈ­ ½ÃÅ°´Â ÇÔ¼ö
+	// ì±…ìƒì„ ë¹„ì¶”ëŠ” ì¹´ë©”ë¼ë¥¼ ì°¾ê³  ë¹„í™œì„±í™” ì‹œí‚¤ëŠ” í•¨ìˆ˜
 	FindDeskCam();
 	player = GetWorld()->GetFirstPlayerController();
 	if (player)
@@ -38,33 +38,33 @@ void UKMK_DeskComponent::BeginPlay()
 void UKMK_DeskComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-	// º¯°æµÈ Ä«¸Ş¶ó È°¼º ½ÃÅ°´Â ÇÔ¼ö
+	// ë³€ê²½ëœ ì¹´ë©”ë¼ í™œì„± ì‹œí‚¤ëŠ” í•¨ìˆ˜
 	ChangeMyCamera(bActive);
 }
 
 void UKMK_DeskComponent::FindDeskCam()
 {
-	// Ä«¸Ş¶ó actorµéÀ» ´ãÀ» º¯¼ö
+	// ì¹´ë©”ë¼ actorë“¤ì„ ë‹´ì„ ë³€ìˆ˜
 	TArray<AActor*> FoundActors;
-	// ·¹º§¿¡¼­ Ä«¸Ş¶ó¸¦ °¡Áø ¿¢ÅÍ¸¦ ¸ğµÎ Ã£±â
+	// ë ˆë²¨ì—ì„œ ì¹´ë©”ë¼ë¥¼ ê°€ì§„ ì—‘í„°ë¥¼ ëª¨ë‘ ì°¾ê¸°
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ACameraActor::StaticClass(), FoundActors);
-	// Å½»ö
+	// íƒìƒ‰
 	for (AActor* Actor : FoundActors)
 	{
-		// Ä«¸Ş¶ó ¿¢ÅÍ°¡ ÀÖ´Â °æ¿ì ACameraActor·Î º¯È¯
+		// ì¹´ë©”ë¼ ì—‘í„°ê°€ ìˆëŠ” ê²½ìš° ACameraActorë¡œ ë³€í™˜
 		auto* CameraActor = Cast<ACameraActor>(Actor);
-		// UCameraComponent »Ì¾Æ³»±â
+		// UCameraComponent ë½‘ì•„ë‚´ê¸°
 		auto* CamComp = CameraActor->GetComponentByClass<UCameraComponent>();
-		// µ¥½ºÅ©¶ó¸é
+		// ë°ìŠ¤í¬ë¼ë©´
 		if(CamComp)
 		{
 			if (Actor->ActorHasTag(TEXT("Desk")))
 			{
-				// DeskCameraComponent¿¡ º¯¼ö°ªÀ» ³Ö¾îÁÖ°í
+				// DeskCameraComponentì— ë³€ìˆ˜ê°’ì„ ë„£ì–´ì£¼ê³ 
 				if (!DeskCameraComponent)
 				{
 					DeskCameraComponent = CamComp;
-					// ºñÈ°¼ºÈ­
+					// ë¹„í™œì„±í™”
 					DeskCameraComponent->SetActive(false);
 				}
 			}

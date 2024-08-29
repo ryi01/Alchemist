@@ -1,10 +1,10 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "KMK_HttpActorWithAI.h"
+#include "KMK/KMK_HttpActorWithAI.h"
 #include "HttpModule.h"
-#include "KMK_JsonParseLib.h"
-#include "KMK_ChatBotWidget.h"
+#include "KMK/KMK_JsonParseLib.h"
+#include "KMK/KMK_ChatBotWidget.h"
 // Sets default values
 AKMK_HttpActorWithAI::AKMK_HttpActorWithAI()
 {
@@ -32,7 +32,7 @@ void AKMK_HttpActorWithAI::Tick(float DeltaTime)
 
 }
 
-void AKMK_HttpActorWithAI::ReqPostAI(FString json)
+void AKMK_HttpActorWithAI::ReqChatBot(FString json)
 {
 	// HTTP 모듈 생성
 	FHttpModule& httpModule = FHttpModule::Get();
@@ -46,20 +46,52 @@ void AKMK_HttpActorWithAI::ReqPostAI(FString json)
 	req->SetHeader(TEXT("content-type"), TEXT("application/json"));
 	req->SetContentAsString(UKMK_JsonParseLib::MakeJson(data));
 	// 응답받을 함수를 연결
-	req->OnProcessRequestComplete().BindUObject(this, &AKMK_HttpActorWithAI::OnResPostTest);
+	req->OnProcessRequestComplete().BindUObject(this, &AKMK_HttpActorWithAI::OnResChatBot);
 	// 서버에 요청
 
 	req->ProcessRequest();
 }
 
 
-void AKMK_HttpActorWithAI::OnResPostTest(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully)
+void AKMK_HttpActorWithAI::OnResChatBot(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully)
 {
 	if ( bConnectedSuccessfully )
 	{
 		UE_LOG(LogTemp, Warning, TEXT("OnResPostTest a..."));
 		// 성공
 		FString result = Response->GetContentAsString();
+		UE_LOG(LogTemp, Warning, TEXT("%s"), *result);
+	}
+	else {
+		// 실패
+		UE_LOG(LogTemp, Warning, TEXT("OnResPostTest Failed..."));
+	}
+}
+
+void AKMK_HttpActorWithAI::ReqElement(TMap<FString, FString> data)
+{
+	// HTTP 모듈 생성
+	FHttpModule& httpModule = FHttpModule::Get();
+	TSharedRef<IHttpRequest> req = httpModule.CreateRequest();
+
+	req->SetURL("https://absolute-logically-hagfish.ngrok-free.app/posttest");
+	req->SetVerb(TEXT("POST"));
+	req->SetHeader(TEXT("content-type"), TEXT("application/json"));
+	req->SetContentAsString(UKMK_JsonParseLib::MakeJson(data));
+	// 응답받을 함수를 연결
+	req->OnProcessRequestComplete().BindUObject(this, &AKMK_HttpActorWithAI::OnResChatBot);
+	// 서버에 요청
+
+	req->ProcessRequest();
+}
+
+void AKMK_HttpActorWithAI::OnResElement(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully)
+{
+	if ( bConnectedSuccessfully )
+	{
+		// 성공
+		FString result = Response->GetContentAsString();
+		UE_LOG(LogTemp, Warning, TEXT("%s"), *result);
 
 	}
 	else {

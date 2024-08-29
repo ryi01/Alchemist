@@ -30,14 +30,15 @@ public:
 	FString Aurl;
 
 	// SendButt을 눌렀을 때, 요청할 함수
-	void ReqPostAI(FString json);
+	void ReqChatBot(FString json);
 	// 응답받을 함수
-	void OnResPostTest(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully);
+	void OnResChatBot(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully);
 
+	// SendButt을 눌렀을 때, 요청할 함수
+	void ReqElement(TMap<FString, FString> data);
+	// 응답받을 함수
+	void OnResElement(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully);
 
-
-	FString URL = "https://apis.data.go.kr/4050000/libnewbk/getLibnewbk";
-	FString Key = "1B4jOfk0801JYukDA2FApT%2Bs0VOwrTVSE5qPJFlZ1mgXYs1UhkQ53Zj23EbsaJAITIcsaLGVB2gDGEMSk6IaDA%3D%3D";
 	UPROPERTY()
 	class UKMK_ChatBotWidget* HttpUI;
 	// 인터페이스를 위한 UI

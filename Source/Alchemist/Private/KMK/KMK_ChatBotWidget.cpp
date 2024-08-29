@@ -1,12 +1,12 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "KMK_ChatBotWidget.h"
+#include "KMK/KMK_ChatBotWidget.h"
 #include "Components/Button.h"
 #include "Components/ScrollBox.h"
 #include "Components/EditableText.h"
-#include "KMK_TextWidget.h"
-#include "KMK_HttpActorWithAI.h"
+#include "KMK/KMK_TextWidget.h"
+#include "KMK/KMK_HttpActorWithAI.h"
 
 void UKMK_ChatBotWidget::NativeConstruct()
 {
@@ -18,7 +18,7 @@ void UKMK_ChatBotWidget::NativeConstruct()
 void UKMK_ChatBotWidget::OnClickSendButt()
 {
     // AI에게 정보값 보내기
-    httpActor->ReqPostAI(*PlayerChat->GetText().ToString());
+    httpActor->ReqChatBot(*PlayerChat->GetText().ToString());
     // 텍스트가 비어있지 않은 경우
     if (!PlayerChat->GetText().IsEmpty())
     {

@@ -13,7 +13,7 @@
 #include "Blueprint/UserWidget.h"
 #include "SYH/CameraWidget.h"
 #include "SYH/SYH_PlayerAnim.h"
-#include "KMK_SingleIntaraction.h"
+#include "KMK/KMK_SingleIntaraction.h"
 #include "Kismet/GameplayStatics.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
