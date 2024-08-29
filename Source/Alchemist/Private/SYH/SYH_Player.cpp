@@ -211,10 +211,8 @@ void ASYH_Player::Camera(const FInputActionValue& Value)
 
 void ASYH_Player::OnClickedLeft(const FInputActionValue& Value)
 {
-
 	if ( HitResult.bBlockingHit )
 	{
-		// Ŭ���� ������Ʈ�� ���� �޾ƿ���
 		AActor* HitActor = HitResult.GetActor();
 		if ( HitActor )
 		{
@@ -222,7 +220,7 @@ void ASYH_Player::OnClickedLeft(const FInputActionValue& Value)
 			auto* actorClass = HitActor->GetComponentByClass<UKMK_SingleIntaraction>();
 			if ( actorClass )
 			{
-				actorClass->OnCreateMyWidget(true);
+				// actorClass->CreatePlayerWidget(true);
 				player->SetPause(true);
 				
 			}

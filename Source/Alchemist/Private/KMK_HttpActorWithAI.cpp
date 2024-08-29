@@ -35,7 +35,7 @@ void AKMK_HttpActorWithAI::ReqPostAI(FString json)
 	// 요청할 정보를 설정
 	TMap<FString, FString> data;
 	data.Add(TEXT("key"), json);
-	req->SetURL("https://cf78-222-103-183-137.ngrok-free.app/posttest");
+	req->SetURL(Aurl);
 	req->SetVerb(TEXT("POST"));
 	req->SetHeader(TEXT("content-type"), TEXT("application/json"));
 	req->SetContentAsString(UKMK_JsonParseLib::MakeJson(data));
