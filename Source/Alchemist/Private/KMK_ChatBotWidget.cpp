@@ -17,6 +17,8 @@ void UKMK_ChatBotWidget::NativeConstruct()
 
 void UKMK_ChatBotWidget::OnClickSendButt()
 {
+    // AI에게 정보값 보내기
+    httpActor->ReqPostAI(*PlayerChat->GetText().ToString());
     // 텍스트가 비어있지 않은 경우
     if (!PlayerChat->GetText().IsEmpty())
     {
@@ -24,8 +26,7 @@ void UKMK_ChatBotWidget::OnClickSendButt()
         auto* widget = Cast<UKMK_TextWidget>(CreateWidget(GetWorld(), ChatTextWidFact));
         if (widget)
         {
-            // AI에게 정보값 보내기
-            httpActor->ReqPostAI(*PlayerChat->GetText().ToString());
+            
 
             // 위잿 텍스트 작성
             widget->SetChatText(PlayerChat->GetText());

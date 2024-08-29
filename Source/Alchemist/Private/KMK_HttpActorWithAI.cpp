@@ -3,9 +3,8 @@
 
 #include "KMK_HttpActorWithAI.h"
 #include "HttpModule.h"
-#include "Json.h"
-#include "HttpFwd.h"
 #include "KMK_JsonParseLib.h"
+#include "KMK_ChatBotWidget.h"
 // Sets default values
 AKMK_HttpActorWithAI::AKMK_HttpActorWithAI()
 {
@@ -17,7 +16,13 @@ AKMK_HttpActorWithAI::AKMK_HttpActorWithAI()
 void AKMK_HttpActorWithAI::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	//// UI를 생성해서 기억하고싶다.
+	//HttpUI = Cast<UKMK_ChatBotWidget>(CreateWidget(GetWorld(), HttpUIFactory));
+	//if ( HttpUI )
+	//{
+	//	HttpUI->AddToViewport();
+	//	HttpUI->SetHttpActor(this);
+	//}
 }
 
 // Called every frame
@@ -35,30 +40,31 @@ void AKMK_HttpActorWithAI::ReqPostAI(FString json)
 	// 요청할 정보를 설정
 	TMap<FString, FString> data;
 	data.Add(TEXT("key"), json);
-	req->SetURL(Aurl);
+
+	req->SetURL("https://absolute-logically-hagfish.ngrok-free.app/posttest");
 	req->SetVerb(TEXT("POST"));
 	req->SetHeader(TEXT("content-type"), TEXT("application/json"));
 	req->SetContentAsString(UKMK_JsonParseLib::MakeJson(data));
-
 	// 응답받을 함수를 연결
-	req->OnProcessRequestComplete().BindUObject(this, &AKMK_HttpActorWithAI::OnResPostAi);
+	req->OnProcessRequestComplete().BindUObject(this, &AKMK_HttpActorWithAI::OnResPostTest);
 	// 서버에 요청
+
 	req->ProcessRequest();
-	UE_LOG(LogTemp, Warning, TEXT("Conncting with AI"));
 }
 
-void AKMK_HttpActorWithAI::OnResPostAi(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully)
+
+void AKMK_HttpActorWithAI::OnResPostTest(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully)
 {
-	if (bConnectedSuccessfully)
+	if ( bConnectedSuccessfully )
 	{
+		UE_LOG(LogTemp, Warning, TEXT("OnResPostTest a..."));
 		// 성공
-		// FString result = Response->GetContentAsString();
-		UE_LOG(LogTemp, Warning, TEXT("OnResNewBookInfo Succed"));
+		FString result = Response->GetContentAsString();
+
 	}
-	else 
-	{
+	else {
 		// 실패
-		UE_LOG(LogTemp, Warning, TEXT("OnResNewBookInfo Failed..."));
+		UE_LOG(LogTemp, Warning, TEXT("OnResPostTest Failed..."));
 	}
 }
 
