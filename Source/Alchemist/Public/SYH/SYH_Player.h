@@ -64,8 +64,6 @@ public:
 	FHitResult HitResult;
 	UPROPERTY()
 	class UKMK_SingleIntaraction* interActor;
-	UPROPERTY()
-	FHitResult curHitRes;
 
 protected:
 
@@ -78,6 +76,8 @@ protected:
 	void Camera(const FInputActionValue& Value);
 
 	void OnClickedLeft(const FInputActionValue& Value);
+
+	void OnMyCheckActor();
 	
 	int count = 0;
 

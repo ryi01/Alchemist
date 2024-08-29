@@ -86,34 +86,12 @@ void ASYH_Player::Tick(float DeltaTime)
 	{
 		return;
 	}
-		Cast<APlayerController>(Controller)->GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, false, HitResult);
+	player->GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, false, HitResult);
 
-		if ( HitResult.GetActor() != nullptr&& HitResult.bBlockingHit )
-		{
-
-			AActor* HitActor = HitResult.GetActor();
-			if ( curHitRes.GetActor() != nullptr && HitActor != curHitRes.GetActor() )
-			{
-				UKMK_SingleIntaraction* preActor = curHitRes.GetActor()->GetComponentByClass<UKMK_SingleIntaraction>();
-				if ( preActor->bMouseOnActor )
-				{
-					preActor->OnCreateNameWidget(false);
-					preActor->bMouseOnActor = false;
-				}
-			}
-			if ( HitActor )
-			{
-				count = 0;
-				interActor = HitActor->GetComponentByClass<UKMK_SingleIntaraction>();
-				if ( interActor )
-				{
-					interActor->OnCreateNameWidget(true);
-					interActor->bMouseOnActor = true;
-					curHitRes = HitResult;
-				}
-
-			}
-		}
+    if ( HitResult.GetActor() != nullptr && HitResult.bBlockingHit )
+    {
+		OnMyCheckActor();
+    }
 	
 }
 
@@ -230,9 +208,32 @@ void ASYH_Player::OnClickedLeft(const FInputActionValue& Value)
 			if ( actorClass )
 			{
 				actorClass->OnCreateMyWidget(true);
+				player->SetPause(true);
+				
 			}
 		}
 	}
 
+}
+
+void ASYH_Player::OnMyCheckActor()
+{
+	AActor* HitActor = HitResult.GetActor();
+	if ( interActor != nullptr && HitActor != interActor->GetOwner() )
+	{
+		if ( interActor->bMouseOnActor )
+		{
+			interActor->OnCreateNameWidget(false);
+		}
+	}
+	if ( HitActor )
+	{
+		interActor = HitActor->GetComponentByClass<UKMK_SingleIntaraction>();
+		if ( interActor )
+		{
+			interActor->OnCreateNameWidget(true);
+		}
+
+	}
 }
 
