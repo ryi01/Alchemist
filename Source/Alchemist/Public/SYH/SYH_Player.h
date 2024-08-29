@@ -20,10 +20,10 @@ class ASYH_Player : public ACharacter
 {
 	GENERATED_BODY()
 
+public:
 	/** Camera boom positioning the camera behind the character */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	USpringArmComponent* SpringArmComp;
-public:
 	/** Follow camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
 	UCameraComponent* CameraCompThird;
@@ -53,7 +53,7 @@ public:
 	UInputAction* IA_Mouse;
 public:
 	ASYH_Player();
-	
+	virtual void PossessedBy(AController* NewController) override;
 	UPROPERTY()
 	class USYH_PlayerAnim* anim;
 	UPROPERTY()
@@ -78,8 +78,11 @@ protected:
 	void OnClickedLeft(const FInputActionValue& Value);
 
 	void OnMyCheckActor();
+
+	void CreatePopUpWidget();
 	
 	int count = 0;
+	bool bCreateWidget = false;
 
 protected:
 	// APawn interface

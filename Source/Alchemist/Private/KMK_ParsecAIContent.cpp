@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+ï»¿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "KMK_ParsecAIContent.h"
@@ -32,25 +32,4 @@ void UKMK_ParsecAIContent::TickComponent(float DeltaTime, ELevelTick TickType, F
 	// ...
 }
 
-// Ãªº¿ÀÇ °ª ÆÄ¼½
-TMap<FString, FString> UKMK_ParsecAIContent::ChatBotParsec(const FString& json, FString ingredient)
-{
-	TSharedRef<TJsonReader<TCHAR>> reader = TJsonReaderFactory<TCHAR>::Create(json);
-	TSharedPtr<FJsonObject> response = MakeShareable(new FJsonObject());
 
-	TMap<FString, FString> result;
-
-	if (FJsonSerializer::Deserialize(reader, response))
-	{
-		/*FString menu = response->GetStringField(TEXT("food_name"));
-		FString recipe = response->GetStringField(TEXT("recipe"));*/
-		GEngine->AddOnScreenDebugMessage(2, 5, FColor::Blue,FString::Printf(TEXT("AI Connect")));
-	}
-	return result;
-}
-
-TMap<FString, FString> UKMK_ParsecAIContent::ResultAlchemistParsec(const FString& json, FString ResultAlchemist)
-{
-	TMap<FString, FString> result;
-	return result;
-}

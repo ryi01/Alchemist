@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+ï»¿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "KMK_ChatBotWidget.h"
@@ -11,26 +11,26 @@
 void UKMK_ChatBotWidget::NativeConstruct()
 {
     Super::NativeConstruct();
-    // ¹öÆ° ¹ÙÀÎµù
+    // ë²„íŠ¼ ë°”ì¸ë”©
     SendButt->OnClicked.AddDynamic(this, &UKMK_ChatBotWidget::OnClickSendButt);
 }
 
 void UKMK_ChatBotWidget::OnClickSendButt()
 {
-    // ÅØ½ºÆ®°¡ ºñ¾îÀÖÁö ¾ÊÀº °æ¿ì
+    // í…ìŠ¤íŠ¸ê°€ ë¹„ì–´ìˆì§€ ì•Šì€ ê²½ìš°
     if (!PlayerChat->GetText().IsEmpty())
     {
-        // ÅØ½ºÆ® À§Àí »ı¼º
+        // í…ìŠ¤íŠ¸ ìœ„ì¿ ìƒì„±
         auto* widget = Cast<UKMK_TextWidget>(CreateWidget(GetWorld(), ChatTextWidFact));
         if (widget)
         {
-            // AI¿¡°Ô Á¤º¸°ª º¸³»±â
+            // AIì—ê²Œ ì •ë³´ê°’ ë³´ë‚´ê¸°
             httpActor->ReqPostAI(*PlayerChat->GetText().ToString());
-            UE_LOG(LogTemp, Warning, TEXT("SendText"));
-            // À§Àí ÅØ½ºÆ® ÀÛ¼º
+
+            // ìœ„ì¿ í…ìŠ¤íŠ¸ ì‘ì„±
             widget->SetChatText(PlayerChat->GetText());
             widget->AddToViewport();
-            // ½ºÅ©·Ñ ¹Ø¿¡ »ı¼ºµÇ°Ô ¸¸µé±â
+            // ìŠ¤í¬ë¡¤ ë°‘ì— ìƒì„±ë˜ê²Œ ë§Œë“¤ê¸°
             ChatLog->AddChild(widget);
             PlayerChat->SetText(FText::GetEmpty());
         }

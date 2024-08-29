@@ -39,24 +39,9 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	bool bMouseOnActor = false;
-
+		
 	UFUNCTION()
-	void OnCreateMyWidget(bool bMake, int num = 0)
-	{
-		auto* wid = CreateWidget(GetWorld(), widgetFact);
-		// 책상 클릭시 카메라 변경
-		if (bMake)
-		{
-			// 데스크 카메라 활성화
-			wid->AddToViewport(num);
-		}
-		else
-		{
-			// 플레이어 카메라 활성화
-			wid->RemoveFromParent();
-		}
-	}
-	
+	void CreatePlayerWidget(bool bMake, int num);
 	
 	UFUNCTION()
 	void OnCreateNameWidget(bool bActive)

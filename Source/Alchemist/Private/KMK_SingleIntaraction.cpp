@@ -39,4 +39,19 @@ void UKMK_SingleIntaraction::TickComponent(float DeltaTime, ELevelTick TickType,
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 }
 
+void UKMK_SingleIntaraction::CreatePlayerWidget(bool bMake, int num = 0)
+{
+	auto* wid = CreateWidget(GetWorld(), widgetFact);
+	// 책상 클릭시 카메라 변경
+	if ( bMake )
+	{
+		// 데스크 카메라 활성화
+		wid->AddToViewport(num);
+	}
+	else
+	{
+		// 플레이어 카메라 활성화
+		wid->RemoveFromParent();
+	}
+}
 
