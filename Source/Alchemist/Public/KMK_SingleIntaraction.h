@@ -61,6 +61,7 @@ public:
 	UFUNCTION()
 	void OnCreateNameWidget(bool bActive)
 	{
+		bMouseOnActor = bActive;
 		if (bActive)
 		textWidget->SetChatText(FText::FromString(*GetOwner()->GetActorLabel()));
 		else textWidget->SetChatText(FText::GetEmpty());
