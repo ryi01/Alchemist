@@ -62,6 +62,16 @@ ASYH_Player::ASYH_Player()
 
 }
 
+void ASYH_Player::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+	// 서버 위젯
+	if(HasAuthority())
+	{
+		CreatePopUpWidget();
+	}
+}
+
 void ASYH_Player::BeginPlay()
 {
 	Super::BeginPlay();
@@ -75,6 +85,11 @@ void ASYH_Player::BeginPlay()
 	if ( player )
 	{
 		player->SetShowMouseCursor(true);
+	}
+	// 클라이언트 위젯
+	if(!HasAuthority())
+	{
+		CreatePopUpWidget();
 	}
 }
 
@@ -235,5 +250,11 @@ void ASYH_Player::OnMyCheckActor()
 		}
 
 	}
+}
+
+void ASYH_Player::CreatePopUpWidget()
+{
+	if(!IsLocallyControlled()) return;
+	
 }
 
