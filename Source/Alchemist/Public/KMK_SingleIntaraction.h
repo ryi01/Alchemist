@@ -41,7 +41,7 @@ public:
 	bool bMouseOnActor = false;
 		
 	UFUNCTION()
-	void CreatePlayerWidget(bool bMake, int num = 0);
+	void CreatePlayerWidget(bool bMake, int num);
 	
 	UFUNCTION()
 	void OnCreateNameWidget(bool bActive)
