@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Alchemist/CHJ/Illustrated_Guide/Guide_Component/GuideComponent.h"
 #include "Blueprint/UserWidget.h"
 #include "Guide_EntryWidget.generated.h"
 
@@ -29,8 +30,7 @@ protected:
 	virtual void NativeOnMouseEnter(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;
 	virtual void NativeOnMouseLeave(const FPointerEvent& InMouseEvent) override;
 	virtual FReply NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;
-	virtual void NativeOnDragDetected(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent, UDragDropOperation*& OutOperation) override;
-	virtual void NativeOnDragCancelled(const FDragDropEvent& InDragDropEvent, UDragDropOperation* InOperation) override;
+	
 	
 private: // inpoint -> 인트 두개를 묶어 사용
 	FIntPoint CachedFromSlotPos = FIntPoint::ZeroValue;
@@ -54,4 +54,10 @@ protected:
 
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UImage> Image_Hover;
+	
+public:
+	UPROPERTY(EditAnywhere)
+	TArray<FElementDatas> MyElementDatas;
+
+	void SetElementData(FElementDatas& Data);
 };

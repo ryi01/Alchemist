@@ -51,5 +51,6 @@ public:
 public:
 	UPROPERTY(EditAnywhere)
 	TArray<FElementDatas> myItems;
+
 	
 };

@@ -14,6 +14,7 @@
 #include "SYH/CameraWidget.h"
 #include "SYH/SYH_PlayerAnim.h"
 #include "KMK_SingleIntaraction.h"
+#include "Alchemist/CHJ/Illustrated_Guide/Guide_Widget/Guide_MainWidget.h"
 #include "Kismet/GameplayStatics.h"
 
 DEFINE_LOG_CATEGORY(LogTemplate);
@@ -69,6 +70,8 @@ void ASYH_Player::PossessedBy(AController* NewController)
 	if(HasAuthority())
 	{
 		CreatePopUpWidget();
+		if (!IsLocallyControlled() || GuideWidget != nullptr) return;
+		GuideWidget = Cast<UGuide_MainWidget>(CreateWidget(GetWorld(), GuideWidgetClass));
 	}
 }
 
@@ -97,6 +100,9 @@ void ASYH_Player::BeginPlay()
 	if(!HasAuthority())
 	{
 		CreatePopUpWidget();
+		if (!IsLocallyControlled() || GuideWidget != nullptr) return;
+		GuideWidget = Cast<UGuide_MainWidget>(CreateWidget(GetWorld(), GuideWidgetClass));
+
 	}
 }
 
@@ -121,6 +127,20 @@ void ASYH_Player::Tick(float DeltaTime)
 
 // Input
 
+void ASYH_Player::OnOffGuide(const FInputActionValue& Value)
+{
+	// 인벤이 화면이 있으면 지우고
+	if (GuideWidget->IsInViewport())
+	{
+		GuideWidget->RemoveFromParent();
+	}
+	// 인벤이 화면에 없으면 생성
+	else
+	{
+		GuideWidget->AddToViewport();
+	}
+}
+
 void ASYH_Player::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	
@@ -142,12 +162,16 @@ void ASYH_Player::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 
 		// 마우스 클릭
 		EnhancedInputComponent->BindAction(IA_Mouse, ETriggerEvent::Started, this, &ASYH_Player::OnClickedLeft);
+		// 도감
+		EnhancedInputComponent->BindAction(IA_Guide, ETriggerEvent::Started, this, &ASYH_Player::OnOffGuide);
 	}
 	else
 	{
 		UE_LOG(LogTemplate, Error, TEXT("'%s' Failed to find an Enhanced Input component! This template is built to use the Enhanced Input system. If you intend to use the legacy system, then you will need to update this C++ file."), *GetNameSafe(this));
 	}
 }
+
+
 
 void ASYH_Player::Move(const FInputActionValue& Value)
 {

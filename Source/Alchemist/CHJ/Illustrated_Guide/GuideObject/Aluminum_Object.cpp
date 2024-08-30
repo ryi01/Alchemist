@@ -4,8 +4,8 @@
 #include "Alchemist/CHJ/Illustrated_Guide/GuideObject/Aluminum_Object.h"
 
 #include "Alchemist/CHJ/Guide_GameInstance.h"
-#include "Alchemist/CHJ/Illustrated_Guide/Guide_Component/GuideComponent.h"
 #include "Components/BoxComponent.h"
+#include "GameFramework/Character.h"
 #include "Kismet/GameplayStatics.h"
 
 // Sets default values
@@ -15,7 +15,6 @@ AAluminum_Object::AAluminum_Object()
 	PrimaryActorTick.bCanEverTick = true;
 
 	BoxComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxComponent"));
-	GuideComponent = CreateDefaultSubobject<UGuideComponent>(TEXT("GuideComponent"));
 
 }
 
@@ -23,8 +22,10 @@ AAluminum_Object::AAluminum_Object()
 void AAluminum_Object::BeginPlay()
 {
 	Super::BeginPlay();
-
-	GetItem();
+	GameInstance = CastChecked<UGuide_GameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+	
+	BoxComponent->OnComponentBeginOverlap.AddDynamic(this, &AAluminum_Object::OnOverlapBegin);
+	
 }
 
 // Called every frame
@@ -34,12 +35,15 @@ void AAluminum_Object::Tick(float DeltaTime)
 
 }
 
-void AAluminum_Object::GetItem()
+void AAluminum_Object::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	UGuide_GameInstance* GameInstance = Cast<UGuide_GameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
-	if(GameInstance)
-	{
-		GuideComponent->myItems.Add(GameInstance->DefineItem[0]);
+	ACharacter* OtherPlayer = Cast<ACharacter>(OtherActor);
+	//캐릭터가 충돌 되었다면 가이드 컴포넌트의 데이터를 set 한다.
+	if(OtherPlayer)
+	{	
+		GameInstance->TakeItemData(ItemIdx);
 	}
 }
+
 

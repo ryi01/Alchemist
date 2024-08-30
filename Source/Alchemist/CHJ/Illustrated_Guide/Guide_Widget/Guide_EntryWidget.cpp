@@ -26,7 +26,7 @@ void UGuide_EntryWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
 
-	Text_Count->SetText(FText::GetEmpty());
+	//Text_Count->SetText(FText::GetEmpty());
 }
 
 void UGuide_EntryWidget::NativeOnMouseEnter(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)
@@ -54,14 +54,9 @@ FReply UGuide_EntryWidget::NativeOnMouseButtonDown(const FGeometry& InGeometry, 
 
 	return Reply;
 }
-
-void UGuide_EntryWidget::NativeOnDragDetected(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent,
-	UDragDropOperation*& OutOperation)
+// 엘레먼트 데이터 받아서 텍스트, 이미지 바꾼다 
+void UGuide_EntryWidget::SetElementData(FElementDatas& Data)
 {
-	Super::NativeOnDragDetected(InGeometry, InMouseEvent, OutOperation);
-}
-
-void UGuide_EntryWidget::NativeOnDragCancelled(const FDragDropEvent& InDragDropEvent, UDragDropOperation* InOperation)
-{
-	Super::NativeOnDragCancelled(InDragDropEvent, InOperation);
+	Text_Count->SetText(FText::FromString( Data.Element_name));
+	Image_Icon->SetBrushFromTexture(Data.Element_thumbnail);
 }
