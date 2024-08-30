@@ -21,12 +21,20 @@ public:
 	
 	UPROPERTY(EditDefaultsOnly)
 	class ASYH_Player* me;
+	UPROPERTY(EditDefaultsOnly)
+	class ASYH_MultiPlayer* Multi_me;
 	UPROPERTY()
 	class APlayerController* player;
 	UPROPERTY(EditDefaultsOnly,BlueprintReadWrite)
 	float horizontal; // direction
 	UPROPERTY(EditDefaultsOnly,BlueprintReadWrite)
 	float vertical; // speed
+
+	UPROPERTY(EditDefaultsOnly,BlueprintReadWrite)
+	float multi_horizontal; // direction
+	UPROPERTY(EditDefaultsOnly,BlueprintReadWrite)
+	float multi_vertical; // speed
+	
 	UPROPERTY(EditDefaultsOnly,BlueprintReadWrite)
 	bool bIsCamera = false;
 	UPROPERTY(EditDefaultsOnly,BlueprintReadWrite)

@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Alchemist/CHJ/Illustrated_Guide/Guide_Component/GuideComponent.h"
 #include "GameFramework/Actor.h"
 #include "Aluminum_Object.generated.h"
 
@@ -24,11 +25,14 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	UPROPERTY(EditAnywhere)
-	class UGuideComponent* GuideComponent;
-
-	UPROPERTY(EditAnywhere)
 	class UBoxComponent* BoxComponent;
-	UFUNCTION(BlueprintCallable)
-	void GetItem();
+
+	//콜리전 함수
+	UFUNCTION()
+	void OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 	
+	UPROPERTY(EditAnywhere)
+	int32 ItemIdx = 0; // 알루미늄 데이터 인덱스 0
+	
+	class UGuide_GameInstance* GameInstance;
 };

@@ -1,6 +1,7 @@
-﻿// Copyright Epic Games, Inc. All Rights Reserved.
+// Fill out your copyright notice in the Description page of Project Settings.
 
-#include "SYH/SYH_Player.h"
+
+#include "SYH/SYH_MultiPlayer.h"
 #include "Engine/LocalPlayer.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -14,17 +15,13 @@
 #include "SYH/CameraWidget.h"
 #include "SYH/SYH_PlayerAnim.h"
 #include "KMK_SingleIntaraction.h"
-#include "Alchemist/CHJ/Illustrated_Guide/Guide_Widget/Guide_MainWidget.h"
 #include "Kismet/GameplayStatics.h"
+// Sets default values
+DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
-DEFINE_LOG_CATEGORY(LogTemplate);
-
-// ATP_ThirdPersonCharacter
-
-ASYH_Player::ASYH_Player()
+ASYH_MultiPlayer::ASYH_MultiPlayer()
 {
-
-	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
+ 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
 		
 
 	bUseControllerRotationPitch = false;
@@ -62,23 +59,20 @@ ASYH_Player::ASYH_Player()
 	CameraCompFirst->SetRelativeLocationAndRotation(FVector(0, 20, 160), FRotator(0));
 
 }
-
-void ASYH_Player::PossessedBy(AController* NewController)
+void ASYH_MultiPlayer::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
 	// 서버 위젯
 	if(HasAuthority())
 	{
 		CreatePopUpWidget();
-		if (!IsLocallyControlled() || GuideWidget != nullptr) return;
-		GuideWidget = Cast<UGuide_MainWidget>(CreateWidget(GetWorld(), GuideWidgetClass));
 	}
 }
 
-void ASYH_Player::BeginPlay()
+// Called when the game starts or when spawned
+void ASYH_MultiPlayer::BeginPlay()
 {
 	Super::BeginPlay();
-	
 	UAnimInstance* animinstance = GetMesh()->GetAnimInstance();
 	if ( animinstance )
 	{
@@ -100,14 +94,11 @@ void ASYH_Player::BeginPlay()
 	if(!HasAuthority())
 	{
 		CreatePopUpWidget();
-		if (!IsLocallyControlled() || GuideWidget != nullptr) return;
-		GuideWidget = Cast<UGuide_MainWidget>(CreateWidget(GetWorld(), GuideWidgetClass));
-
 	}
 }
 
-
-void ASYH_Player::Tick(float DeltaTime)
+// Called every frame
+void ASYH_MultiPlayer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	if(IsLocallyControlled())
@@ -125,25 +116,10 @@ void ASYH_Player::Tick(float DeltaTime)
 	}
 }
 
-// Input
-
-void ASYH_Player::OnOffGuide(const FInputActionValue& Value)
+// Called to bind functionality to input
+void ASYH_MultiPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
-	// 인벤이 화면이 있으면 지우고
-	if (GuideWidget->IsInViewport())
-	{
-		GuideWidget->RemoveFromParent();
-	}
-	// 인벤이 화면에 없으면 생성
-	else
-	{
-		GuideWidget->AddToViewport();
-	}
-}
-
-void ASYH_Player::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
-	
+	Super::SetupPlayerInputComponent(PlayerInputComponent);
 	// Set up action bindings
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent)) {
 		
@@ -152,28 +128,24 @@ void ASYH_Player::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 		EnhancedInputComponent->BindAction(IA_Jump, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
 
 		// Moving
-		EnhancedInputComponent->BindAction(IA_Move, ETriggerEvent::Triggered, this, &ASYH_Player::Move);
+		EnhancedInputComponent->BindAction(IA_Move, ETriggerEvent::Triggered, this, &ASYH_MultiPlayer::Move);
 
 		// Looking
-		EnhancedInputComponent->BindAction(IA_Look, ETriggerEvent::Triggered, this, &ASYH_Player::Look);
+		EnhancedInputComponent->BindAction(IA_Look, ETriggerEvent::Triggered, this, &ASYH_MultiPlayer::Look);
 
 		// Camera
-		EnhancedInputComponent->BindAction(IA_Camera, ETriggerEvent::Started, this, &ASYH_Player::Camera);
+		EnhancedInputComponent->BindAction(IA_Camera, ETriggerEvent::Started, this, &ASYH_MultiPlayer::Camera);
 
 		// 마우스 클릭
-		EnhancedInputComponent->BindAction(IA_Mouse, ETriggerEvent::Started, this, &ASYH_Player::OnClickedLeft);
-		// 도감
-		EnhancedInputComponent->BindAction(IA_Guide, ETriggerEvent::Started, this, &ASYH_Player::OnOffGuide);
+		EnhancedInputComponent->BindAction(IA_Mouse, ETriggerEvent::Started, this, &ASYH_MultiPlayer::OnClickedLeft);
 	}
 	else
 	{
-		UE_LOG(LogTemplate, Error, TEXT("'%s' Failed to find an Enhanced Input component! This template is built to use the Enhanced Input system. If you intend to use the legacy system, then you will need to update this C++ file."), *GetNameSafe(this));
+		UE_LOG(LogTemplateCharacter, Error, TEXT("'%s' Failed to find an Enhanced Input component! This template is built to use the Enhanced Input system. If you intend to use the legacy system, then you will need to update this C++ file."), *GetNameSafe(this));
 	}
 }
 
-
-
-void ASYH_Player::Move(const FInputActionValue& Value)
+void ASYH_MultiPlayer::Move(const FInputActionValue& Value)
 {
 	// input is a Vector2D
 	FVector2D MovementVector = Value.Get<FVector2D>();
@@ -196,7 +168,7 @@ void ASYH_Player::Move(const FInputActionValue& Value)
 	}
 }
 
-void ASYH_Player::Look(const FInputActionValue& Value)
+void ASYH_MultiPlayer::Look(const FInputActionValue& Value)
 {
 	// input is a Vector2D
 	FVector2D LookAxisVector = Value.Get<FVector2D>();
@@ -209,7 +181,7 @@ void ASYH_Player::Look(const FInputActionValue& Value)
 	}
 }
 
-void ASYH_Player::Camera(const FInputActionValue& Value)
+void ASYH_MultiPlayer::Camera(const FInputActionValue& Value)
 {
 	// e키를 누르면 애니메이션이 출력되고 시점을 바꾸고 싶다.
 	if ( anim && anim->bIsPlayCameraAnim == true)
@@ -234,7 +206,7 @@ void ASYH_Player::Camera(const FInputActionValue& Value)
 	}
 }
 
-void ASYH_Player::OnClickedLeft(const FInputActionValue& Value)
+void ASYH_MultiPlayer::OnClickedLeft(const FInputActionValue& Value)
 {
 	if ( HitResult.bBlockingHit )
 	{
@@ -254,7 +226,7 @@ void ASYH_Player::OnClickedLeft(const FInputActionValue& Value)
 
 }
 
-void ASYH_Player::OnMyCheckActor()
+void ASYH_MultiPlayer::OnMyCheckActor()
 {
 	AActor* HitActor = HitResult.GetActor();
 	if ( interActor != nullptr && HitActor != interActor->GetOwner() )
@@ -275,9 +247,10 @@ void ASYH_Player::OnMyCheckActor()
 	}
 }
 
-void ASYH_Player::CreatePopUpWidget()
+void ASYH_MultiPlayer::CreatePopUpWidget()
 {
 	if(!IsLocallyControlled()) return;
 	bCreateWidget = true;
 }
+
 

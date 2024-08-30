@@ -15,4 +15,7 @@ class ALCHEMIST_API UGuide_MainWidget : public UUserWidget
 	GENERATED_BODY()
 
 	virtual void NativeConstruct() override;
+
+public:
+	
 };

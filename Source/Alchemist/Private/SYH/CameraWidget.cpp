@@ -16,6 +16,7 @@ void UCameraWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 	UpdateTextVisibility();
 }
 
+
 void UCameraWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
@@ -23,6 +24,10 @@ void UCameraWidget::NativeConstruct()
 	if (ZoomSlider)
 	{
 		ZoomSlider->OnValueChanged.AddDynamic(this, &UCameraWidget::OnSliderValueChanged);
+	}
+	if(APlayerController* player = GetOwningPlayer())
+	{
+		player->SetShowMouseCursor(true);
 	}
 }
 
