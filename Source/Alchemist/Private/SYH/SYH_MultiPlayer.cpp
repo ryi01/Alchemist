@@ -183,28 +183,31 @@ void ASYH_MultiPlayer::Look(const FInputActionValue& Value)
 
 void ASYH_MultiPlayer::Camera(const FInputActionValue& Value)
 {
-	// e키를 누르면 애니메이션이 출력되고 시점을 바꾸고 싶다.
-	if ( anim && anim->bIsPlayCameraAnim == true)
+	if(IsLocallyControlled())
 	{
-		// 카메라를 드는 애니메이션이 출력되도록 bool 값을 true로 설정
-		anim->bIsCamera = true;
-		player->SetShowMouseCursor(true);
-	}
-	// e키를 누르고 카메라가 1인칭 시점인 상태에서 e키를 다시 누르면 원래대로 돌아오게 하고 싶다.
-	else if(anim&& anim->bIsPlayCameraAnim == false)
-	{
-		CameraCompThird->SetActive(true);
-		CameraCompFirst->SetActive(false);
-		// UI도 끄고 싶다.
-		if(anim->CameraWidgetClass)
+		// e키를 누르면 애니메이션이 출력되고 시점을 바꾸고 싶다.
+		if ( anim && anim->bIsPlayCameraAnim == true)
 		{
-			if(anim->CameraWidget)
+			// 카메라를 드는 애니메이션이 출력되도록 bool 값을 true로 설정
+			// bIsCamera = true;
+			player->SetShowMouseCursor(true);
+		}
+		// e키를 누르고 카메라가 1인칭 시점인 상태에서 e키를 다시 누르면 원래대로 돌아오게 하고 싶다.
+		else if(anim&& anim->bIsPlayCameraAnim == false)
+		{
+			CameraCompThird->SetActive(true);
+			CameraCompFirst->SetActive(false);
+			// UI도 끄고 싶다.
+			if(anim->CameraWidgetClass)
 			{
-				anim->CameraWidget->RemoveFromParent();
-				anim->bIsPlayCameraAnim = true;
-				player->SetShowMouseCursor(false);
-				FInputModeGameOnly InputMode;
-				player->SetInputMode(InputMode);
+				if(anim->CameraWidget)
+				{
+					anim->CameraWidget->RemoveFromParent();
+					anim->bIsPlayCameraAnim = true;
+					player->SetShowMouseCursor(false);
+					FInputModeGameOnly InputMode;
+					player->SetInputMode(InputMode);
+				}
 			}
 		}
 	}

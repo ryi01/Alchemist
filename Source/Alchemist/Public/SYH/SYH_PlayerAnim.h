@@ -35,8 +35,8 @@ public:
 	UPROPERTY(EditDefaultsOnly,BlueprintReadWrite)
 	float multi_vertical; // speed
 	
-	UPROPERTY(EditDefaultsOnly,BlueprintReadWrite)
-	bool bIsCamera = false;
+	//UPROPERTY(EditDefaultsOnly,BlueprintReadWrite)
+	//bool bIsCamera = false;
 	UPROPERTY(EditDefaultsOnly,BlueprintReadWrite)
 	bool bIsPlayCameraAnim = true;
 	UFUNCTION()

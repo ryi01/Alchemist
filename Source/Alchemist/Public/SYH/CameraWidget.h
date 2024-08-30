@@ -32,7 +32,7 @@ public:
 	class ASYH_MultiPlayer* me;
 	
 	UPROPERTY()
-	class APlayerController* player;
+	class APlayerController* playercontroller;
 	UPROPERTY(editanywhere, BlueprintReadWrite, Category="Actor")
 	FName ActorTag;
 

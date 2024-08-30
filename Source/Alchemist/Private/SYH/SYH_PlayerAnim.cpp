@@ -44,23 +44,26 @@ void USYH_PlayerAnim::NativeUpdateAnimation(float DeltaSeconds)
 	multi_vertical = FVector::DotProduct(multi_velocity, multi_forward);
 }
 
-// 카메라를 드는 애니메이션이 끝나면 시점을 변경하고 UI를 띄우고 싶다.
+//카메라를 드는 애니메이션이 끝나면 시점을 변경하고 UI를 띄우고 싶다.
 void USYH_PlayerAnim::AnimNotify_CameraEnd()
 {
-	bIsCamera = false;
+	//Multi_me->bIsCamera = false;
 	// camera를 1인칭 시점으로 변경한다.
 	Multi_me->CameraCompThird->SetActive(false);
 	Multi_me->CameraCompFirst->SetActive(true);
 	// 시점을 변경한 후 사진을 찍는 듯한 UI를 띄운다.
-	if(CameraWidgetClass)
+	if(CameraWidgetClass )
 	{
-		player = Cast<APlayerController>(Multi_me->Controller);
-		CameraWidget = CreateWidget<UUserWidget>(player, CameraWidgetClass);
-		if(CameraWidget)
+		if(Multi_me->Controller != nullptr)player = CastChecked<APlayerController>(Multi_me->Controller);
+		if(player && player->IsLocalPlayerController())
 		{
-			CameraWidget->AddToViewport();
+			CameraWidget = CreateWidget<UUserWidget>(player, CameraWidgetClass);
+			if(CameraWidget)
+			{
+				CameraWidget->AddToViewport();
+			}
+			// 시점을 바꾼 상태에서는 e키를 누르지 못하게 bool값으로 조절
+			bIsPlayCameraAnim = false;
 		}
-		// 시점을 바꾼 상태에서는 e키를 누르지 못하게 bool값으로 조절
-		bIsPlayCameraAnim = false;
 	}
 }
