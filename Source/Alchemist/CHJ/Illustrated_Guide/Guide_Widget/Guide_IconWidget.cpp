@@ -9,8 +9,8 @@ void UGuide_IconWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
 
-	SizeBox_Root->SetWidthOverride(300);
-	SizeBox_Root->SetHeightOverride(300);
+	// SizeBox_Root->SetWidthOverride(300);
+	// SizeBox_Root->SetHeightOverride(300);
 }
 
 
