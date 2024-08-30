@@ -83,7 +83,7 @@ void ASYH_MultiPlayer::BeginPlay()
 		player = Cast<APlayerController>(Controller);
 		if(player)
 		{
-			player->SetShowMouseCursor(true);
+			player->SetShowMouseCursor(false);
 			if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(player->GetLocalPlayer()))
 			{
 				Subsystem->AddMappingContext(IMC_Player, 0);
@@ -188,6 +188,7 @@ void ASYH_MultiPlayer::Camera(const FInputActionValue& Value)
 	{
 		// 카메라를 드는 애니메이션이 출력되도록 bool 값을 true로 설정
 		anim->bIsCamera = true;
+		player->SetShowMouseCursor(true);
 	}
 	// e키를 누르고 카메라가 1인칭 시점인 상태에서 e키를 다시 누르면 원래대로 돌아오게 하고 싶다.
 	else if(anim&& anim->bIsPlayCameraAnim == false)
@@ -201,6 +202,9 @@ void ASYH_MultiPlayer::Camera(const FInputActionValue& Value)
 			{
 				anim->CameraWidget->RemoveFromParent();
 				anim->bIsPlayCameraAnim = true;
+				player->SetShowMouseCursor(false);
+				FInputModeGameOnly InputMode;
+				player->SetInputMode(InputMode);
 			}
 		}
 	}

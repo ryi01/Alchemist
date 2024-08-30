@@ -22,15 +22,8 @@ class ASYH_Player : public ACharacter
 	GENERATED_BODY()
 
 public:
-	/** Camera boom positioning the camera behind the character */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-	USpringArmComponent* SpringArmComp;
-	/** Follow camera */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
-	UCameraComponent* CameraCompThird;
-	
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
-	UCameraComponent* CameraCompFirst;
+
+
 	/** MappingContext */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputMappingContext* IMC_Player;
@@ -48,9 +41,6 @@ public:
 	UInputAction* IA_Look;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputAction* IA_Camera;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* IA_Mouse;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
@@ -62,8 +52,6 @@ public:
 	class USYH_PlayerAnim* anim;
 	UPROPERTY()
 	class APlayerController* player;
-	UPROPERTY(BlueprintReadWrite, Category = "UI")
-	UUserWidget* CameraWidget;
 	UPROPERTY()
 	FHitResult HitResult;
 	UPROPERTY()
@@ -76,8 +64,7 @@ protected:
 
 	/** Called for looking input */
 	void Look(const FInputActionValue& Value);
-			
-	void Camera(const FInputActionValue& Value);
+	
 
 	void OnClickedLeft(const FInputActionValue& Value);
 
@@ -104,10 +91,6 @@ protected:
 
 	virtual void Tick(float DeltaTime) override;
 
-public:
-	/** Returns CameraBoom subobject **/
-	FORCEINLINE class USpringArmComponent* GetSpringArmComp() const { return SpringArmComp; }
-	/** Returns FollowCamera subobject **/
-	FORCEINLINE class UCameraComponent* GetCameraCompThird() const { return CameraCompThird; }
+
 };
 

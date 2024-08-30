@@ -42,24 +42,7 @@ ASYH_Player::ASYH_Player()
 	GetCharacterMovement()->MinAnalogWalkSpeed = 20.f;
 	GetCharacterMovement()->BrakingDecelerationWalking = 2000.f;
 	GetCharacterMovement()->BrakingDecelerationFalling = 1500.0f;
-
-	// Create a camera boom (pulls in towards the player if there is a collision)
-	SpringArmComp = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArmComp"));
-	SpringArmComp->SetupAttachment(RootComponent);
-	SpringArmComp->TargetArmLength = 150.0f; // The camera follows at this distance behind the character	
-	SpringArmComp->bUsePawnControlRotation = true; // Rotate the arm based on the controller
-	SpringArmComp->SetRelativeLocation(FVector(0,40,60));
-
-	// Create a follow camera
-	CameraCompThird = CreateDefaultSubobject<UCameraComponent>(TEXT("CameraCompThird"));
-	CameraCompThird->SetupAttachment(SpringArmComp, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
-	CameraCompThird->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
-
-	CameraCompFirst = CreateDefaultSubobject<UCameraComponent>(TEXT("CameraCompFirst"));
-	CameraCompFirst->SetupAttachment(GetMesh()); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
-	CameraCompFirst->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
-	CameraCompFirst->SetActive(false);
-	CameraCompFirst->SetRelativeLocationAndRotation(FVector(0, 20, 160), FRotator(0));
+	
 
 }
 
@@ -158,7 +141,6 @@ void ASYH_Player::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 		EnhancedInputComponent->BindAction(IA_Look, ETriggerEvent::Triggered, this, &ASYH_Player::Look);
 
 		// Camera
-		EnhancedInputComponent->BindAction(IA_Camera, ETriggerEvent::Started, this, &ASYH_Player::Camera);
 
 		// 마우스 클릭
 		EnhancedInputComponent->BindAction(IA_Mouse, ETriggerEvent::Started, this, &ASYH_Player::OnClickedLeft);
@@ -206,31 +188,6 @@ void ASYH_Player::Look(const FInputActionValue& Value)
 		// add yaw and pitch input to controller
 		AddControllerYawInput(LookAxisVector.X);
 		AddControllerPitchInput(LookAxisVector.Y);
-	}
-}
-
-void ASYH_Player::Camera(const FInputActionValue& Value)
-{
-	// e키를 누르면 애니메이션이 출력되고 시점을 바꾸고 싶다.
-	if ( anim && anim->bIsPlayCameraAnim == true)
-	{
-		// 카메라를 드는 애니메이션이 출력되도록 bool 값을 true로 설정
-		anim->bIsCamera = true;
-	}
-	// e키를 누르고 카메라가 1인칭 시점인 상태에서 e키를 다시 누르면 원래대로 돌아오게 하고 싶다.
-	else if(anim&& anim->bIsPlayCameraAnim == false)
-	{
-		CameraCompThird->SetActive(true);
-		CameraCompFirst->SetActive(false);
-		// UI도 끄고 싶다.
-		if(anim->CameraWidgetClass)
-		{
-			if(anim->CameraWidget)
-			{
-				anim->CameraWidget->RemoveFromParent();
-				anim->bIsPlayCameraAnim = true;
-			}
-		}
 	}
 }
 
