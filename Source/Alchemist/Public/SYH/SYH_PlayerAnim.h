@@ -46,4 +46,8 @@ public:
 	TSubclassOf<UUserWidget> CameraWidgetClass;
 
 	class UUserWidget* CameraWidget;
+
+	// 몸 굽히기
+	UPROPERTY(EditDefaultsOnly,BlueprintReadWrite)
+	float PitchAngle;
 };

@@ -42,6 +42,8 @@ void USYH_PlayerAnim::NativeUpdateAnimation(float DeltaSeconds)
 
 	multi_horizontal = FVector::DotProduct(multi_velocity, multi_right);
 	multi_vertical = FVector::DotProduct(multi_velocity, multi_forward);
+
+	PitchAngle = -Multi_me->GetBaseAimRotation().Pitch;
 }
 
 //카메라를 드는 애니메이션이 끝나면 시점을 변경하고 UI를 띄우고 싶다.
@@ -51,10 +53,15 @@ void USYH_PlayerAnim::AnimNotify_CameraEnd()
 	// camera를 1인칭 시점으로 변경한다.
 	Multi_me->CameraCompThird->SetActive(false);
 	Multi_me->CameraCompFirst->SetActive(true);
-	// 시점을 변경한 후 사진을 찍는 듯한 UI를 띄운다.
+	// 1인칭일 때 몸이 보이기 때문에 안보이게 설정
+	if (Multi_me->GetMesh())
+	{
+		Multi_me->GetMesh()->SetOwnerNoSee(true);
+	}
+	// 시점을 변경한 후 사진을 찍는 듯한 UI를 띄운다
 	if(CameraWidgetClass )
 	{
-		if(Multi_me->Controller != nullptr)player = CastChecked<APlayerController>(Multi_me->Controller);
+		if(Multi_me->Controller != nullptr) player = CastChecked<APlayerController>(Multi_me->Controller);
 		if(player && player->IsLocalPlayerController())
 		{
 			CameraWidget = CreateWidget<UUserWidget>(player, CameraWidgetClass);

@@ -43,8 +43,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* IA_Mouse;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputAction* IA_Guide;
 public:
 	ASYH_Player();
 	virtual void PossessedBy(AController* NewController) override;
@@ -75,12 +73,6 @@ protected:
 	int count = 0;
 	bool bCreateWidget = false;
 
-	// 도감
-	void OnOffGuide(const FInputActionValue& Value);
-	UPROPERTY(EditAnywhere)
-	TSubclassOf<class UGuide_MainWidget> GuideWidgetClass;
-	UPROPERTY()
-	class UGuide_MainWidget* GuideWidget;
 	
 protected:
 	// APawn interface

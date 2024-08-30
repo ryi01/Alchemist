@@ -3,12 +3,15 @@
 
 #include "SYH/CameraWidget.h"
 
+#include "Animation/WidgetAnimation.h"
 #include "Blueprint/WidgetLayoutLibrary.h"
 #include "Components/Image.h"
 #include "Components/ProgressBar.h"
 #include "Components/Slider.h"
 #include "Components/TextBlock.h"
 #include "Kismet/GameplayStatics.h"
+#include "Input/Reply.h"
+#include "SYH/SYH_MultiPlayer.h"
 
 void UCameraWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 {
@@ -26,6 +29,7 @@ void UCameraWidget::NativeConstruct()
 		ZoomSlider->OnValueChanged.AddDynamic(this, &UCameraWidget::OnSliderValueChanged);
 	}
 	playercontroller = Cast<APlayerController>(GetOwningPlayer());
+	me = CastChecked<ASYH_MultiPlayer>(GetOwningPlayerPawn());
 }
 
 
@@ -44,6 +48,20 @@ void UCameraWidget::OnSliderValueChanged(float value)
 			CameraManager->SetFOV(NewFOV);
 		}
 	}
+}
+
+FReply UCameraWidget::NativeOnMouseButtonDown(const FGeometry& MyGeometry, const FPointerEvent& MouseEvent)
+{
+	if(MouseEvent.GetEffectingButton() == EKeys::RightMouseButton)
+	{
+		if(camera)
+		{
+			PlayAnimation(camera);
+		}
+		me->ObjectDetect();
+		return FReply::Handled();
+	}
+	return Super::NativeOnMouseButtonDown(MyGeometry, MouseEvent);
 }
 
 bool UCameraWidget::IsTaggedActorInView()
