@@ -35,7 +35,6 @@ void UKMK_GrabActorComp::TickComponent(float DeltaTime, ELevelTick TickType, FAc
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	// ...
 }
 
 void UKMK_GrabActorComp::BeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
@@ -43,6 +42,11 @@ void UKMK_GrabActorComp::BeginOverlap(UPrimitiveComponent* OverlappedComponent, 
 	// 액터 중에 tag = element인것만 넣기
 	if ( OtherActor->ActorHasTag(TEXT("element")) )
 	{
+		FString checkTagName = OtherActor->Tags[1].ToString();
+		if(checkTagName == "" ) return;
+		if ( ElementArray.Contains(checkTagName) ) ElementArray[ checkTagName ]++;
+		else ElementArray.Add(checkTagName,1);
+
 		OtherActor->Destroy();
 	}
 

@@ -28,7 +28,7 @@ public:
 	// ai의 url 담을 변수
 	UPROPERTY(EditAnywhere, Category = "AI_URL")
 	FString Aurl;
-
+	FString MyData;
 	// SendButt을 눌렀을 때, 요청할 함수
 	void ReqChatBot(FString json);
 	// 응답받을 함수

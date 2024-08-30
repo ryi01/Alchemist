@@ -5,6 +5,7 @@
 #include "HttpModule.h"
 #include "KMK/KMK_JsonParseLib.h"
 #include "KMK/KMK_ChatBotWidget.h"
+#include "Components/EditableText.h"
 // Sets default values
 AKMK_HttpActorWithAI::AKMK_HttpActorWithAI()
 {
@@ -16,7 +17,7 @@ AKMK_HttpActorWithAI::AKMK_HttpActorWithAI()
 void AKMK_HttpActorWithAI::BeginPlay()
 {
 	Super::BeginPlay();
-	//// UI를 생성해서 기억하고싶다.
+	////// UI를 생성해서 기억하고싶다.
 	//HttpUI = Cast<UKMK_ChatBotWidget>(CreateWidget(GetWorld(), HttpUIFactory));
 	//if ( HttpUI )
 	//{
@@ -39,6 +40,7 @@ void AKMK_HttpActorWithAI::ReqChatBot(FString json)
 	TSharedRef<IHttpRequest> req = httpModule.CreateRequest();
 	// 요청할 정보를 설정
 	TMap<FString, FString> data;
+	MyData = json;
 	data.Add(TEXT("key"), json);
 
 	req->SetURL("https://absolute-logically-hagfish.ngrok-free.app/posttest");
@@ -57,10 +59,14 @@ void AKMK_HttpActorWithAI::OnResChatBot(FHttpRequestPtr Request, FHttpResponsePt
 {
 	if ( bConnectedSuccessfully )
 	{
-		UE_LOG(LogTemp, Warning, TEXT("OnResPostTest a..."));
 		// 성공
-		FString result = Response->GetContentAsString();
-		UE_LOG(LogTemp, Warning, TEXT("%s"), *result);
+		FString respon = Response->GetContentAsString();
+		TMap<FString, FString> result = UKMK_JsonParseLib::ChatBotParsec(respon, MyData);
+		if ( HttpUI && !result.IsEmpty())
+		{
+			HttpUI->MakeChatText(FText::FromString(result[ TEXT("산소") ]));
+			HttpUI->PlayerChat->SetIsEnabled(true);
+		}
 	}
 	else {
 		// 실패
@@ -91,7 +97,6 @@ void AKMK_HttpActorWithAI::OnResElement(FHttpRequestPtr Request, FHttpResponsePt
 	{
 		// 성공
 		FString result = Response->GetContentAsString();
-		UE_LOG(LogTemp, Warning, TEXT("%s"), *result);
 
 	}
 	else {

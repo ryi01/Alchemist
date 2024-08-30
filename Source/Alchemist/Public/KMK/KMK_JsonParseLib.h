@@ -19,5 +19,6 @@ public:
 	static FString MakeJson(const TMap<FString, FString> source);
 
 	static TMap<FString, FString>  ChatBotParsec(const FString& json, FString ResultChatBot);
-	static TMap<FString, FString>  ResultAlchemistParsec(const FString& json, FString ResultAlchemist);
+
+	static TMap<FString,FString>  ResultAlchemistParsec(const FString& json,FString ResultAlchemist);
 };

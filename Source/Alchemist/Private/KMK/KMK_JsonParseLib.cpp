@@ -21,7 +21,7 @@ FString UKMK_JsonParseLib::MakeJson(const TMap<FString, FString> source)
 	return json;
 }
 // 챗봇의 값 파섹
-TMap<FString, FString> UKMK_JsonParseLib::ChatBotParsec(const FString& json, FString ingredient)
+TMap<FString, FString> UKMK_JsonParseLib::ChatBotParsec(const FString& json, FString ResultChatBot)
 {
 	TSharedRef<TJsonReader<TCHAR>> reader = TJsonReaderFactory<TCHAR>::Create(json);
 	TSharedPtr<FJsonObject> response = MakeShareable(new FJsonObject());
@@ -30,8 +30,15 @@ TMap<FString, FString> UKMK_JsonParseLib::ChatBotParsec(const FString& json, FSt
 	
 	if ( FJsonSerializer::Deserialize(reader, response) )
 	{
-		/*FString menu = response->GetStringField(TEXT("food_name"));
-		FString recipe = response->GetStringField(TEXT("recipe"));*/
+		TArray<TSharedPtr<FJsonValue>> parseDataList = response->GetArrayField(TEXT("원소명"));
+		// 책의 이름과 저자
+		//FString elementName = response->GetStringField(TEXT("원소명"));
+		//if ( elementName.IsEmpty() ) elementName = "네";
+		//result.Add(elementName, ResultChatBot);
+		if(parseDataList.IsEmpty() ) result.Add(TEXT("산소"), ResultChatBot);
+
+		// FString elementName = response->GetStringField(TEXT("원소명"));
+
 		GEngine->AddOnScreenDebugMessage(2, 5, FColor::Blue, FString::Printf(TEXT("AI Connect")));
 	}
 

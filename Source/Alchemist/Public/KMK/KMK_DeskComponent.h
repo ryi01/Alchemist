@@ -38,6 +38,7 @@ public:
 	UFUNCTION()
 	void ChangeMyCamera(bool OnClick)
 	{
+		bActive = OnClick;
 		// 책상 클릭시 카메라 변경
 		if (OnClick)
 		{

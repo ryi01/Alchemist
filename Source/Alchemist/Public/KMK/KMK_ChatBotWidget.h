@@ -32,6 +32,9 @@ public:
 	UFUNCTION()
 	void OnClickSendButt();
 
+	UFUNCTION()
+	void MakeChatText(FText text);
+
 	UFUNCTION(BlueprintCallable)
 	void SetHttpActor(AKMK_HttpActorWithAI* actor);
 

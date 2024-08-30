@@ -17,24 +17,29 @@ void UKMK_ChatBotWidget::NativeConstruct()
 
 void UKMK_ChatBotWidget::OnClickSendButt()
 {
-    // AI에게 정보값 보내기
-    httpActor->ReqChatBot(*PlayerChat->GetText().ToString());
+
     // 텍스트가 비어있지 않은 경우
     if (!PlayerChat->GetText().IsEmpty())
     {
-        // 텍스트 위잿 생성
-        auto* widget = Cast<UKMK_TextWidget>(CreateWidget(GetWorld(), ChatTextWidFact));
-        if (widget)
-        {
-            
+        // AI에게 정보값 보내기
+        httpActor->ReqChatBot(*PlayerChat->GetText().ToString());
+        MakeChatText(PlayerChat->GetText());
+        PlayerChat->SetText(FText::GetEmpty());
+        PlayerChat->SetIsEnabled(false);
+    }
+}
 
-            // 위잿 텍스트 작성
-            widget->SetChatText(PlayerChat->GetText());
-            widget->AddToViewport();
-            // 스크롤 밑에 생성되게 만들기
-            ChatLog->AddChild(widget);
-            PlayerChat->SetText(FText::GetEmpty());
-        }
+void UKMK_ChatBotWidget::MakeChatText(FText text)
+{
+    // 텍스트 위잿 생성
+    auto* widget = Cast<UKMK_TextWidget>(CreateWidget(GetWorld(), ChatTextWidFact));
+    if ( widget )
+    {
+        // 위잿 텍스트 작성
+        widget->SetChatText(text);
+        widget->AddToViewport();
+        // 스크롤 밑에 생성되게 만들기
+        ChatLog->AddChild(widget);
     }
 }
 

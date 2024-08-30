@@ -39,7 +39,7 @@ void UKMK_DeskComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAc
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 	// 변경된 카메라 활성 시키는 함수
-	ChangeMyCamera(bActive);
+	// ChangeMyCamera(bActive);
 }
 
 void UKMK_DeskComponent::FindDeskCam()
