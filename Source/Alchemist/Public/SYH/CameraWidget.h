@@ -16,7 +16,6 @@ class ALCHEMIST_API UCameraWidget : public UUserWidget
 	GENERATED_BODY()
 public:
 	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
-	
 	UPROPERTY(meta = (BindWidget))
 	class USlider* ZoomSlider;
 	virtual void NativeConstruct() override;
@@ -29,8 +28,11 @@ public:
 	class UTextBlock* No;
 	UPROPERTY(meta = (BindWidget))
 	class UImage* CameraImage;
-
+	UPROPERTY()
+	class ASYH_MultiPlayer* me;
 	
+	UPROPERTY()
+	class APlayerController* player;
 	UPROPERTY(editanywhere, BlueprintReadWrite, Category="Actor")
 	FName ActorTag;
 

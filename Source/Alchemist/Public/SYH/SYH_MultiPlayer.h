@@ -1,11 +1,11 @@
-﻿// Copyright Epic Games, Inc. All Rights Reserved.
+// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
-#include "SYH_Player.generated.h"
+#include "SYH_MultiPlayer.generated.h"
 
 class USpringArmComponent;
 class UCameraComponent;
@@ -13,10 +13,10 @@ class UInputMappingContext;
 class UInputAction;
 struct FInputActionValue;
 
-DECLARE_LOG_CATEGORY_EXTERN(LogTemplate, Log, All);
+DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
 
 UCLASS(config=Game)
-class ASYH_Player : public ACharacter
+class ASYH_MultiPlayer : public ACharacter
 {
 	GENERATED_BODY()
 
@@ -51,8 +51,8 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* IA_Mouse;
-public:
-	ASYH_Player();
+	// Sets default values for this character's properties
+	ASYH_MultiPlayer();
 	virtual void PossessedBy(AController* NewController) override;
 	UPROPERTY()
 	class USYH_PlayerAnim* anim;
@@ -64,7 +64,6 @@ public:
 	FHitResult HitResult;
 	UPROPERTY()
 	class UKMK_SingleIntaraction* interActor;
-
 protected:
 
 	/** Called for movement input */
@@ -83,20 +82,16 @@ protected:
 	
 	int count = 0;
 	bool bCreateWidget = false;
-
-protected:
-	// APawn interface
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-	
-	// To add mapping context
-	virtual void BeginPlay();
-
+public:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-public:
+	// Called to bind functionality to input
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE class USpringArmComponent* GetSpringArmComp() const { return SpringArmComp; }
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetCameraCompThird() const { return CameraCompThird; }
 };
-

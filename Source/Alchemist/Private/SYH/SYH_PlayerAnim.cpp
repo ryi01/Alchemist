@@ -5,27 +5,43 @@
 
 #include "Blueprint/UserWidget.h"
 #include "Camera/CameraComponent.h"
+#include "SYH/SYH_MultiPlayer.h"
 #include "SYH/SYH_Player.h"
 
 void USYH_PlayerAnim::NativeInitializeAnimation()
 {
 	Super::NativeInitializeAnimation();
-	me = Cast<ASYH_Player>(TryGetPawnOwner());
+
 }
 
 void USYH_PlayerAnim::NativeUpdateAnimation(float DeltaSeconds)
 {
 	Super::NativeUpdateAnimation(DeltaSeconds);
-	if ( me == nullptr )
+	me = Cast<ASYH_Player>(TryGetPawnOwner());
+	Multi_me = Cast<ASYH_MultiPlayer>(TryGetPawnOwner());
+	if ( me != nullptr )
 	{
-		return;
-	}
-	FVector velocity = me->GetVelocity();
-	FVector right = me->GetActorRightVector();
-	FVector forward = me->GetActorForwardVector();
+		FVector velocity = me->GetVelocity();
+		FVector right = me->GetActorRightVector();
+		FVector forward = me->GetActorForwardVector();
 
-	horizontal = FVector::DotProduct(velocity, right);
-	vertical = FVector::DotProduct(velocity, forward);
+		horizontal = FVector::DotProduct(velocity, right);
+		vertical = FVector::DotProduct(velocity, forward);
+	}
+
+
+	// multi ver
+
+	if (Multi_me == nullptr)
+	{
+		return ;
+	}
+	FVector multi_velocity = Multi_me->GetVelocity();
+	FVector multi_right = Multi_me->GetActorRightVector();
+	FVector multi_forward = Multi_me->GetActorForwardVector();
+
+	multi_horizontal = FVector::DotProduct(multi_velocity, multi_right);
+	multi_vertical = FVector::DotProduct(multi_velocity, multi_forward);
 }
 
 // 카메라를 드는 애니메이션이 끝나면 시점을 변경하고 UI를 띄우고 싶다.
@@ -33,12 +49,12 @@ void USYH_PlayerAnim::AnimNotify_CameraEnd()
 {
 	bIsCamera = false;
 	// camera를 1인칭 시점으로 변경한다.
-	me->CameraCompThird->SetActive(false);
-	me->CameraCompFirst->SetActive(true);
+	Multi_me->CameraCompThird->SetActive(false);
+	Multi_me->CameraCompFirst->SetActive(true);
 	// 시점을 변경한 후 사진을 찍는 듯한 UI를 띄운다.
 	if(CameraWidgetClass)
 	{
-		player = Cast<APlayerController>(me->Controller);
+		player = Cast<APlayerController>(Multi_me->Controller);
 		CameraWidget = CreateWidget<UUserWidget>(player, CameraWidgetClass);
 		if(CameraWidget)
 		{
