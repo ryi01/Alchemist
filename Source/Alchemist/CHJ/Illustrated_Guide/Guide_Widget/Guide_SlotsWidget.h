@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "Alchemist/CHJ/Illustrated_Guide/Guide_Component/GuideComponent.h"
+
 #include "Guide_SlotsWidget.generated.h"
 
 class UCanvasPanel;
@@ -19,9 +21,8 @@ class ALCHEMIST_API UGuide_SlotsWidget : public UUserWidget
 {
 	GENERATED_BODY()
 public:
-	//UR1InventorySlotsWidget(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 	UGuide_SlotsWidget(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
-	void OnInventoryEntryChanged(const FIntPoint& ItemSlotPos, TObjectPtr<UGuide_ObjectInstance> Item);
+	
 protected:
 	virtual void NativeConstruct() override;
 
@@ -51,4 +52,5 @@ public:
 	void CreateEmptySlots();
 
 	void CreateEntrySlot(int32 X, int32 Y);
+	void CreateEntrySlot(int32 index, FElementDatas& data);
 };
