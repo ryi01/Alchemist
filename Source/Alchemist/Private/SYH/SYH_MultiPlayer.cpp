@@ -16,6 +16,7 @@
 #include "SYH/SYH_PlayerAnim.h"
 #include "KMK_SingleIntaraction.h"
 #include "Alchemist/CHJ/Guide_GameInstance.h"
+#include "Alchemist/CHJ/Illustrated_Guide/GuideObject/Aluminum_Object.h"
 #include "Alchemist/CHJ/Illustrated_Guide/Guide_Widget/Guide_MainWidget.h"
 #include "Kismet/GameplayStatics.h"
 // Sets default values
@@ -101,7 +102,7 @@ void ASYH_MultiPlayer::BeginPlay()
 		if (!IsLocallyControlled() || GuideWidget != nullptr) return;
 		GuideWidget = Cast<UGuide_MainWidget>(CreateWidget(GetWorld(), GuideWidgetClass));
 	}
-	GameInstance = CastChecked<UGuide_GameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+	
 }
 
 // Called every frame
@@ -155,9 +156,7 @@ void ASYH_MultiPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 		// Camera
 		EnhancedInputComponent->BindAction(IA_Camera, ETriggerEvent::Started, this, &ASYH_MultiPlayer::Camera);
-
-		// 마우스 클릭
-		EnhancedInputComponent->BindAction(IA_Mouse, ETriggerEvent::Started, this, &ASYH_MultiPlayer::OnClickedLeft);
+		
 		// 도감
 		EnhancedInputComponent->BindAction(IA_Guide, ETriggerEvent::Started, this, &ASYH_MultiPlayer::OnOffGuide);
 		
@@ -174,19 +173,34 @@ void ASYH_MultiPlayer::ObjectDetect()
 	// linetrace를 사용해 hit된 물체의 GameInstance->TakeItemData(ItemIdx);를 통해 정보를 가져온다
 	FHitResult OutHit;
 	FVector start = CameraCompFirst->GetComponentLocation();
-	FVector end = start + CameraCompFirst->GetForwardVector()*10000;
+	FVector end = start + CameraCompFirst->GetForwardVector()*100000;
+	float Radius = 60.f;
 	ECollisionChannel TraceChannel = ECC_Visibility;
 	FCollisionQueryParams Params;
 	Params.AddIgnoredActor(this);
-
-	bool bHit = GetWorld()->LineTraceSingleByChannel(OutHit,start,end,TraceChannel,Params);
+	
+	bool bHit = GetWorld()->SweepSingleByChannel(OutHit,start,end,FQuat::Identity,TraceChannel,FCollisionShape::MakeSphere(Radius),Params);
 	if(bHit)
 	{
 		auto* hitcomp = OutHit.GetComponent();
-		if(hitcomp->IsSimulatingPhysics())
+		if(hitcomp)
 		{
-			GameInstance->TakeItemData(0);
+			Aluminum = Cast<AAluminum_Object>(OutHit.GetActor());
+			// 알루미늄 오브젝트 가져와서
+			// GetItemData 호출하기
+			if(Aluminum)
+			{
+				Aluminum->GetItemData();
+			}
+			else
+			{
+				bHit = false;
+			}
 			UE_LOG(LogTemp,Error,TEXT("%s"),*hitcomp->GetName());
+		}
+		else
+		{
+			bHit = false;
 		}
 		UE_LOG(LogTemp,Error,TEXT("here"));
 	}
@@ -194,7 +208,6 @@ void ASYH_MultiPlayer::ObjectDetect()
 	{
 		UE_LOG(LogTemp,Error,TEXT("no bhit"));
 	}
-	
 }
 
 
@@ -269,25 +282,6 @@ void ASYH_MultiPlayer::Camera(const FInputActionValue& Value)
 	}
 }
 
-void ASYH_MultiPlayer::OnClickedLeft(const FInputActionValue& Value)
-{
-	if ( HitResult.bBlockingHit )
-	{
-		AActor* HitActor = HitResult.GetActor();
-		if ( HitActor )
-		{
-			count = 0;
-			auto* actorClass = HitActor->GetComponentByClass<UKMK_SingleIntaraction>();
-			if ( actorClass && bCreateWidget )
-			{
-				actorClass->CreatePlayerWidget(true,0);
-				PlayerController->SetPause(true);
-				
-			}
-		}
-	}
-
-}
 
 void ASYH_MultiPlayer::OnMyCheckActor()
 {

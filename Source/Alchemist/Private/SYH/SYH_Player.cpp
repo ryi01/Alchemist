@@ -10,11 +10,13 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
+#include "KMK_PopUpWidget.h"
 #include "Blueprint/UserWidget.h"
 #include "SYH/CameraWidget.h"
 #include "SYH/SYH_PlayerAnim.h"
 #include "KMK_SingleIntaraction.h"
 #include "Alchemist/CHJ/Illustrated_Guide/Guide_Widget/Guide_MainWidget.h"
+#include "Components/Button.h"
 #include "Kismet/GameplayStatics.h"
 
 DEFINE_LOG_CATEGORY(LogTemplate);
@@ -46,17 +48,6 @@ ASYH_Player::ASYH_Player()
 
 }
 
-void ASYH_Player::PossessedBy(AController* NewController)
-{
-	Super::PossessedBy(NewController);
-	// 서버 위젯
-	if(HasAuthority())
-	{
-		CreatePopUpWidget();
-	
-	}
-}
-
 void ASYH_Player::BeginPlay()
 {
 	Super::BeginPlay();
@@ -68,11 +59,11 @@ void ASYH_Player::BeginPlay()
 	}
 	if (IsLocallyControlled())
 	{
-		player = Cast<APlayerController>(Controller);
-		if(player)
+		PlayerController = Cast<APlayerController>(Controller);
+		if(PlayerController)
 		{
-			player->SetShowMouseCursor(true);
-			if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(player->GetLocalPlayer()))
+			PlayerController->SetShowMouseCursor(true);
+			if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
 			{
 				Subsystem->AddMappingContext(IMC_Player, 0);
 			}
@@ -82,10 +73,18 @@ void ASYH_Player::BeginPlay()
 	if(!HasAuthority())
 	{
 		CreatePopUpWidget();
-
 	}
 }
 
+void ASYH_Player::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+	// 서버 위젯
+	if(HasAuthority())
+	{
+		CreatePopUpWidget();
+	}
+}
 
 void ASYH_Player::Tick(float DeltaTime)
 {
@@ -96,7 +95,7 @@ void ASYH_Player::Tick(float DeltaTime)
 		{
 			return;
 		}
-		player->GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, false, HitResult);
+		PlayerController->GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, false, HitResult);
 	
 		if (HitResult.GetActor() != nullptr && HitResult.bBlockingHit)
 		{
@@ -123,8 +122,6 @@ void ASYH_Player::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 
 		// Looking
 		EnhancedInputComponent->BindAction(IA_Look, ETriggerEvent::Triggered, this, &ASYH_Player::Look);
-
-		// Camera
 
 		// 마우스 클릭
 		EnhancedInputComponent->BindAction(IA_Mouse, ETriggerEvent::Started, this, &ASYH_Player::OnClickedLeft);
@@ -176,6 +173,7 @@ void ASYH_Player::Look(const FInputActionValue& Value)
 
 void ASYH_Player::OnClickedLeft(const FInputActionValue& Value)
 {
+	
 	if ( HitResult.bBlockingHit )
 	{
 		AActor* HitActor = HitResult.GetActor();
@@ -186,12 +184,10 @@ void ASYH_Player::OnClickedLeft(const FInputActionValue& Value)
 			if ( actorClass && bCreateWidget )
 			{
 				actorClass->CreatePlayerWidget(true,0);
-				player->SetPause(true);
-				
+				//PlayerController->SetPause(true);
 			}
 		}
 	}
-
 }
 
 void ASYH_Player::OnMyCheckActor()

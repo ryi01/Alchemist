@@ -90,9 +90,10 @@ protected:
 	void OnMyCheckActor();
 
 	void CreatePopUpWidget();
-	
+
 	UPROPERTY()
-	class UGuide_GameInstance* GameInstance;
+	class AAluminum_Object* Aluminum;
+	
 	int count = 0;
 	bool bCreateWidget = false;
 

@@ -49,7 +49,7 @@ public:
 	UPROPERTY()
 	class USYH_PlayerAnim* anim;
 	UPROPERTY()
-	class APlayerController* player;
+	class APlayerController* PlayerController;
 	UPROPERTY()
 	FHitResult HitResult;
 	UPROPERTY()
@@ -73,7 +73,10 @@ protected:
 	int count = 0;
 	bool bCreateWidget = false;
 
-	
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="UI")
+	TSubclassOf<UUserWidget> PopUPWidgetClass;
+	UPROPERTY();
+	class UKMK_PopUpWidget* PopUpWidget;
 protected:
 	// APawn interface
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;

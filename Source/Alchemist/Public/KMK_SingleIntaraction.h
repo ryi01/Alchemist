@@ -31,6 +31,7 @@ public:
 	// 각각 widget을 설정해줘야함 => 플레이어 클릭에 따라 달라지기 때문
 	UPROPERTY(EditAnywhere, Category = "WidgetBluePrint")
 	TSubclassOf<class UUserWidget>widgetFact;
+	
 	UPROPERTY(EditAnywhere, Category = "WidgetBluePrint")
 	class UKMK_TextWidget* textWidget;
 

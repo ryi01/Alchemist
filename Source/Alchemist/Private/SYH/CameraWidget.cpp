@@ -52,14 +52,16 @@ void UCameraWidget::OnSliderValueChanged(float value)
 
 FReply UCameraWidget::NativeOnMouseButtonDown(const FGeometry& MyGeometry, const FPointerEvent& MouseEvent)
 {
-	if(MouseEvent.GetEffectingButton() == EKeys::RightMouseButton)
+	if(MouseEvent.GetEffectingButton() == EKeys::RightMouseButton && IsTaggedActorInView())
 	{
 		if(camera)
 		{
 			PlayAnimation(camera);
 		}
-		me->ObjectDetect();
-		return FReply::Handled();
+		if(me)
+		{
+			me->ObjectDetect();
+		}
 	}
 	return Super::NativeOnMouseButtonDown(MyGeometry, MouseEvent);
 }
