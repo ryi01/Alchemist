@@ -7,7 +7,12 @@
 		{
 			"Name": "Alchemist",
 			"Type": "Runtime",
-			"LoadingPhase": "Default"
+			"LoadingPhase": "Default",
+			"AdditionalDependencies": [
+				"UMG",
+				"Engine",
+				"CoreUObject"
+			]
 		}
 	],
 	"Plugins": [
