@@ -31,6 +31,7 @@ public:
 	FString MyData;
 	// SendButt을 눌렀을 때, 요청할 함수
 	void ReqChatBot(FString json);
+	void ReqChatBot1(FString json);
 	// 응답받을 함수
 	void OnResChatBot(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully);
 

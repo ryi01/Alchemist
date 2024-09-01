@@ -16,6 +16,9 @@
 #include "KMK/KMK_SingleIntaraction.h"
 #include "Alchemist/CHJ/Illustrated_Guide/Guide_Widget/Guide_MainWidget.h"
 #include "Kismet/GameplayStatics.h"
+#include "KMK/KMK_DeskComponent.h"
+#include "KMK/KMK_PlayerMouse.h"
+#include "PhysicsEngine/PhysicsHandleComponent.h"
 
 DEFINE_LOG_CATEGORY(LogTemplate);
 
@@ -145,7 +148,7 @@ void ASYH_Player::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 {
 	
 	// Set up action bindings
-	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent)) {
+	if ( UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent)) {
 		
 		// Jumping
 		EnhancedInputComponent->BindAction(IA_Jump, ETriggerEvent::Started, this, &ACharacter::Jump);
@@ -159,9 +162,8 @@ void ASYH_Player::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 
 		// Camera
 		EnhancedInputComponent->BindAction(IA_Camera, ETriggerEvent::Started, this, &ASYH_Player::Camera);
-
 		// 마우스 클릭
-		EnhancedInputComponent->BindAction(IA_Mouse, ETriggerEvent::Started, this, &ASYH_Player::OnClickedLeft);
+		EnhancedInputComponent->BindAction(IA_Mouse,ETriggerEvent::Started,this,&ASYH_Player::OnClickedLeft);
 		// 도감
 		EnhancedInputComponent->BindAction(IA_Guide, ETriggerEvent::Started, this, &ASYH_Player::OnOffGuide);
 	}
@@ -239,6 +241,19 @@ void ASYH_Player::OnClickedLeft(const FInputActionValue& Value)
 	if ( HitResult.bBlockingHit )
 	{
 		AActor* HitActor = HitResult.GetActor();
+		auto* desk = HitActor->GetComponentByClass<UKMK_DeskComponent>();
+		auto* mouse = HitActor->GetComponentByClass<UKMK_PlayerMouse>();
+		if ( HitActor->ActorHasTag("Desk") )
+		{
+			if ( desk )
+			{
+				DeskActor = HitActor;
+				mouse->isDesk = true;
+				mouse->handle = GetComponentByClass<UPhysicsHandleComponent>();
+				desk->ChangeMyCamera(true);
+			}
+			return;
+		}
 		if ( HitActor )
 		{
 			count = 0;

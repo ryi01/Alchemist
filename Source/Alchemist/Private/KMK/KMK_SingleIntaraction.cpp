@@ -18,11 +18,12 @@ UKMK_SingleIntaraction::UKMK_SingleIntaraction()
 void UKMK_SingleIntaraction::BeginPlay()
 {
 	Super::BeginPlay();
+
 	// 오너의 widget 들고오기
 	auto* owner = GetOwner()->FindComponentByClass< UWidgetComponent>();
 	if (owner)
 	{
-		owner->SetWidgetClass(textWidget->GetClass());
+		if(textWidget!= nullptr) owner->SetWidgetClass(textWidget->GetClass());
 		if (owner->GetWidget() != nullptr)
 		{
 			textWidget = Cast<UKMK_TextWidget>(owner->GetWidget());
@@ -41,6 +42,10 @@ void UKMK_SingleIntaraction::TickComponent(float DeltaTime, ELevelTick TickType,
 
 void UKMK_SingleIntaraction::CreatePlayerWidget(bool bMake, int num = 0)
 {
+	if ( widgetFact == nullptr )
+	{
+		return;
+	}
 	auto* wid = CreateWidget(GetWorld(), widgetFact);
 	// 책상 클릭시 카메라 변경
 	if ( bMake )

@@ -21,15 +21,12 @@ void UKMK_DeskComponent::BeginPlay()
 {
 	Super::BeginPlay();	
 	// 책상을 비추는 카메라를 찾고 비활성화 시키는 함수
-	FindDeskCam();
 	player = GetWorld()->GetFirstPlayerController();
-	if (player)
+	check(player);
+	if ( player && ToViewCamera != nullptr )
 	{
-		auto* playerController = Cast<ACharacter>(player->GetPawn());
-		if (playerController)
-		{
-			PlayerCamera = playerController->FindComponentByClass<UCameraComponent>();
-		}
+		player->SetViewTarget(ToViewCamera);
+		FindDeskCam();
 	}
 }
 
@@ -39,6 +36,7 @@ void UKMK_DeskComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAc
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 	// 변경된 카메라 활성 시키는 함수
+	if(!bActive) player->SetViewTarget(ToViewCamera);
 	// ChangeMyCamera(bActive);
 }
 
@@ -66,6 +64,16 @@ void UKMK_DeskComponent::FindDeskCam()
 					DeskCameraComponent = CamComp;
 					// 비활성화
 					DeskCameraComponent->SetActive(false);
+				}
+			}
+			if ( Actor->ActorHasTag(TEXT("Top")) )
+			{
+				// DeskCameraComponent에 변수값을 넣어주고
+				if ( !TopViewCameraComponent )
+				{
+					TopViewCameraComponent = CamComp;
+					// 비활성화
+					TopViewCameraComponent->SetActive(true);
 				}
 			}
 		}

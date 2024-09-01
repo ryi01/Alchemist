@@ -25,7 +25,7 @@ void UKMK_PlayerMouse::BeginPlay()
 {
 	Super::BeginPlay();
 	me = CastChecked<APlayerController>(GetWorld()->GetFirstPlayerController());
-	handle = GetOwner()->GetComponentByClass<UPhysicsHandleComponent>();
+
 }
 
 
@@ -34,6 +34,7 @@ void UKMK_PlayerMouse::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 	if(me == nullptr ) return;
+
 	if( !IsRay ) OnMyPutComp(outHitComp);
 	else OnMyGrabComp();
 
@@ -48,7 +49,7 @@ void UKMK_PlayerMouse::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 void UKMK_PlayerMouse::OnMyGrabComp()
 {
 	if(count > 0) return;
-
+	if ( !isDesk ) return;
 	FHitResult outHit;
 	mousePos = GetMouseWorldDirection();
 	ECollisionChannel channel = ECollisionChannel::ECC_GameTraceChannel1;
@@ -62,9 +63,10 @@ void UKMK_PlayerMouse::OnMyGrabComp()
 		if ( hitActor->ActorHasTag(TEXT("Pot")) )
 		{
 			auto* potComp = hitActor->GetComponentByClass<UKMK_GrabActorComp>();
+			if(potComp->ElementArray.IsEmpty() ) return;
 			TArray<AActor*> arrActor;
 			UGameplayStatics::GetAllActorsOfClass(GetWorld(),AKMK_HttpActorWithAI::StaticClass(),arrActor);
-			HttpActor = arrActor[ 0 ];
+			if(arrActor[0])HttpActor = arrActor[0];
 			if ( HttpActor == nullptr ) return;
 			auto* httpComp = CastChecked<AKMK_HttpActorWithAI>(HttpActor);
 			if ( httpComp )
@@ -76,15 +78,6 @@ void UKMK_PlayerMouse::OnMyGrabComp()
 				}
 				httpComp->ReqElement(ConvertedMap);
 				potComp->ElementArray.Empty();
-			}
-			return;
-		}
-		if ( hitActor->ActorHasTag(TEXT("Desk")))
-		{
-			auto* desk = hitActor->GetComponentByClass<UKMK_DeskComponent>();
-			if ( desk )
-			{
-				desk->ChangeMyCamera(true);
 			}
 			return;
 		}

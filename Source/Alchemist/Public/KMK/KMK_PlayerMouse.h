@@ -40,7 +40,9 @@ public:
 	UPROPERTY(EditAnywhere)
 	AActor* HttpActor;
 
+	bool isDesk = false;
 	TArray<FVector> mousePos;
+	UPROPERTY(BlueprintReadWrite)
 	int count = 0;
 
 	UFUNCTION()

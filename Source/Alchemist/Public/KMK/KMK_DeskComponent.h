@@ -28,14 +28,16 @@ public:
 	// 책상 위를 찍고 있는 카메라
 	UPROPERTY()
 	class UCameraComponent* DeskCameraComponent;
+	UPROPERTY(EditAnywhere)
+	class ACameraActor* ToViewCamera;
 	UPROPERTY()
-	class UCameraComponent* PlayerCamera;
+	class UCameraComponent* TopViewCameraComponent;
 	UPROPERTY()
 	class APlayerController* player;
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	bool bActive = false;
 	// 클릭되면 활성화될 함수 = 인라인 함수사용
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void ChangeMyCamera(bool OnClick)
 	{
 		bActive = OnClick;
@@ -43,12 +45,12 @@ public:
 		if (OnClick)
 		{
 			// 데스크 카메라 활성화
-			player->SetViewTarget(DeskCameraComponent->GetOwner());
+			if( DeskCameraComponent)player->SetViewTarget(DeskCameraComponent->GetOwner());
 		}
 		else
 		{
 			// 플레이어 카메라 활성화
-			player->SetViewTarget(PlayerCamera->GetOwner());
+			if( TopViewCameraComponent)player->SetViewTarget(TopViewCameraComponent->GetOwner());
 		}
 	}
 	// 카메라 찾는 함수

@@ -35,6 +35,7 @@ void AKMK_HttpActorWithAI::Tick(float DeltaTime)
 
 void AKMK_HttpActorWithAI::ReqChatBot(FString json)
 {
+	
 	// HTTP 모듈 생성
 	FHttpModule& httpModule = FHttpModule::Get();
 	TSharedRef<IHttpRequest> req = httpModule.CreateRequest();
@@ -55,6 +56,12 @@ void AKMK_HttpActorWithAI::ReqChatBot(FString json)
 }
 
 
+void AKMK_HttpActorWithAI::ReqChatBot1(FString json)
+{
+	HttpUI->MakeChatText(FText::FromString("Hi"),1);
+	HttpUI->PlayerChat->SetIsEnabled(true);
+}
+
 void AKMK_HttpActorWithAI::OnResChatBot(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully)
 {
 	if ( bConnectedSuccessfully )
@@ -64,7 +71,7 @@ void AKMK_HttpActorWithAI::OnResChatBot(FHttpRequestPtr Request, FHttpResponsePt
 		TMap<FString, FString> result = UKMK_JsonParseLib::ChatBotParsec(respon, MyData);
 		if ( HttpUI && !result.IsEmpty())
 		{
-			HttpUI->MakeChatText(FText::FromString(result[ TEXT("산소") ]));
+			HttpUI->MakeChatText(FText::FromString(result[ TEXT("산소") ]), 1);
 			HttpUI->PlayerChat->SetIsEnabled(true);
 		}
 	}

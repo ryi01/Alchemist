@@ -7,6 +7,7 @@
 #include "Components/EditableText.h"
 #include "KMK/KMK_TextWidget.h"
 #include "KMK/KMK_HttpActorWithAI.h"
+#include "Components/ScrollBoxSlot.h"
 
 void UKMK_ChatBotWidget::NativeConstruct()
 {
@@ -22,28 +23,40 @@ void UKMK_ChatBotWidget::OnClickSendButt()
     if (!PlayerChat->GetText().IsEmpty())
     {
         // AI에게 정보값 보내기
-        httpActor->ReqChatBot(*PlayerChat->GetText().ToString());
         MakeChatText(PlayerChat->GetText());
+        httpActor->ReqChatBot1(*PlayerChat->GetText().ToString());
         PlayerChat->SetText(FText::GetEmpty());
         PlayerChat->SetIsEnabled(false);
     }
 }
 
-void UKMK_ChatBotWidget::MakeChatText(FText text)
+void UKMK_ChatBotWidget::MakeChatText(FText text, int num)
 {
     // 텍스트 위잿 생성
     auto* widget = Cast<UKMK_TextWidget>(CreateWidget(GetWorld(), ChatTextWidFact));
     if ( widget )
     {
         // 위잿 텍스트 작성
-        widget->SetChatText(text);
+        widget->SetChatText(text, count % 2);
         widget->AddToViewport();
-        // 스크롤 밑에 생성되게 만들기
+
         ChatLog->AddChild(widget);
+        UScrollBoxSlot* a = CastChecked<UScrollBoxSlot>(widget->Slot);
+        // Child의 슬롯을 가져옴
+        if ( a )
+        {
+            // 슬롯의 Alignment 설정
+            if ( count % 2 == 0 )a->SetHorizontalAlignment(HAlign_Right);
+            else a->SetHorizontalAlignment(HAlign_Left);
+            // 스크롤 밑에 생성되게 만들기
+            count++;
+        }
     }
+    
 }
 
 void UKMK_ChatBotWidget::SetHttpActor(AKMK_HttpActorWithAI* actor)
 {
     httpActor = actor;
+    httpActor->HttpUI = this;
 }
