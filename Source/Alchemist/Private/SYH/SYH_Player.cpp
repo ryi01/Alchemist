@@ -10,15 +10,14 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
+#include "KMK_PopUpWidget.h"
 #include "Blueprint/UserWidget.h"
 #include "SYH/CameraWidget.h"
 #include "SYH/SYH_PlayerAnim.h"
-#include "KMK/KMK_SingleIntaraction.h"
+#include "KMK_SingleIntaraction.h"
 #include "Alchemist/CHJ/Illustrated_Guide/Guide_Widget/Guide_MainWidget.h"
+#include "Components/Button.h"
 #include "Kismet/GameplayStatics.h"
-#include "KMK/KMK_DeskComponent.h"
-#include "KMK/KMK_PlayerMouse.h"
-#include "PhysicsEngine/PhysicsHandleComponent.h"
 
 DEFINE_LOG_CATEGORY(LogTemplate);
 
@@ -45,37 +44,8 @@ ASYH_Player::ASYH_Player()
 	GetCharacterMovement()->MinAnalogWalkSpeed = 20.f;
 	GetCharacterMovement()->BrakingDecelerationWalking = 2000.f;
 	GetCharacterMovement()->BrakingDecelerationFalling = 1500.0f;
+	
 
-	// Create a camera boom (pulls in towards the player if there is a collision)
-	SpringArmComp = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArmComp"));
-	SpringArmComp->SetupAttachment(RootComponent);
-	SpringArmComp->TargetArmLength = 150.0f; // The camera follows at this distance behind the character	
-	SpringArmComp->bUsePawnControlRotation = true; // Rotate the arm based on the controller
-	SpringArmComp->SetRelativeLocation(FVector(0,40,60));
-
-	// Create a follow camera
-	CameraCompThird = CreateDefaultSubobject<UCameraComponent>(TEXT("CameraCompThird"));
-	CameraCompThird->SetupAttachment(SpringArmComp, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
-	CameraCompThird->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
-
-	CameraCompFirst = CreateDefaultSubobject<UCameraComponent>(TEXT("CameraCompFirst"));
-	CameraCompFirst->SetupAttachment(GetMesh()); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
-	CameraCompFirst->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
-	CameraCompFirst->SetActive(false);
-	CameraCompFirst->SetRelativeLocationAndRotation(FVector(0, 20, 160), FRotator(0));
-
-}
-
-void ASYH_Player::PossessedBy(AController* NewController)
-{
-	Super::PossessedBy(NewController);
-	// 서버 위젯
-	if(HasAuthority())
-	{
-		CreatePopUpWidget();
-		if (!IsLocallyControlled() || GuideWidget != nullptr) return;
-		GuideWidget = Cast<UGuide_MainWidget>(CreateWidget(GetWorld(), GuideWidgetClass));
-	}
 }
 
 void ASYH_Player::BeginPlay()
@@ -89,11 +59,11 @@ void ASYH_Player::BeginPlay()
 	}
 	if (IsLocallyControlled())
 	{
-		player = Cast<APlayerController>(Controller);
-		if(player)
+		PlayerController = Cast<APlayerController>(Controller);
+		if(PlayerController)
 		{
-			player->SetShowMouseCursor(true);
-			if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(player->GetLocalPlayer()))
+			PlayerController->SetShowMouseCursor(true);
+			if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
 			{
 				Subsystem->AddMappingContext(IMC_Player, 0);
 			}
@@ -103,12 +73,18 @@ void ASYH_Player::BeginPlay()
 	if(!HasAuthority())
 	{
 		CreatePopUpWidget();
-		if (!IsLocallyControlled() || GuideWidget != nullptr) return;
-		GuideWidget = Cast<UGuide_MainWidget>(CreateWidget(GetWorld(), GuideWidgetClass));
-
 	}
 }
 
+void ASYH_Player::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+	// 서버 위젯
+	if(HasAuthority())
+	{
+		CreatePopUpWidget();
+	}
+}
 
 void ASYH_Player::Tick(float DeltaTime)
 {
@@ -119,7 +95,7 @@ void ASYH_Player::Tick(float DeltaTime)
 		{
 			return;
 		}
-		player->GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, false, HitResult);
+		PlayerController->GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, false, HitResult);
 	
 		if (HitResult.GetActor() != nullptr && HitResult.bBlockingHit)
 		{
@@ -130,25 +106,12 @@ void ASYH_Player::Tick(float DeltaTime)
 
 // Input
 
-void ASYH_Player::OnOffGuide(const FInputActionValue& Value)
-{
-	// 인벤이 화면이 있으면 지우고
-	if (GuideWidget->IsInViewport())
-	{
-		GuideWidget->RemoveFromParent();
-	}
-	// 인벤이 화면에 없으면 생성
-	else
-	{
-		GuideWidget->AddToViewport();
-	}
-}
 
 void ASYH_Player::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	
 	// Set up action bindings
-	if ( UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent)) {
+	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent)) {
 		
 		// Jumping
 		EnhancedInputComponent->BindAction(IA_Jump, ETriggerEvent::Started, this, &ACharacter::Jump);
@@ -160,12 +123,9 @@ void ASYH_Player::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 		// Looking
 		EnhancedInputComponent->BindAction(IA_Look, ETriggerEvent::Triggered, this, &ASYH_Player::Look);
 
-		// Camera
-		EnhancedInputComponent->BindAction(IA_Camera, ETriggerEvent::Started, this, &ASYH_Player::Camera);
 		// 마우스 클릭
-		EnhancedInputComponent->BindAction(IA_Mouse,ETriggerEvent::Started,this,&ASYH_Player::OnClickedLeft);
-		// 도감
-		EnhancedInputComponent->BindAction(IA_Guide, ETriggerEvent::Started, this, &ASYH_Player::OnOffGuide);
+		EnhancedInputComponent->BindAction(IA_Mouse, ETriggerEvent::Started, this, &ASYH_Player::OnClickedLeft);
+	
 	}
 	else
 	{
@@ -211,49 +171,12 @@ void ASYH_Player::Look(const FInputActionValue& Value)
 	}
 }
 
-void ASYH_Player::Camera(const FInputActionValue& Value)
-{
-	// e키를 누르면 애니메이션이 출력되고 시점을 바꾸고 싶다.
-	if ( anim && anim->bIsPlayCameraAnim == true)
-	{
-		// 카메라를 드는 애니메이션이 출력되도록 bool 값을 true로 설정
-		anim->bIsCamera = true;
-	}
-	// e키를 누르고 카메라가 1인칭 시점인 상태에서 e키를 다시 누르면 원래대로 돌아오게 하고 싶다.
-	else if(anim&& anim->bIsPlayCameraAnim == false)
-	{
-		CameraCompThird->SetActive(true);
-		CameraCompFirst->SetActive(false);
-		// UI도 끄고 싶다.
-		if(anim->CameraWidgetClass)
-		{
-			if(anim->CameraWidget)
-			{
-				anim->CameraWidget->RemoveFromParent();
-				anim->bIsPlayCameraAnim = true;
-			}
-		}
-	}
-}
-
 void ASYH_Player::OnClickedLeft(const FInputActionValue& Value)
 {
+	
 	if ( HitResult.bBlockingHit )
 	{
 		AActor* HitActor = HitResult.GetActor();
-		auto* desk = HitActor->GetComponentByClass<UKMK_DeskComponent>();
-		auto* mouse = HitActor->GetComponentByClass<UKMK_PlayerMouse>();
-		if ( HitActor->ActorHasTag("Desk") )
-		{
-			if ( desk )
-			{
-				DeskActor = HitActor;
-				mouse->isDesk = true;
-				mouse->handle = GetComponentByClass<UPhysicsHandleComponent>();
-				desk->ChangeMyCamera(true);
-			}
-			return;
-		}
 		if ( HitActor )
 		{
 			count = 0;
@@ -261,12 +184,10 @@ void ASYH_Player::OnClickedLeft(const FInputActionValue& Value)
 			if ( actorClass && bCreateWidget )
 			{
 				actorClass->CreatePlayerWidget(true,0);
-				player->SetPause(true);
-				
+				//PlayerController->SetPause(true);
 			}
 		}
 	}
-
 }
 
 void ASYH_Player::OnMyCheckActor()

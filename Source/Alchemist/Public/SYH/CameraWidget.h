@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "Input/Reply.h"
 #include "CameraWidget.generated.h"
 
 class UProgressBar;
@@ -30,11 +31,16 @@ public:
 	class UImage* CameraImage;
 	UPROPERTY()
 	class ASYH_MultiPlayer* me;
-	
+
 	UPROPERTY()
-	class APlayerController* player;
+	class APlayerController* playercontroller;
 	UPROPERTY(editanywhere, BlueprintReadWrite, Category="Actor")
 	FName ActorTag;
+	UPROPERTY(meta = (BindWidgetAnim), Transient)
+	class UWidgetAnimation* camera;
+private:
+
+	virtual FReply NativeOnMouseButtonDown(const FGeometry& MyGeometry, const FPointerEvent& MouseEvent) override;
 
 private:
 	bool IsTaggedActorInView();

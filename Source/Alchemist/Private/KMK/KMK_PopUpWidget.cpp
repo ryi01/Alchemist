@@ -1,23 +1,38 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
+// Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "KMK/KMK_PopUpWidget.h"
+#include "KMK_PopUpWidget.h"
 #include "Components/Button.h"
 #include "Components/TextBlock.h"
+#include "Kismet/KismetSystemLibrary.h"
+#include "SYH/SYH_Player.h"
 
 void UKMK_PopUpWidget::NativeConstruct()
 {
     Super::NativeConstruct();
-    // 버튼 바인딩
+    PlayerController = Cast<APlayerController>(GetOwningPlayer());
+    
     if (YesButt)
     {
-        // 버튼 바인딩
         YesButt->OnClicked.AddDynamic(this, &UKMK_PopUpWidget::OnClickedYesButt);
     }
+  
     if (NoButt)
     {
-        // 버튼 바인딩
         NoButt->OnClicked.AddDynamic(this, &UKMK_PopUpWidget::OnClickedNobutt);
+    }
+    if (PauseButt)
+    {
+        PauseButt->OnClicked.AddDynamic(this, &UKMK_PopUpWidget::OnClickedPausebutt);
+    }
+    if (GetWorld()->GetNetMode() == NM_DedicatedServer || GetWorld()->GetNetMode() == NM_ListenServer)
+    {
+        // 서버 코드
+    }
+    else
+    {
+        // 클라이언트 코드
+        VisibleYesButt();
     }
 }
 
@@ -35,3 +50,27 @@ void UKMK_PopUpWidget::OnClickedNobutt()
 {
 
 }
+
+void UKMK_PopUpWidget::OnClickedPausebutt()
+{
+    
+    if (GetWorld()->GetNetMode() == NM_DedicatedServer || GetWorld()->GetNetMode() == NM_ListenServer)
+    {
+        // 서버 코드
+        RemoveFromParent();
+    }
+    else
+    {
+        // 클라이언트 코드
+        RemoveFromParent();
+    }
+}
+
+void UKMK_PopUpWidget::VisibleYesButt()
+{
+    if(YesButt)
+    {
+        YesButt->SetVisibility(ESlateVisibility::Hidden);
+    }
+}
+

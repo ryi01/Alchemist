@@ -1,4 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
@@ -29,7 +28,7 @@ public:
 	UCameraComponent* CameraCompThird;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
-	UCameraComponent* CameraCompFirst;
+	class UCameraComponent* CameraCompFirst;
 	/** MappingContext */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputMappingContext* IMC_Player;
@@ -51,19 +50,31 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* IA_Mouse;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* IA_Guide;
+	
 	// Sets default values for this character's properties
 	ASYH_MultiPlayer();
 	virtual void PossessedBy(AController* NewController) override;
 	UPROPERTY()
 	class USYH_PlayerAnim* anim;
 	UPROPERTY()
-	class APlayerController* player;
+	class APlayerController* PlayerController;
 	UPROPERTY(BlueprintReadWrite, Category = "UI")
 	UUserWidget* CameraWidget;
 	UPROPERTY()
 	FHitResult HitResult;
 	UPROPERTY()
 	class UKMK_SingleIntaraction* interActor;
+
+	// 도감
+	void OnOffGuide(const FInputActionValue& Value);
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class UGuide_MainWidget> GuideWidgetClass;
+	UPROPERTY()
+	class UGuide_MainWidget* GuideWidget;
+
+
 protected:
 
 	/** Called for movement input */
@@ -79,10 +90,16 @@ protected:
 	void OnMyCheckActor();
 
 	void CreatePopUpWidget();
+
+	UPROPERTY()
+	class AAluminum_Object* Aluminum;
 	
 	int count = 0;
 	bool bCreateWidget = false;
+
 public:
+	//UPROPERTY(EditDefaultsOnly,BlueprintReadWrite)
+	//bool bIsCamera = false;
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	// Called every frame
@@ -94,4 +111,6 @@ public:
 	FORCEINLINE class USpringArmComponent* GetSpringArmComp() const { return SpringArmComp; }
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetCameraCompThird() const { return CameraCompThird; }
+
+	void ObjectDetect();
 };

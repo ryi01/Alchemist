@@ -35,8 +35,8 @@ public:
 	UPROPERTY(EditDefaultsOnly,BlueprintReadWrite)
 	float multi_vertical; // speed
 	
-	UPROPERTY(EditDefaultsOnly,BlueprintReadWrite)
-	bool bIsCamera = false;
+	//UPROPERTY(EditDefaultsOnly,BlueprintReadWrite)
+	//bool bIsCamera = false;
 	UPROPERTY(EditDefaultsOnly,BlueprintReadWrite)
 	bool bIsPlayCameraAnim = true;
 	UFUNCTION()
@@ -46,4 +46,8 @@ public:
 	TSubclassOf<UUserWidget> CameraWidgetClass;
 
 	class UUserWidget* CameraWidget;
+
+	// 몸 굽히기
+	UPROPERTY(EditDefaultsOnly,BlueprintReadWrite)
+	float PitchAngle;
 };

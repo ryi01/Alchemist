@@ -20,13 +20,20 @@ public:
 	class UTextBlock* PopUpText;
 	UPROPERTY(EditAnywhere, meta = (BindWidget),BlueprintReadWrite)
 	class UButton* YesButt;
-	UPROPERTY(EditAnywhere, meta = (BindWidget))
+	UPROPERTY(EditAnywhere, meta = (BindWidget),BlueprintReadWrite)
 	class UButton* NoButt;
-
+	UPROPERTY(EditAnywhere, meta = (BindWidget),BlueprintReadWrite)
+	class UButton* PauseButt;
 	UFUNCTION()
 	void SetPopUpText(FText text);
 	UFUNCTION()
 	void OnClickedYesButt();
 	UFUNCTION()
 	void OnClickedNobutt();
+	UFUNCTION()
+	void OnClickedPausebutt();
+	void VisibleYesButt();
+
+	UPROPERTY()
+	class APlayerController* PlayerController;
 };

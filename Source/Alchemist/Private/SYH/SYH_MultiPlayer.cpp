@@ -1,4 +1,4 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
+// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "SYH/SYH_MultiPlayer.h"
@@ -14,7 +14,10 @@
 #include "Blueprint/UserWidget.h"
 #include "SYH/CameraWidget.h"
 #include "SYH/SYH_PlayerAnim.h"
-#include "KMK/KMK_SingleIntaraction.h"
+#include "KMK_SingleIntaraction.h"
+#include "Alchemist/CHJ/Guide_GameInstance.h"
+#include "Alchemist/CHJ/Illustrated_Guide/GuideObject/Aluminum_Object.h"
+#include "Alchemist/CHJ/Illustrated_Guide/Guide_Widget/Guide_MainWidget.h"
 #include "Kismet/GameplayStatics.h"
 // Sets default values
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
@@ -66,6 +69,8 @@ void ASYH_MultiPlayer::PossessedBy(AController* NewController)
 	if(HasAuthority())
 	{
 		CreatePopUpWidget();
+		if (!IsLocallyControlled() || GuideWidget != nullptr) return;
+		GuideWidget = Cast<UGuide_MainWidget>(CreateWidget(GetWorld(), GuideWidgetClass));
 	}
 }
 
@@ -80,11 +85,11 @@ void ASYH_MultiPlayer::BeginPlay()
 	}
 	if (IsLocallyControlled())
 	{
-		player = Cast<APlayerController>(Controller);
-		if(player)
+		PlayerController = Cast<APlayerController>(Controller);
+		if(PlayerController)
 		{
-			player->SetShowMouseCursor(true);
-			if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(player->GetLocalPlayer()))
+			PlayerController->SetShowMouseCursor(false);
+			if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
 			{
 				Subsystem->AddMappingContext(IMC_Player, 0);
 			}
@@ -94,7 +99,10 @@ void ASYH_MultiPlayer::BeginPlay()
 	if(!HasAuthority())
 	{
 		CreatePopUpWidget();
+		if (!IsLocallyControlled() || GuideWidget != nullptr) return;
+		GuideWidget = Cast<UGuide_MainWidget>(CreateWidget(GetWorld(), GuideWidgetClass));
 	}
+	
 }
 
 // Called every frame
@@ -107,15 +115,28 @@ void ASYH_MultiPlayer::Tick(float DeltaTime)
 		{
 			return;
 		}
-		player->GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, false, HitResult);
+		PlayerController->GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, false, HitResult);
 	
 		if (HitResult.GetActor() != nullptr && HitResult.bBlockingHit)
 		{
 			OnMyCheckActor();
 		}
 	}
+	
 }
-
+void ASYH_MultiPlayer::OnOffGuide(const FInputActionValue& Value)
+{
+	// 인벤이 화면이 있으면 지우고
+	if (GuideWidget->IsInViewport())
+	{
+		GuideWidget->RemoveFromParent();
+	}
+	// 인벤이 화면에 없으면 생성
+	else
+	{
+		GuideWidget->AddToViewport();
+	}
+}
 // Called to bind functionality to input
 void ASYH_MultiPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
@@ -135,15 +156,60 @@ void ASYH_MultiPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 		// Camera
 		EnhancedInputComponent->BindAction(IA_Camera, ETriggerEvent::Started, this, &ASYH_MultiPlayer::Camera);
-
-		// 마우스 클릭
-		EnhancedInputComponent->BindAction(IA_Mouse, ETriggerEvent::Started, this, &ASYH_MultiPlayer::OnClickedLeft);
+		
+		// 도감
+		EnhancedInputComponent->BindAction(IA_Guide, ETriggerEvent::Started, this, &ASYH_MultiPlayer::OnOffGuide);
+		
 	}
 	else
 	{
 		UE_LOG(LogTemplateCharacter, Error, TEXT("'%s' Failed to find an Enhanced Input component! This template is built to use the Enhanced Input system. If you intend to use the legacy system, then you will need to update this C++ file."), *GetNameSafe(this));
 	}
 }
+
+void ASYH_MultiPlayer::ObjectDetect()
+{
+	// 카메라가 사진찍는 애니메이션을 시작하고 나서 호출
+	// linetrace를 사용해 hit된 물체의 GameInstance->TakeItemData(ItemIdx);를 통해 정보를 가져온다
+	FHitResult OutHit;
+	FVector start = CameraCompFirst->GetComponentLocation();
+	FVector end = start + CameraCompFirst->GetForwardVector()*100000;
+	float Radius = 60.f;
+	ECollisionChannel TraceChannel = ECC_Visibility;
+	FCollisionQueryParams Params;
+	Params.AddIgnoredActor(this);
+	
+	bool bHit = GetWorld()->SweepSingleByChannel(OutHit,start,end,FQuat::Identity,TraceChannel,FCollisionShape::MakeSphere(Radius),Params);
+	if(bHit)
+	{
+		auto* hitcomp = OutHit.GetComponent();
+		if(hitcomp)
+		{
+			Aluminum = Cast<AAluminum_Object>(OutHit.GetActor());
+			// 알루미늄 오브젝트 가져와서
+			// GetItemData 호출하기
+			if(Aluminum)
+			{
+				Aluminum->GetItemData();
+			}
+			else
+			{
+				bHit = false;
+			}
+			UE_LOG(LogTemp,Error,TEXT("%s"),*hitcomp->GetName());
+		}
+		else
+		{
+			bHit = false;
+		}
+		UE_LOG(LogTemp,Error,TEXT("here"));
+	}
+	else
+	{
+		UE_LOG(LogTemp,Error,TEXT("no bhit"));
+	}
+}
+
 
 void ASYH_MultiPlayer::Move(const FInputActionValue& Value)
 {
@@ -183,48 +249,39 @@ void ASYH_MultiPlayer::Look(const FInputActionValue& Value)
 
 void ASYH_MultiPlayer::Camera(const FInputActionValue& Value)
 {
-	// e키를 누르면 애니메이션이 출력되고 시점을 바꾸고 싶다.
-	if ( anim && anim->bIsPlayCameraAnim == true)
+	if(IsLocallyControlled())
 	{
-		// 카메라를 드는 애니메이션이 출력되도록 bool 값을 true로 설정
-		anim->bIsCamera = true;
-	}
-	// e키를 누르고 카메라가 1인칭 시점인 상태에서 e키를 다시 누르면 원래대로 돌아오게 하고 싶다.
-	else if(anim&& anim->bIsPlayCameraAnim == false)
-	{
-		CameraCompThird->SetActive(true);
-		CameraCompFirst->SetActive(false);
-		// UI도 끄고 싶다.
-		if(anim->CameraWidgetClass)
+		// e키를 누르면 애니메이션이 출력되고 시점을 바꾸고 싶다.
+		if ( anim && anim->bIsPlayCameraAnim == true)
 		{
-			if(anim->CameraWidget)
+			PlayerController->SetShowMouseCursor(true);
+			
+		}
+		// e키를 누르고 카메라가 1인칭 시점인 상태에서 e키를 다시 누르면 원래대로 돌아오게 하고 싶다.
+		else if(anim&& anim->bIsPlayCameraAnim == false)
+		{
+			CameraCompThird->SetActive(true);
+			CameraCompFirst->SetActive(false);
+			if (GetMesh())
 			{
-				anim->CameraWidget->RemoveFromParent();
-				anim->bIsPlayCameraAnim = true;
+				GetMesh()->SetOwnerNoSee(false);
+			}
+			// UI도 끄고 싶다.
+			if(anim->CameraWidgetClass)
+			{
+				if(anim->CameraWidget)
+				{
+					anim->CameraWidget->RemoveFromParent();
+					anim->bIsPlayCameraAnim = true;
+					PlayerController->SetShowMouseCursor(false);
+					FInputModeGameOnly InputMode;
+					PlayerController->SetInputMode(InputMode);
+				}
 			}
 		}
 	}
 }
 
-void ASYH_MultiPlayer::OnClickedLeft(const FInputActionValue& Value)
-{
-	if ( HitResult.bBlockingHit )
-	{
-		AActor* HitActor = HitResult.GetActor();
-		if ( HitActor )
-		{
-			count = 0;
-			auto* actorClass = HitActor->GetComponentByClass<UKMK_SingleIntaraction>();
-			if ( actorClass && bCreateWidget )
-			{
-				actorClass->CreatePlayerWidget(true,0);
-				player->SetPause(true);
-				
-			}
-		}
-	}
-
-}
 
 void ASYH_MultiPlayer::OnMyCheckActor()
 {
@@ -252,5 +309,6 @@ void ASYH_MultiPlayer::CreatePopUpWidget()
 	if(!IsLocallyControlled()) return;
 	bCreateWidget = true;
 }
+
 
 
