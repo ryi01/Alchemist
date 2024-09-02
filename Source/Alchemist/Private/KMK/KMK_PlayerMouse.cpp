@@ -60,7 +60,7 @@ void UKMK_PlayerMouse::OnMyGrabComp()
 	if ( bHit )
 	{
 		auto* hitActor = outHit.GetActor();
-		if ( hitActor->ActorHasTag(TEXT("Pot")) )
+		if ( hitActor->ActorHasTag(TEXT("Pot")) && outHitComp == nullptr )
 		{
 			auto* potComp = hitActor->GetComponentByClass<UKMK_GrabActorComp>();
 			if(potComp->ElementArray.IsEmpty() ) return;
@@ -110,6 +110,7 @@ void UKMK_PlayerMouse::OnMyPutComp(class UPrimitiveComponent* comp)
 	count = 0;
 	comp->SetSimulatePhysics(false);
 	handle->ReleaseComponent();
+	outHitComp = nullptr;
 }
 
 void UKMK_PlayerMouse::CopyNewActor(AActor* hitActor, FVector grabPos)
