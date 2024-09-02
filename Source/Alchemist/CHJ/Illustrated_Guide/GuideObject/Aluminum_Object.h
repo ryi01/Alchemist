@@ -35,4 +35,6 @@ public:
 	int32 ItemIdx = 0; // 알루미늄 데이터 인덱스 0
 	
 	class UGuide_GameInstance* GameInstance;
+	
+	void GetItemData();
 };

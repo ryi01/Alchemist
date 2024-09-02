@@ -3,18 +3,22 @@
 
 #include "SYH/CameraWidget.h"
 
+#include "Animation/WidgetAnimation.h"
 #include "Blueprint/WidgetLayoutLibrary.h"
 #include "Components/Image.h"
 #include "Components/ProgressBar.h"
 #include "Components/Slider.h"
 #include "Components/TextBlock.h"
 #include "Kismet/GameplayStatics.h"
+#include "Input/Reply.h"
+#include "SYH/SYH_MultiPlayer.h"
 
 void UCameraWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 {
 	Super::NativeTick(MyGeometry, InDeltaTime);
 	UpdateTextVisibility();
 }
+
 
 void UCameraWidget::NativeConstruct()
 {
@@ -24,6 +28,8 @@ void UCameraWidget::NativeConstruct()
 	{
 		ZoomSlider->OnValueChanged.AddDynamic(this, &UCameraWidget::OnSliderValueChanged);
 	}
+	playercontroller = Cast<APlayerController>(GetOwningPlayer());
+	me = CastChecked<ASYH_MultiPlayer>(GetOwningPlayerPawn());
 }
 
 
@@ -35,13 +41,29 @@ void UCameraWidget::OnSliderValueChanged(float value)
 	// lerp를 사용하여  slider의 값이 변함에 따라 선형적으로 fov값이 변하도록 함
 	float NewFOV = FMath::Lerp(MaxFOV, MinFOV, value);
 
-	if(APlayerController* player = GetOwningPlayer())
+	if(playercontroller && playercontroller == GetOwningPlayer() )
 	{
-		if(APlayerCameraManager* CameraManager = player->PlayerCameraManager)
+		if(APlayerCameraManager* CameraManager = playercontroller->PlayerCameraManager)
 		{
 			CameraManager->SetFOV(NewFOV);
 		}
 	}
+}
+
+FReply UCameraWidget::NativeOnMouseButtonDown(const FGeometry& MyGeometry, const FPointerEvent& MouseEvent)
+{
+	if(MouseEvent.GetEffectingButton() == EKeys::RightMouseButton && IsTaggedActorInView())
+	{
+		if(camera)
+		{
+			PlayAnimation(camera);
+		}
+		if(me)
+		{
+			me->ObjectDetect();
+		}
+	}
+	return Super::NativeOnMouseButtonDown(MyGeometry, MouseEvent);
 }
 
 bool UCameraWidget::IsTaggedActorInView()
@@ -53,8 +75,7 @@ bool UCameraWidget::IsTaggedActorInView()
 	TArray<AActor*> TaggedActors;
 	UGameplayStatics::GetAllActorsWithTag(GetWorld(),"CameraObject",TaggedActors);
 
-	APlayerController* player =  GetWorld()->GetFirstPlayerController();
-	if(!player) return false;
+	if(!playercontroller) return false;
 
 	for(AActor* actor : TaggedActors)
 	{
@@ -62,7 +83,7 @@ bool UCameraWidget::IsTaggedActorInView()
 		{
 			FVector2D ScreenPos;
 			FVector ActorPos = actor->GetActorLocation();
-			if(player->ProjectWorldLocationToScreen(ActorPos,ScreenPos))
+			if(playercontroller->ProjectWorldLocationToScreen(ActorPos,ScreenPos))
 			{
 				FVector2D CameraPos = CameraImage->GetCachedGeometry().GetAbsolutePosition();
 				FVector2D CameraSize = CameraImage->GetCachedGeometry().GetLocalSize();

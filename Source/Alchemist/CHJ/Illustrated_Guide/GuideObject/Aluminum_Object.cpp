@@ -42,8 +42,12 @@ void AAluminum_Object::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActo
 	//캐릭터가 충돌 되었다면 가이드 컴포넌트의 데이터를 set 한다.
 	if(OtherPlayer)
 	{	
-		GameInstance->TakeItemData(ItemIdx);
+		//GameInstance->TakeItemData(ItemIdx);
 	}
 }
 
+void AAluminum_Object::GetItemData()
+{
+    GameInstance->TakeItemData(ItemIdx);
+}
 

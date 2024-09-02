@@ -4,20 +4,35 @@
 #include "KMK_PopUpWidget.h"
 #include "Components/Button.h"
 #include "Components/TextBlock.h"
+#include "Kismet/KismetSystemLibrary.h"
+#include "SYH/SYH_Player.h"
 
 void UKMK_PopUpWidget::NativeConstruct()
 {
     Super::NativeConstruct();
-    // ¹öÆ° ¹ÙÀÎµù
+    PlayerController = Cast<APlayerController>(GetOwningPlayer());
+    
     if (YesButt)
     {
-        // ¹öÆ° ¹ÙÀÎµù
         YesButt->OnClicked.AddDynamic(this, &UKMK_PopUpWidget::OnClickedYesButt);
     }
+  
     if (NoButt)
     {
-        // ¹öÆ° ¹ÙÀÎµù
         NoButt->OnClicked.AddDynamic(this, &UKMK_PopUpWidget::OnClickedNobutt);
+    }
+    if (PauseButt)
+    {
+        PauseButt->OnClicked.AddDynamic(this, &UKMK_PopUpWidget::OnClickedPausebutt);
+    }
+    if (GetWorld()->GetNetMode() == NM_DedicatedServer || GetWorld()->GetNetMode() == NM_ListenServer)
+    {
+        // ì„œë²„ ì½”ë“œ
+    }
+    else
+    {
+        // í´ë¼ì´ì–¸íŠ¸ ì½”ë“œ
+        VisibleYesButt();
     }
 }
 
@@ -35,3 +50,27 @@ void UKMK_PopUpWidget::OnClickedNobutt()
 {
 
 }
+
+void UKMK_PopUpWidget::OnClickedPausebutt()
+{
+    
+    if (GetWorld()->GetNetMode() == NM_DedicatedServer || GetWorld()->GetNetMode() == NM_ListenServer)
+    {
+        // ì„œë²„ ì½”ë“œ
+        RemoveFromParent();
+    }
+    else
+    {
+        // í´ë¼ì´ì–¸íŠ¸ ì½”ë“œ
+        RemoveFromParent();
+    }
+}
+
+void UKMK_PopUpWidget::VisibleYesButt()
+{
+    if(YesButt)
+    {
+        YesButt->SetVisibility(ESlateVisibility::Hidden);
+    }
+}
+
