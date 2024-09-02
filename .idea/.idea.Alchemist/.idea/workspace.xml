@@ -11,7 +11,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3e7ba4d9-04c6-440b-a40d-f809cf4ad7f2" name="변경" comment="" />
+    <list default="true" id="3e7ba4d9-04c6-440b-a40d-f809cf4ad7f2" name="변경" comment="xml" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -499,6 +499,7 @@
       <updated>1725102914251</updated>
       <workItem from="1725102915339" duration="162000" />
       <workItem from="1725103089340" duration="1197000" />
+      <workItem from="1725272213459" duration="401000" />
     </task>
     <task id="LOCAL-00001" summary="1">
       <option name="closed" value="true" />
@@ -508,7 +509,23 @@
       <option name="project" value="LOCAL" />
       <updated>1725103234288</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="ignore">
+      <option name="closed" value="true" />
+      <created>1725272377929</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1725272377929</updated>
+    </task>
+    <task id="LOCAL-00003" summary="xml">
+      <option name="closed" value="true" />
+      <created>1725272452122</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1725272452122</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -527,7 +544,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="origin/CHJ" />
+                        <option value="CHJ" />
                       </list>
                     </value>
                   </entry>
@@ -542,6 +559,8 @@
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
     <MESSAGE value="1" />
-    <option name="LAST_COMMIT_MESSAGE" value="1" />
+    <MESSAGE value="ignore" />
+    <MESSAGE value="xml" />
+    <option name="LAST_COMMIT_MESSAGE" value="xml" />
   </component>
 </project>
