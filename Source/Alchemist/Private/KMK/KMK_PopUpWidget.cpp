@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "KMK_PopUpWidget.h"
+#include "KMK/KMK_PopUpWidget.h"
 #include "Components/Button.h"
 #include "Components/TextBlock.h"
 #include "Kismet/KismetSystemLibrary.h"
@@ -11,7 +11,7 @@ void UKMK_PopUpWidget::NativeConstruct()
 {
     Super::NativeConstruct();
     PlayerController = Cast<APlayerController>(GetOwningPlayer());
-    
+    PlayerController->SetInputMode(FInputModeUIOnly());
     if (YesButt)
     {
         YesButt->OnClicked.AddDynamic(this, &UKMK_PopUpWidget::OnClickedYesButt);
@@ -58,11 +58,13 @@ void UKMK_PopUpWidget::OnClickedPausebutt()
     {
         // 서버 코드
         RemoveFromParent();
+        PlayerController->SetInputMode(FInputModeGameOnly());
     }
     else
     {
         // 클라이언트 코드
         RemoveFromParent();
+        PlayerController->SetInputMode(FInputModeGameOnly());
     }
 }
 
