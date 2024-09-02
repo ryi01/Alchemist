@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+ï»¿// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
@@ -7,7 +7,7 @@
 #include "Camera/CameraComponent.h"
 #include "KMK_DeskComponent.generated.h"
 
-// Ã¥»ó À§ Å¬¸¯½Ã ¿ÀºêÁ§Æ®°¡ ÆîÃÄÁö°Ô ¸¸µé ¿¹Á¤
+// ì±…ìƒ ìœ„ í´ë¦­ì‹œ ì˜¤ë¸Œì íŠ¸ê°€ í¼ì³ì§€ê²Œ ë§Œë“¤ ì˜ˆì •
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class ALCHEMIST_API UKMK_DeskComponent : public UActorComponent
 {
@@ -25,32 +25,35 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	// Ã¥»ó À§¸¦ Âï°í ÀÖ´Â Ä«¸Ş¶ó
+	// ì±…ìƒ ìœ„ë¥¼ ì°ê³  ìˆëŠ” ì¹´ë©”ë¼
 	UPROPERTY()
 	class UCameraComponent* DeskCameraComponent;
+	UPROPERTY(EditAnywhere)
+	class ACameraActor* ToViewCamera;
 	UPROPERTY()
-	class UCameraComponent* PlayerCamera;
+	class UCameraComponent* TopViewCameraComponent;
 	UPROPERTY()
 	class APlayerController* player;
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	bool bActive = false;
-	// Å¬¸¯µÇ¸é È°¼ºÈ­µÉ ÇÔ¼ö = ÀÎ¶óÀÎ ÇÔ¼ö»ç¿ë
-	UFUNCTION()
+	// í´ë¦­ë˜ë©´ í™œì„±í™”ë  í•¨ìˆ˜ = ì¸ë¼ì¸ í•¨ìˆ˜ì‚¬ìš©
+	UFUNCTION(BlueprintCallable)
 	void ChangeMyCamera(bool OnClick)
 	{
-		// Ã¥»ó Å¬¸¯½Ã Ä«¸Ş¶ó º¯°æ
+		bActive = OnClick;
+		// ì±…ìƒ í´ë¦­ì‹œ ì¹´ë©”ë¼ ë³€ê²½
 		if (OnClick)
 		{
-			// µ¥½ºÅ© Ä«¸Ş¶ó È°¼ºÈ­
-			player->SetViewTarget(DeskCameraComponent->GetOwner());
+			// ë°ìŠ¤í¬ ì¹´ë©”ë¼ í™œì„±í™”
+			if( DeskCameraComponent)player->SetViewTarget(DeskCameraComponent->GetOwner());
 		}
 		else
 		{
-			// ÇÃ·¹ÀÌ¾î Ä«¸Ş¶ó È°¼ºÈ­
-			player->SetViewTarget(PlayerCamera->GetOwner());
+			// í”Œë ˆì´ì–´ ì¹´ë©”ë¼ í™œì„±í™”
+			if( TopViewCameraComponent)player->SetViewTarget(TopViewCameraComponent->GetOwner());
 		}
 	}
-	// Ä«¸Ş¶ó Ã£´Â ÇÔ¼ö
+	// ì¹´ë©”ë¼ ì°¾ëŠ” í•¨ìˆ˜
 	void FindDeskCam();
 
 };

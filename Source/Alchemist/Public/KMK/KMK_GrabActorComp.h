@@ -4,17 +4,17 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "KMK_ParsecAIContent.generated.h"
+#include "KMK_GrabActorComp.generated.h"
 
-
+// 항아리 엑터에 넣을 컴포넌트
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class ALCHEMIST_API UKMK_ParsecAIContent : public UActorComponent
+class ALCHEMIST_API UKMK_GrabActorComp : public UActorComponent
 {
 	GENERATED_BODY()
 
 public:	
 	// Sets default values for this component's properties
-	UKMK_ParsecAIContent();
+	UKMK_GrabActorComp();
 
 protected:
 	// Called when the game starts
@@ -23,6 +23,10 @@ protected:
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-	
-		
+
+	TMap<FString, int32> ElementArray;
+
+	UFUNCTION()
+	// 오버랩 감지를 위한 함수 선언
+	virtual void BeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 };

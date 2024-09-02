@@ -28,9 +28,21 @@ public:
 	// ai의 url 담을 변수
 	UPROPERTY(EditAnywhere, Category = "AI_URL")
 	FString Aurl;
+	FString MyData;
+	// SendButt을 눌렀을 때, 요청할 함수
+	void ReqChatBot(FString json);
+	void ReqChatBot1(FString json);
+	// 응답받을 함수
+	void OnResChatBot(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully);
 
 	// SendButt을 눌렀을 때, 요청할 함수
-	void ReqPostAI(FString json);
+	void ReqElement(TMap<FString, FString> data);
 	// 응답받을 함수
-	void OnResPostAi(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully);
+	void OnResElement(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully);
+
+	UPROPERTY()
+	class UKMK_ChatBotWidget* HttpUI;
+	// 인터페이스를 위한 UI
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<class UUserWidget> HttpUIFactory;
 };

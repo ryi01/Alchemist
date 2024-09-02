@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
@@ -31,6 +31,10 @@ public:
 
 	UFUNCTION()
 	void OnClickSendButt();
+
+	UFUNCTION()
+	void MakeChatText(FText text, int num = 0);
+	int count = 0;
 
 	UFUNCTION(BlueprintCallable)
 	void SetHttpActor(AKMK_HttpActorWithAI* actor);

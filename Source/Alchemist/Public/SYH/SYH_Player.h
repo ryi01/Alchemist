@@ -20,7 +20,6 @@ UCLASS(config=Game)
 class ASYH_Player : public ACharacter
 {
 	GENERATED_BODY()
-
 public:
 
 
@@ -69,7 +68,9 @@ protected:
 	void OnMyCheckActor();
 
 	void CreatePopUpWidget();
-	
+
+	UPROPERTY(BlueprintReadWrite)
+	AActor* DeskActor;
 	int count = 0;
 	bool bCreateWidget = false;
 
