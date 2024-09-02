@@ -46,3 +46,28 @@ void UGuide_GameInstance::TakeItemData(int itemIdx)
 		}
 	 }
 }
+
+void UGuide_GameInstance::HandleQuizRequest(ASYH_MultiPlayer* RequestingPlayer, AActor* TargetActor)
+{
+	UE_LOG(LogTemp, Warning, TEXT("HandleQuizRequest 함수가 호출됨"));
+	// target actor 가 valid하면 타겟 클라이언트에게 퀴즈 요청을 전송
+	if (IsValid(TargetActor))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("TargetActor 이름: %s"), *TargetActor->GetName());
+		ClientShowQuiz(Cast<ASYH_MultiPlayer>(TargetActor));
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("TargetActor가 유효하지 않음"));
+	}
+}
+
+void UGuide_GameInstance::ClientShowQuiz_Implementation(ASYH_MultiPlayer* TargetPlayer)
+{
+	if (TargetPlayer)
+	{
+		// 클라이언트에서 퀴즈 요청 UI 표시
+		TargetPlayer->ShowQuizRequestUI();
+	}
+
+}

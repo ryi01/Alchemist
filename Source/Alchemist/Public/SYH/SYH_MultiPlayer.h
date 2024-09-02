@@ -2,6 +2,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "InputActionValue.h"
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
 #include "SYH_MultiPlayer.generated.h"
@@ -47,12 +48,12 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* IA_Camera;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputAction* IA_Mouse;
+	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* IA_Guide;
-	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* IA_Quiz;
+
 	// Sets default values for this character's properties
 	ASYH_MultiPlayer();
 	virtual void PossessedBy(AController* NewController) override;
@@ -85,17 +86,16 @@ protected:
 			
 	void Camera(const FInputActionValue& Value);
 
-	void OnClickedLeft(const FInputActionValue& Value);
-
 	void OnMyCheckActor();
 
 	void CreatePopUpWidget();
+	
 
+	void Quiz(const FInputActionValue& Value);
 	UPROPERTY()
 	class AAluminum_Object* Aluminum;
 	
 	int count = 0;
-	bool bCreateWidget = false;
 
 public:
 	//UPROPERTY(EditDefaultsOnly,BlueprintReadWrite)
@@ -113,4 +113,36 @@ public:
 	FORCEINLINE class UCameraComponent* GetCameraCompThird() const { return CameraCompThird; }
 
 	void ObjectDetect();
+
+	// 퀴즈 관련 함수
+
+	// 특정거리내에 들어오면 F키를 누르라는 안내 UI를 띄우고싶다.
+	UFUNCTION(Client,Reliable)
+	void CallQuizRequestUI(); 
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UUserWidget> QuizWaitClass;
+	UPROPERTY()
+	class USYH_QuizWaitWidget* QuizWaitWidget;
+
+	UPROPERTY(EditDefaultsOnly)
+	float RequestUIDistance = 500.0f;
+
+	void CheckRequestDistance();
+
+	// F키를 누르면 서버에 퀴즈 요청을 보내고 싶다.
+	UFUNCTION(Server,reliable,withValidation)
+	void SendQuizRequest(FVector start, FVector end, float radius);
+	// 퀴즈 요청을 다루는 함수
+	void HandleQuizRequest(AActor* TargetActor);
+	
+	class UGuide_GameInstance* GameInstance;
+
+	UFUNCTION(Client,Reliable)	
+	void ShowQuizRequestUI();
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UUserWidget> QuizRequestClass;
+	UPROPERTY()
+	class USYH_QuizSelect* QuizRequestWidget;
+	
 };
