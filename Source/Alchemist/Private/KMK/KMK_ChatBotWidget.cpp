@@ -23,34 +23,35 @@ void UKMK_ChatBotWidget::OnClickSendButt()
     if (!PlayerChat->GetText().IsEmpty())
     {
         // AI에게 정보값 보내기
-        MakeChatText(PlayerChat->GetText());
+        MakeChatText(PlayerChat->GetText().ToString());
         PlayerChat->SetIsEnabled(false);
-        httpActor->ReqChatBot(*PlayerChat->GetText().ToString());
+        httpActor->ReqChatBot1(*PlayerChat->GetText().ToString());
         PlayerChat->SetText(FText::GetEmpty());
     }
 }
 
-void UKMK_ChatBotWidget::MakeChatText(FText text, int num)
+void UKMK_ChatBotWidget::MakeChatText(FString text, int num)
 {
     // 텍스트 위잿 생성
     auto* widget = Cast<UKMK_TextWidget>(CreateWidget(GetWorld(), ChatTextWidFact));
     if ( widget )
     {
         // 위잿 텍스트 작성
-        widget->SetChatText(text, count % 2);
+        widget->SetChatText(text,num);
         widget->AddToViewport();
 
         ChatLog->AddChild(widget);
         UScrollBoxSlot* a = CastChecked<UScrollBoxSlot>(widget->Slot);
         // Child의 슬롯을 가져옴
-        if ( a )
+        if ( num == 0 )
         {
             // 슬롯의 Alignment 설정
-            if ( count % 2 == 0 )a->SetHorizontalAlignment(HAlign_Right);
-            else a->SetHorizontalAlignment(HAlign_Left);
+            a->SetHorizontalAlignment(HAlign_Right);
+           
             // 스크롤 밑에 생성되게 만들기
-            count++;
         }
+        else a->SetHorizontalAlignment(HAlign_Left);
+        count++;
     }
     
 }

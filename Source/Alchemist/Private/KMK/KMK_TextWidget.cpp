@@ -9,11 +9,11 @@
 #include "Components/MultiLineEditableTextBox.h"
 
 // 텍스트 설정 함수
-void UKMK_TextWidget::SetChatText(FText text , int num)
+void UKMK_TextWidget::SetChatText(FString text , int num)
 {
     if ( mats.Num() > 0 )
     {
-         BackTextImage->SetBrushFromTexture(mats[num]);
+         BackTextImage->SetBrushFromTexture(mats[0]);
          // VerticalBox에서 지정된 인덱스의 Child를 가져옴
          count++;
          UWidget* ChildWidget = TextVerticalBox->GetChildAt(count);
@@ -25,12 +25,33 @@ void UKMK_TextWidget::SetChatText(FText text , int num)
 
              if ( childSlot )
              {
-                 ResChatText->SetVisibility(ESlateVisibility::Hidden);
-                 if(num %2 == 0)childSlot->SetHorizontalAlignment(HAlign_Right);
-                 else childSlot->SetHorizontalAlignment(HAlign_Left);
+                
+                 if ( num == 0 )
+                 {
+                     SetVisibleText(childSlot, HAlign_Right, ESlateVisibility::Visible);
+                     ChatBotTextureBox->SetVisibility(ESlateVisibility::Hidden);
+                     ChatText->SetText(FText::FromString(text));
+                 }
+                 else
+                 {
+                     SetVisibleText(childSlot,HAlign_Left,ESlateVisibility::Hidden); 
+                     ChatBotTextureBox->SetVisibility(ESlateVisibility::Visible);
+                     ResChatText->SetText(FText::FromString(text));
+                 }
              }
          }
     }
-    ChatText->SetText(text);
+    else
+    {
+        ChatText->SetText(FText::FromString(text));
+    }
 
 }
+
+void UKMK_TextWidget::SetVisibleText(UVerticalBoxSlot* childSlot, EHorizontalAlignment align, ESlateVisibility visible)
+{
+    childSlot->SetHorizontalAlignment(align);
+    BackTextImage->SetVisibility(visible);
+    ChatText->SetVisibility(visible);
+}
+

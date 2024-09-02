@@ -29,7 +29,7 @@ void UKMK_SingleIntaraction::BeginPlay()
 			textWidget = Cast<UKMK_TextWidget>(owner->GetWidget());
 			if (textWidget)
 			{
-				textWidget->SetChatText(FText::GetEmpty());
+				textWidget->SetChatText(TEXT(""));
 			}
 		}
 	}

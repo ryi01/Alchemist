@@ -21,9 +21,16 @@ public :
 	UPROPERTY(EditAnywhere, meta = (BindWidget))
 	class UVerticalBox* TextVerticalBox;
 	UPROPERTY(EditAnywhere, meta = (BindWidget))
+	class UVerticalBox* ChatBotTextureBox;
+	UPROPERTY(EditAnywhere, meta = (BindWidget))
+	class UScrollBox* ChatBotScrollBox;
+	UPROPERTY(EditAnywhere, meta = (BindWidget))
 	class UMultiLineEditableTextBox* ResChatText;
 	UFUNCTION()
-	void SetChatText(FText text, int num = 0);
+	void SetChatText(FString text, int num = 0);
+
+	UFUNCTION()
+	void SetVisibleText(class UVerticalBoxSlot* childSlot, EHorizontalAlignment align, ESlateVisibility visible);
 	int count = -1;
 
 	UPROPERTY(EditDefaultsOnly)

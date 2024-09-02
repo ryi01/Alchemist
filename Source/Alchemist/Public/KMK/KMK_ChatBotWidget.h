@@ -33,7 +33,7 @@ public:
 	void OnClickSendButt();
 
 	UFUNCTION()
-	void MakeChatText(FText text, int num = 0);
+	void MakeChatText(FString text, int num = 0);
 	int count = 0;
 
 	UFUNCTION(BlueprintCallable)

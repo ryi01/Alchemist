@@ -49,7 +49,7 @@ public:
 	{
 		bMouseOnActor = bActive;
 		if (bActive)
-		textWidget->SetChatText(FText::FromString(*GetOwner()->GetActorLabel()));
-		else textWidget->SetChatText(FText::GetEmpty());
+		textWidget->SetChatText(*GetOwner()->GetActorLabel());
+		else textWidget->SetChatText(TEXT(""));
 	}
 };
