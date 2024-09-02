@@ -11,13 +11,21 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3e7ba4d9-04c6-440b-a40d-f809cf4ad7f2" name="변경" comment="xml" />
+    <list default="true" id="3e7ba4d9-04c6-440b-a40d-f809cf4ad7f2" name="변경" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.Alchemist/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Alchemist/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/Alchemist/CHJ/Illustrated_Guide/Guide_Component/GuideComponent.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Alchemist/CHJ/Illustrated_Guide/Guide_Component/GuideComponent.h" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="main" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
@@ -561,6 +569,6 @@
     <MESSAGE value="1" />
     <MESSAGE value="ignore" />
     <MESSAGE value="xml" />
-    <option name="LAST_COMMIT_MESSAGE" value="xml" />
+    <option name="LAST_COMMIT_MESSAGE" value="" />
   </component>
 </project>
