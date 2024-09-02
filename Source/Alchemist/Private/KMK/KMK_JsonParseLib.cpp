@@ -30,31 +30,15 @@ TMap<FString, FString> UKMK_JsonParseLib::ChatBotParsec(const FString& json, FSt
 	
 	if ( FJsonSerializer::Deserialize(reader, response) )
 	{
-		TArray<TSharedPtr<FJsonValue>> parseDataList = response->GetArrayField(TEXT("원소명"));
-		// 책의 이름과 저자
-		//FString elementName = response->GetStringField(TEXT("원소명"));
-		//if ( elementName.IsEmpty() ) elementName = "네";
-		//result.Add(elementName, ResultChatBot);
-		if(parseDataList.IsEmpty() ) result.Add(TEXT("산소"), ResultChatBot);
-
-		// FString elementName = response->GetStringField(TEXT("원소명"));
+		FString parseDataList = response->GetStringField(TEXT("element"));
+		FString parseDataList1 = response->GetStringField(TEXT("explanation"));
+		// 원소 이름과 정보
+		if(parseDataList.IsEmpty() ) result.Add(TEXT("element"), parseDataList);
+		if( parseDataList1.IsEmpty() ) result.Add(TEXT("explanation"),parseDataList1);
 
 		GEngine->AddOnScreenDebugMessage(2, 5, FColor::Blue, FString::Printf(TEXT("AI Connect")));
 	}
 
-	// json 파일을 오브젝트 형식으로 된 배열형태로 받은상태
-	//FString returnValue;
-	//if ( FJsonSerializer::Deserialize(reader, response) )
-	//{
-	//	TArray<TSharedPtr<FJsonValue>> parseDataList = response->GetArrayField(TEXT("items"));
-	//	for ( TSharedPtr<FJsonValue> data : parseDataList )
-	//	{
-	//		// 책의 이름과 저자
-	//		FString bookName = data->AsObject()->GetStringField("bk_nm");
-	//		FString authorName = data->AsObject()->GetStringField("aut_nm");
-	//		returnValue.Append(FString::Printf(TEXT("BookName : %s / AuthorName : %s\n"), *bookName, *authorName));
-	//	}
-	//}
 	return result;
 }
 

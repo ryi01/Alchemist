@@ -20,6 +20,8 @@ public :
 	class UImage* BackTextImage;
 	UPROPERTY(EditAnywhere, meta = (BindWidget))
 	class UVerticalBox* TextVerticalBox;
+	UPROPERTY(EditAnywhere, meta = (BindWidget))
+	class UMultiLineEditableTextBox* ResChatText;
 	UFUNCTION()
 	void SetChatText(FText text, int num = 0);
 	int count = -1;

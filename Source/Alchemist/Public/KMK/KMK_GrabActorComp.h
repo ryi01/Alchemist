@@ -26,6 +26,14 @@ public:
 
 	TMap<FString, int32> ElementArray;
 
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<AActor> elementFact;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	bool isCreate = false;
+
+	UFUNCTION()
+	void CreateElementSucced();
+
 	UFUNCTION()
 	// 오버랩 감지를 위한 함수 선언
 	virtual void BeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);

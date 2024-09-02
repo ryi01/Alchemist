@@ -6,6 +6,7 @@
 #include "Components/Image.h"
 #include "Components/VerticalBoxSlot.h"
 #include "Components/VerticalBox.h"
+#include "Components/MultiLineEditableTextBox.h"
 
 // 텍스트 설정 함수
 void UKMK_TextWidget::SetChatText(FText text , int num)
@@ -24,7 +25,7 @@ void UKMK_TextWidget::SetChatText(FText text , int num)
 
              if ( childSlot )
              {
-                 // 슬롯의 Alignment 설정
+                 ResChatText->SetVisibility(ESlateVisibility::Hidden);
                  if(num %2 == 0)childSlot->SetHorizontalAlignment(HAlign_Right);
                  else childSlot->SetHorizontalAlignment(HAlign_Left);
              }

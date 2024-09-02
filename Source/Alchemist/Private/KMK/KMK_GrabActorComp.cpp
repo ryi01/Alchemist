@@ -37,6 +37,17 @@ void UKMK_GrabActorComp::TickComponent(float DeltaTime, ELevelTick TickType, FAc
 
 }
 
+void UKMK_GrabActorComp::CreateElementSucced()
+{
+	if ( !isCreate )
+	{
+		isCreate = true;
+		AActor* newActor = GetWorld()->SpawnActor<AActor>(elementFact,GetOwner()->GetTargetLocation(),FRotator::ZeroRotator);
+		newActor->Tags.Add("받아온 이름");
+
+	}
+}
+
 void UKMK_GrabActorComp::BeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	// 액터 중에 tag = element인것만 넣기
