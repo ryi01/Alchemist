@@ -88,16 +88,17 @@ protected:
 
 	void OnMyCheckActor();
 
-	void CreatePopUpWidget();
-	
-
 	void Quiz(const FInputActionValue& Value);
+
+	// void Quiz(const FInputActionValue& Value);
 	UPROPERTY()
 	class AAluminum_Object* Aluminum;
 	
 	int count = 0;
 
 public:
+	UPROPERTY(EditAnywhere)
+	bool InQuiz= false;
 	//UPROPERTY(EditDefaultsOnly,BlueprintReadWrite)
 	//bool bIsCamera = false;
 	// Called when the game starts or when spawned
@@ -115,34 +116,50 @@ public:
 	void ObjectDetect();
 
 	// 퀴즈 관련 함수
-
 	// 특정거리내에 들어오면 F키를 누르라는 안내 UI를 띄우고싶다.
 	UFUNCTION(Client,Reliable)
-	void CallQuizRequestUI(); 
+	void ClientRPC_CallFKey(); 
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<UUserWidget> QuizWaitClass;
 	UPROPERTY()
 	class USYH_QuizWaitWidget* QuizWaitWidget;
-
-	UPROPERTY(EditDefaultsOnly)
-	float RequestUIDistance = 500.0f;
-
-	void CheckRequestDistance();
-
-	// F키를 누르면 서버에 퀴즈 요청을 보내고 싶다.
-	UFUNCTION(Server,reliable,withValidation)
-	void SendQuizRequest(FVector start, FVector end, float radius);
-	// 퀴즈 요청을 다루는 함수
-	void HandleQuizRequest(AActor* TargetActor);
-	
-	class UGuide_GameInstance* GameInstance;
-
-	UFUNCTION(Client,Reliable)	
-	void ShowQuizRequestUI();
-
 	UPROPERTY(EditAnywhere)
-	TSubclassOf<UUserWidget> QuizRequestClass;
+	TSubclassOf<UUserWidget> QuizSelectClass;
 	UPROPERTY()
-	class USYH_QuizSelect* QuizRequestWidget;
-	
+	class USYH_QuizSelect* QuizSelectWidget;
+	class UGuide_GameInstance* GameInstance;
+	UPROPERTY(EditDefaultsOnly)
+	float RequestUIDistance = 300.0f;
+	void CheckDist();
+
+	UFUNCTION(Client,Reliable)
+	void ClientRPC_ShowQuizSelect();
+
+	UFUNCTION(Client,Reliable)
+	void ClientRPC_ShowQuizWait();
+	UFUNCTION(Server,Reliable,withValidation)
+	void ServerRPC_Quiz();
+
+	void Server_Quiz();
+	// // F키를 누르면 서버에 퀴즈 요청을 보내고 싶다.
+	// UFUNCTION(Server,Reliable,withValidation)
+	// void ServerRPC_SendQuizSelect(FVector start, FVector end, float radius);
+	// // 퀴즈 요청을 다루는 함수
+	// void HandleQuizRequest(AActor* TargetActor);
+	// UPROPERTY();
+	// class ASYH_MultiPlayer* OtherPlayer;
+	//
+	// UFUNCTION(Client,Reliable)	// server -> client
+	// void ClientRPC_ShowQuizSelect();
+	//
+
+	//
+	// // server가 client에게 응답을 기다리는 중 UI 띄우기
+	// UFUNCTION(Client,Reliable)
+	// void ClientRPC_ShowQuizWait();
+	//
+	// // server가 client에게 거절당하였습니다 UI 띄우기
+	// UFUNCTION(Client,Reliable)
+	// void ClientRPC_ShowQuizReject();
+
 };

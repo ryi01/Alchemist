@@ -67,7 +67,7 @@ void USYH_PlayerAnim::AnimNotify_CameraEnd()
 			CameraWidget = CreateWidget<UUserWidget>(player, CameraWidgetClass);
 			if(CameraWidget)
 			{
-				CameraWidget->AddToViewport();
+				CameraWidget->AddToViewport(0);
 			}
 			// 시점을 바꾼 상태에서는 e키를 누르지 못하게 bool값으로 조절
 			bIsPlayCameraAnim = false;

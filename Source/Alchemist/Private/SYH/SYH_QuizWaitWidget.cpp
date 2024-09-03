@@ -9,42 +9,28 @@
 void USYH_QuizWaitWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
-	if(Wait)
-	{
-		Wait->SetVisibility(ESlateVisibility::Hidden);
-	}
-	if(Request)
-	{
-		Request->SetVisibility(ESlateVisibility::Hidden);
-	}
-	if(Reject)
-	{
-		Reject->SetVisibility(ESlateVisibility::Hidden);
-	}
+	
 }
 
 void USYH_QuizWaitWidget::SetWaitVisibility(bool bshow)
 {
-	if(Wait && bshow)
+	if (Wait)
 	{
-		Wait->SetVisibility(ESlateVisibility::Visible);
-	}
-	else
-	{
-		Wait->SetVisibility(ESlateVisibility::Hidden);
+		ESlateVisibility NewVisibility = bshow ? ESlateVisibility::Visible : ESlateVisibility::Hidden;
+		Wait->SetVisibility(NewVisibility);
+
+		UE_LOG(LogTemp, Warning, TEXT("Wait visibility set to: %s"), *UEnum::GetValueAsString(NewVisibility));
 	}
 }
 
 void USYH_QuizWaitWidget::SetRequestVisibility(bool bshow)
 {
-	if(!Request) return;
-	if(bshow)
+	if (Request)
 	{
-		Request->SetVisibility(ESlateVisibility::Visible);
-	}
-	else
-	{
-		Request->SetVisibility(ESlateVisibility::Hidden);
+		ESlateVisibility NewVisibility = bshow ? ESlateVisibility::Visible : ESlateVisibility::Hidden;
+		Request->SetVisibility(NewVisibility);
+
+		UE_LOG(LogTemp, Warning, TEXT("Request visibility set to: %s"), *UEnum::GetValueAsString(NewVisibility));
 	}
 }
 

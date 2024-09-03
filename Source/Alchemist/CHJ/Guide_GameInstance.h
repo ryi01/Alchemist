@@ -37,10 +37,5 @@ public:
 	int32 SlotsIndex = 8;
 
 public:
-	// 서버가 요청을 받았을 때 호출되는 함수
-	void HandleQuizRequest(ASYH_MultiPlayer* RequestingPlayer, AActor* TargetActor);
 
-	// 클라이언트에게 퀴즈 UI를 표시하라는 메시지 전송
-	UFUNCTION(Client, Reliable)
-	void ClientShowQuiz(ASYH_MultiPlayer* TargetPlayer);
 };

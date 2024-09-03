@@ -24,10 +24,11 @@ public:
 	UPROPERTY(EditAnywhere, meta = (BindWidget),BlueprintReadWrite);
 	class UTextBlock* Reject;
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION()
 	void SetWaitVisibility(bool bshow);
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION()
 	void SetRequestVisibility(bool bshow);
-	UFUNCTION(BlueprintCallable)
+	
+	UFUNCTION()
 	void SetRejectVisibility(bool bshow);
 };

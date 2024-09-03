@@ -13,11 +13,6 @@
 #include "Input/Reply.h"
 #include "SYH/SYH_MultiPlayer.h"
 
-void UCameraWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
-{
-	Super::NativeTick(MyGeometry, InDeltaTime);
-	UpdateTextVisibility();
-}
 
 
 void UCameraWidget::NativeConstruct()
@@ -31,7 +26,12 @@ void UCameraWidget::NativeConstruct()
 	playercontroller = Cast<APlayerController>(GetOwningPlayer());
 	me = CastChecked<ASYH_MultiPlayer>(GetOwningPlayerPawn());
 }
-
+void UCameraWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
+{
+	Super::NativeTick(MyGeometry, InDeltaTime);
+	UpdateTextVisibility();
+	playercontroller->SetShowMouseCursor(true);
+}
 
 void UCameraWidget::OnSliderValueChanged(float value)
 {
