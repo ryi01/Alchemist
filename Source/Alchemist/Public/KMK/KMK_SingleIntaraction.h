@@ -42,7 +42,7 @@ public:
 	bool bMouseOnActor = false;
 		
 	UFUNCTION()
-	void CreatePlayerWidget(bool bMake, int num);
+	void CreatePlayerWidget(bool bMake, int num,APlayerController* pc);
 	
 	UFUNCTION()
 	void OnCreateNameWidget(bool bActive)

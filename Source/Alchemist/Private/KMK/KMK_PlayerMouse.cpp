@@ -8,6 +8,8 @@
 #include "KMK/KMK_GrabActorComp.h"
 #include "Kismet/GameplayStatics.h"
 #include "KMK/KMK_DeskComponent.h"
+#include "KMK/KMK_StudyWidget.h"
+#include "Blueprint/UserWidget.h"
 
 // Sets default values for this component's properties
 UKMK_PlayerMouse::UKMK_PlayerMouse()
@@ -60,6 +62,19 @@ void UKMK_PlayerMouse::OnMyGrabComp()
 	if ( bHit )
 	{
 		auto* hitActor = outHit.GetActor();
+		if ( hitActor->ActorHasTag("NewEle") && outHitComp == nullptr )
+		{
+
+			auto* widget = CastChecked< UKMK_StudyWidget>(CreateWidget(GetWorld(), widgetFact));
+			if ( widget && cnt <= 0 )
+			{
+				widget->AddToViewport();
+				widget->SetButtVisi(true, me);
+				cnt++;
+				me->SetPause(true);
+			}
+			return;
+		}
 		if ( hitActor->ActorHasTag(TEXT("Pot")) && outHitComp == nullptr )
 		{
 			auto* potComp = hitActor->GetComponentByClass<UKMK_GrabActorComp>();

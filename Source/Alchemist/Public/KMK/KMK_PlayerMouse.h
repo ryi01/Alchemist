@@ -36,7 +36,9 @@ public:
 	float RayDis = 500;
 	UPROPERTY(EditAnywhere)
 	float distance = 250;
-
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class UUserWidget> widgetFact;
+	int cnt = 0;
 	UPROPERTY(EditAnywhere)
 	AActor* HttpActor;
 

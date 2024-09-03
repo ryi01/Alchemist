@@ -20,11 +20,23 @@ public:
 	class UButton* NextButt;
 	UPROPERTY(meta = (BindWidget ))
 	class UButton* PreButt;
+	UPROPERTY(meta = (BindWidget ))
+	class UButton* DeletButt;
+	UPROPERTY(meta = (BindWidget ))
+	class UTextBlock* ElementName;
+	UPROPERTY(meta = (BindWidget ))
+	class UMultiLineEditableTextBox* ExplainText;
 
 	UFUNCTION()
 	void ClickNext();
 	UFUNCTION()
 	void ClickPre();
+	UFUNCTION()
+	void ClickDel();
+	UPROPERTY()
+	APlayerController* me;
+	UFUNCTION()
+	void SetButtVisi(bool isActive, APlayerController* pc);
 
 	// 원소 이름 및 설명 담을 변수들
 

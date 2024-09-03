@@ -94,7 +94,7 @@ void ASYH_Player::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	if(IsLocallyControlled())
 	{
-		if(UGameplayStatics::GetCurrentLevelName(GetWorld())!="Room")
+		if(UGameplayStatics::GetCurrentLevelName(GetWorld())!="Room1")
 		{
 			return;
 		}
@@ -199,7 +199,7 @@ void ASYH_Player::OnClickedLeft(const FInputActionValue& Value)
 			auto* actorClass = HitActor->GetComponentByClass<UKMK_SingleIntaraction>();
 			if ( actorClass && bCreateWidget )
 			{
-				actorClass->CreatePlayerWidget(true,0);
+				actorClass->CreatePlayerWidget(true,0, PlayerController);
 				//PlayerController->SetPause(true);
 			}
 		}

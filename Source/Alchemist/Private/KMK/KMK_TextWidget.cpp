@@ -11,5 +11,6 @@
 // 텍스트 설정 함수
 void UKMK_TextWidget::SetChatText(FString text)
 {
-    ResChatText->SetText(FText::FromString(text));
+    ResChatText->SetText(FText::FromString(text));  
+    ResChatText->SetIsEnabled(false);
 }
