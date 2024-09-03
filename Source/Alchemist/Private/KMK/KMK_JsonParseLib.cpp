@@ -21,48 +21,68 @@ FString UKMK_JsonParseLib::MakeJson(const TMap<FString, FString> source)
 	return json;
 }
 // 챗봇의 값 파섹
-TMap<FString, FString> UKMK_JsonParseLib::ChatBotParsec(const FString& json, FString ResultChatBot)
+TMap<FString,TMap<FString,FString>> UKMK_JsonParseLib::ChatBotParsec(const FString& json,TArray<FString> Sections)
 {
 	TSharedRef<TJsonReader<TCHAR>> reader = TJsonReaderFactory<TCHAR>::Create(json);
 	TSharedPtr<FJsonObject> response = MakeShareable(new FJsonObject());
 
-	TMap<FString, FString> result;
-	TArray<FString> Sections = { TEXT("1. 기본 정보"), TEXT("2. 특성"), TEXT("3. 용도"), TEXT("4. 흥미로운 사실") };
-	int32 index = 0;
-
-	for ( int32 i = 0; i < Sections.Num(); i++ )
-	{
-		// 현재 섹션의 시작 위치 찾기
-		int32 SectionStart = json.Find(Sections[ i ],ESearchCase::IgnoreCase,ESearchDir::FromStart,index);
-
-		if ( SectionStart != INDEX_NONE )
-		{
-			// 다음 섹션의 시작 위치 찾기
-			int32 NextSectionStart = ( i + 1 < Sections.Num() ) ? json.Find(Sections[ i + 1 ],ESearchCase::IgnoreCase,ESearchDir::FromStart,SectionStart + 1) : json.Len();
-
-			// 섹션 내용 추출
-			FString SectionContent = json.Mid(SectionStart,NextSectionStart - SectionStart).TrimStartAndEnd();
-
-			// 섹션 제목을 제거한 실제 내용만 추출하여 저장
-			int32 ContentStart = SectionContent.Find(TEXT(":")) + 1;
-			if ( ContentStart > 0 )
-			{
-				result.Add(Sections[ i ],SectionContent.Mid(ContentStart).TrimStartAndEnd());
-			}
-
-			// 다음 섹션으로 이동
-			index = NextSectionStart;
-		}
-	}
+    TMap<FString,TMap<FString,FString>> result;
+  
 	if ( FJsonSerializer::Deserialize(reader, response) )
 	{
-		FString parseDataList = response->GetStringField(TEXT("element"));
 		FString parseDataList1 = response->GetStringField(TEXT("explanation"));
-		// 원소 이름과 정보
-		if( response->TryGetStringField(TEXT("element"),parseDataList) && !parseDataList.IsEmpty() ) result.Add(TEXT("element"), parseDataList);
 		if ( response->TryGetStringField(TEXT("explanation"),parseDataList1) && !parseDataList1.IsEmpty() )
 		{
-			
+#pragma region StringParsec
+            int32 StartIndex = 0;
+            for ( int32 i = 0; i < Sections.Num(); i++ )
+            {
+                // 현재 섹션의 시작 위치 찾기
+                int32 SectionStart = json.Find(Sections[ i ],ESearchCase::IgnoreCase,ESearchDir::FromStart,StartIndex);
+
+                if ( SectionStart != INDEX_NONE )
+                {
+                    // 다음 섹션의 시작 위치 찾기
+                    int32 NextSectionStart = ( i + 1 < Sections.Num() ) ? json.Find(Sections[ i + 1 ],ESearchCase::IgnoreCase,ESearchDir::FromStart,SectionStart + 1) : json.Len();
+
+                    // 섹션 내용 추출
+                    FString SectionContent = json.Mid(SectionStart,NextSectionStart - SectionStart).TrimStartAndEnd();
+
+                    // 각 항목을 저장할 TMap 생성
+                    TMap<FString,FString> SectionDetails;
+
+                    // 섹션 내용을 줄 단위로 분리
+                    TArray<FString> Lines;
+                    SectionContent.ParseIntoArray(Lines,TEXT("\n"),true);
+
+                    for ( FString& Line : Lines )
+                    {
+                        Line = Line.TrimStartAndEnd();
+
+                        // 정보 항목을 "-" 기호를 기준으로 분리
+                        if ( Line.StartsWith(TEXT("- ")) )
+                        {
+                            int32 DelimIndex;
+
+                            if ( Line.FindChar(TEXT(':'),DelimIndex) )
+                            {
+                                FString Key = Line.Mid(2,DelimIndex - 2).TrimStartAndEnd();  // "- "를 제거하고 키 추출
+                                FString Value = Line.Mid(DelimIndex + 1).TrimStartAndEnd();   // ":" 이후를 값으로 저장
+
+                                SectionDetails.Add(Key,Value);
+                            }
+                        }
+                    }
+
+                    // 전체 섹션을 TMap에 추가
+                    result.Add(Sections[ i ],SectionDetails);
+
+                    // 다음 섹션의 시작 인덱스로 이동
+                    StartIndex = NextSectionStart;
+                }
+            }
+
+#pragma endregion
 		}
 	}
 	return result;

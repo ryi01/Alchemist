@@ -64,21 +64,23 @@ void UKMK_PlayerMouse::OnMyGrabComp()
 		{
 			auto* potComp = hitActor->GetComponentByClass<UKMK_GrabActorComp>();
 			if(potComp->ElementArray.IsEmpty() ) return;
-			TArray<AActor*> arrActor;
-			UGameplayStatics::GetAllActorsOfClass(GetWorld(),AKMK_HttpActorWithAI::StaticClass(),arrActor);
-			if(arrActor[0])HttpActor = arrActor[0];
-			if ( HttpActor == nullptr ) return;
-			auto* httpComp = CastChecked<AKMK_HttpActorWithAI>(HttpActor);
-			if ( httpComp )
-			{
-				TMap<FString,FString> ConvertedMap;
-				for ( const TPair<FString,int>& pair : potComp->ElementArray )
-				{
-					ConvertedMap.Add(pair.Key,FString::FromInt(pair.Value));
-				}
-				httpComp->ReqElement(ConvertedMap);
-				potComp->ElementArray.Empty();
-			}
+			potComp->CreateElementSucced(TEXT("HI"));
+			//TArray<AActor*> arrActor;
+			//UGameplayStatics::GetAllActorsOfClass(GetWorld(),AKMK_HttpActorWithAI::StaticClass(),arrActor);
+			//if(arrActor[0])HttpActor = arrActor[0];
+			//if ( HttpActor == nullptr ) return;
+			//auto* httpComp = CastChecked<AKMK_HttpActorWithAI>(HttpActor);
+			//if ( httpComp )
+			//{
+			//	TMap<FString,FString> ConvertedMap;
+			//	for ( const TPair<FString,int>& pair : potComp->ElementArray )
+			//	{
+			//		ConvertedMap.Add(pair.Key,FString::FromInt(pair.Value));
+			//	}
+			//	httpComp->ReqElement(ConvertedMap);
+			//	potComp->CreateElementSucced();
+			//	potComp->ElementArray.Empty();
+			//}
 			return;
 		}
 
@@ -120,7 +122,7 @@ void UKMK_PlayerMouse::CopyNewActor(AActor* hitActor, FVector grabPos)
 	count++;
 	if ( newActor )
 	{
-		if(hitActor->Tags[1].IsValid())newActor->Tags.Add(hitActor->Tags[1]);
+		if(hitActor->Tags[1].IsValid() && hitActor->Tags[1] != TEXT("Pot"))newActor->Tags.Add(hitActor->Tags[1]);
 		newActor->Tags.Add("Copy");
 		if ( handle )
 		{

@@ -37,14 +37,13 @@ void UKMK_GrabActorComp::TickComponent(float DeltaTime, ELevelTick TickType, FAc
 
 }
 
-void UKMK_GrabActorComp::CreateElementSucced()
+void UKMK_GrabActorComp::CreateElementSucced(FString tagName)
 {
-	if ( !isCreate )
+	if ( count <= 0 )
 	{
-		isCreate = true;
-		AActor* newActor = GetWorld()->SpawnActor<AActor>(elementFact,GetOwner()->GetTargetLocation(),FRotator::ZeroRotator);
-		newActor->Tags.Add("받아온 이름");
-
+		newActor = GetWorld()->SpawnActor<AActor>(elementFact,GetOwner()->GetTargetLocation(),FRotator::ZeroRotator);
+		newActor->Tags.Add(FName(*tagName));
+		count++;
 	}
 }
 

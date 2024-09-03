@@ -32,26 +32,32 @@ void UKMK_ChatBotWidget::OnClickSendButt()
 
 void UKMK_ChatBotWidget::MakeChatText(FString text, int num)
 {
-    // 텍스트 위잿 생성
-    auto* widget = Cast<UKMK_TextWidget>(CreateWidget(GetWorld(), ChatTextWidFact));
+
+    auto* widget = Cast<UKMK_TextWidget>(CreateWidget(GetWorld(), ChatTextWidFact[num]));
     if ( widget )
     {
-        // 위잿 텍스트 작성
-        widget->SetChatText(text,num);
         widget->AddToViewport();
-
         ChatLog->AddChild(widget);
-        UScrollBoxSlot* a = CastChecked<UScrollBoxSlot>(widget->Slot);
+        if(widget->Slot != nullptr) a = CastChecked<UScrollBoxSlot>(widget->Slot);
         // Child의 슬롯을 가져옴
         if ( num == 0 )
         {
+            // 위잿 텍스트 작성
+            widget->SetChatText(text);
             // 슬롯의 Alignment 설정
             a->SetHorizontalAlignment(HAlign_Right);
            
             // 스크롤 밑에 생성되게 만들기
         }
-        else a->SetHorizontalAlignment(HAlign_Left);
+        else
+        {
+            // 위잿 텍스트 작성
+            widget->SetChatText(text);
+            a->SetHorizontalAlignment(HAlign_Left);
+        }
+        
         count++;
+
     }
     
 }

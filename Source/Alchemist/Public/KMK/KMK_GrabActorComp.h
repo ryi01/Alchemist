@@ -26,13 +26,14 @@ public:
 
 	TMap<FString, int32> ElementArray;
 
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditAnywhere)
 	TSubclassOf<AActor> elementFact;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	bool isCreate = false;
-
+	AActor* newActor; 
 	UFUNCTION()
-	void CreateElementSucced();
+	void CreateElementSucced(FString tagName);
+	int count = 0;
 
 	UFUNCTION()
 	// 오버랩 감지를 위한 함수 선언
