@@ -13,7 +13,7 @@ enum class EElementTypes : uint8 // 원소 타입 Enum
 	Helium,
 	Gold,
 	Steel,
-	
+	Hydrogen
 };
 
 USTRUCT(BlueprintType)
