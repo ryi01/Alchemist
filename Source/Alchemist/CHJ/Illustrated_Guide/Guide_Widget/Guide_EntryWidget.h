@@ -7,6 +7,7 @@
 #include "Blueprint/UserWidget.h"
 #include "Guide_EntryWidget.generated.h"
 
+class UGuide_DetailWidget;
 class UGuide_ObjectInstance;
 class UImage;
 class UTextBlock;
@@ -21,7 +22,7 @@ class ALCHEMIST_API UGuide_EntryWidget : public UUserWidget
 	GENERATED_BODY()
 public:
 	UGuide_EntryWidget(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
-
+	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
 public:
 	void Init(UGuide_SlotsWidget* InSlotsWidget, UGuide_ObjectInstance* InItemInstance, int32 InItemCount);
 
@@ -54,10 +55,26 @@ protected:
 
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UImage> Image_Hover;
-	
+
+protected:
+	FWidgetTransform SizeBox_Transform;
+	FVector2d SizeBoxScale = FVector2D(1.3f, 1.3f);
+	FVector2D StartScale = FVector2D(1.0f, 1.0f); // 시작 스케일
+	FVector2D TargetScale = FVector2D(1.3f, 1.3f); // 목표 스케일
+	float LerpAlpha = 0.0f;
+	FTimerHandle SizeBox_ScaleTimerHandle;
 public:
 	UPROPERTY(EditAnywhere)
 	TArray<FElementDatas> MyElementDatas;
 
 	void SetElementData(FElementDatas& Data);
+
+	void SetSizeBoxScale(float X, float Y);
+	void UpdateSizeBoxScale();
+
+protected:
+	//UPROPERTY()
+	//TObjectPtr<UGuide_DetailWidget> DetailWidget;
+	UPROPERTY()
+	TSubclassOf<UGuide_DetailWidget> DetailWidgetClass;
 };

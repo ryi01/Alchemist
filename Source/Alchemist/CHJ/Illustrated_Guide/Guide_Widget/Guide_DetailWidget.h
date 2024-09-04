@@ -4,24 +4,24 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
-#include "Guide_IconWidget.generated.h"
+#include "Guide_DetailWidget.generated.h"
 
-class UImage;
+class UTextBlock;
 class USizeBox;
 /**
- * 아이콘 위젯은 아이템 위젯
+ * 
  */
 UCLASS()
-class ALCHEMIST_API UGuide_IconWidget : public UUserWidget
+class ALCHEMIST_API UGuide_DetailWidget : public UUserWidget
 {
 	GENERATED_BODY()
-	
-	virtual void NativeConstruct() override;
-
 public:
+	UGuide_DetailWidget(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
+
+protected:
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<USizeBox> SizeBox_Root;
 
 	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UImage> Image_Slot;
+	TObjectPtr<UTextBlock> Text_Detail;
 };

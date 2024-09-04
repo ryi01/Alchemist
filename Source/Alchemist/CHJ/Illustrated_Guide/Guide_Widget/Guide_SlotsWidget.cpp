@@ -63,14 +63,6 @@ void UGuide_SlotsWidget::CreateEmptySlots()
 	}
 }
 
-void UGuide_SlotsWidget::CreateEntrySlot(int32 X, int32 Y)
-{
-	// int32 SlotIndex = Y * X_COUNT + X; // 1차원으로 변형해서 
-	// UGuide_EntryWidget* EntryWidget = CreateWidget<UGuide_EntryWidget>(GetOwningPlayer(), EntryWidgetClass);
-	// EntryWidgets[SlotIndex] = EntryWidget;
-	// GridPanel_Slots->AddChildToUniformGrid(EntryWidget, X, Y); // 그리드 위젯 생성
-}
-
 void UGuide_SlotsWidget::CreateEntrySlot(int32 index, FElementDatas& data)
 {
 	if(EntryWidgets.Num() <= index) return;

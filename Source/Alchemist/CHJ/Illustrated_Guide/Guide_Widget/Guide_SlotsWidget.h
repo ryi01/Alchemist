@@ -51,6 +51,5 @@ private:
 public:
 	void CreateEmptySlots();
 
-	void CreateEntrySlot(int32 X, int32 Y);
 	void CreateEntrySlot(int32 index, FElementDatas& data);
 };
