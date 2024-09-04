@@ -3,6 +3,8 @@
 
 #include "Alchemist/CHJ/Guide_GameInstance.h"
 
+#include "SYH/SYH_QuizWaitWidget.h"
+
 UGuide_GameInstance::UGuide_GameInstance()
 {
 	//데이터 테이블 붙이기

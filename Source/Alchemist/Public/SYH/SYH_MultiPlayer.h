@@ -2,6 +2,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "InputActionValue.h"
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
 #include "SYH_MultiPlayer.generated.h"
@@ -47,12 +48,12 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* IA_Camera;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputAction* IA_Mouse;
+	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* IA_Guide;
-	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* IA_Quiz;
+
 	// Sets default values for this character's properties
 	ASYH_MultiPlayer();
 	virtual void PossessedBy(AController* NewController) override;
@@ -85,19 +86,19 @@ protected:
 			
 	void Camera(const FInputActionValue& Value);
 
-	void OnClickedLeft(const FInputActionValue& Value);
-
 	void OnMyCheckActor();
 
-	void CreatePopUpWidget();
+	void Quiz(const FInputActionValue& Value);
 
+	// void Quiz(const FInputActionValue& Value);
 	UPROPERTY()
 	class AAluminum_Object* Aluminum;
 	
 	int count = 0;
-	bool bCreateWidget = false;
 
 public:
+	UPROPERTY(EditAnywhere)
+	bool InQuiz= false;
 	//UPROPERTY(EditDefaultsOnly,BlueprintReadWrite)
 	//bool bIsCamera = false;
 	// Called when the game starts or when spawned
@@ -113,4 +114,50 @@ public:
 	FORCEINLINE class UCameraComponent* GetCameraCompThird() const { return CameraCompThird; }
 
 	void ObjectDetect();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Quiz")
+	class ASYH_MultiPlayer* TargetPlayer;
+	// 퀴즈 관련 함수
+	// 특정거리내에 들어오면 F키를 누르라는 안내 UI를 띄우고싶다.
+	UFUNCTION(Client,Reliable)
+	void ClientRPC_CallFKey(); 
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UUserWidget> QuizWaitClass;
+	UPROPERTY()
+	class USYH_QuizWaitWidget* QuizWaitWidget;
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UUserWidget> QuizSelectClass;
+	UPROPERTY()
+	class USYH_QuizSelect* QuizSelectWidget;
+	class UGuide_GameInstance* GameInstance;
+	UPROPERTY(EditDefaultsOnly)
+	float RequestUIDistance = 300.0f;
+	void CheckDist();
+
+	UFUNCTION(Client,Reliable)
+	void ClientRPC_ShowQuizSelect();
+
+	UFUNCTION(Client,Reliable)
+	void ClientRPC_ShowQuizWait();
+
+	FTimerHandle Timer;
+	void HideQuizReject();
+	UFUNCTION(Server,Reliable,withValidation)
+	void ServerRPC_Quiz();
+
+	void Server_Quiz();
+
+	// select 버튼 이벤트
+	// UFUNCTION(Server, Reliable, WithValidation)
+	// void ServerRPC_AcceptQuiz();
+
+	UFUNCTION(Server, Reliable, WithValidation)
+	void ServerRPC_RejectQuiz();
+
+	UFUNCTION(Client, Reliable)
+	void ClientRPC_ShowQuiz();
+
+	UFUNCTION(Client, Reliable)
+	void ClientRPC_ShowQuizReject();
+
 };
