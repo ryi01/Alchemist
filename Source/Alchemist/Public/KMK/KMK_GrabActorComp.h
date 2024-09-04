@@ -33,6 +33,7 @@ public:
 	AActor* newActor; 
 	UFUNCTION()
 	void CreateElementSucced(FString tagName);
+	UPROPERTY()
 	int count = 0;
 
 	UFUNCTION()

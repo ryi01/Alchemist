@@ -32,8 +32,12 @@ void UKMK_ElementGameActor::TickComponent(float DeltaTime, ELevelTick TickType, 
 	// ...
 }
 
+
+
 void UKMK_ElementGameActor::ChangeMyPos(FVector myPos)
 {
-
+	isUp = true;
+	GetOwner()->SetActorLocation(myPos); 
+	//GEngine->AddOnScreenDebugMessage(1,1,FColor::Cyan,FString::Printf(TEXT("HIIIIIIIIIIIIIIIII")));
 }
 

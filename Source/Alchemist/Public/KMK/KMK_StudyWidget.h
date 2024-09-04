@@ -38,8 +38,10 @@ public:
 	UPROPERTY()
 	APlayerController* me;
 	UFUNCTION()
-	void SetButtVisi(bool isActive, APlayerController* pc);
+	void SetButtVisi(bool isActive, APlayerController* pc, class UKMK_PlayerMouse* pm);
+	// 원소 위치 및 newElement저장
 
-	// 원소 이름 및 설명 담을 변수들
+	UPROPERTY()
+	class UKMK_PlayerMouse* PlayerMouseComp;
 
 };

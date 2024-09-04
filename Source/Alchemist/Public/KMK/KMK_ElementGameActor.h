@@ -25,6 +25,9 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 	// 생성된 엑터에 정보값을 저장할 예정 => Map 형태
 	TMap<FString,TMap<FString,FString>> myInfos;
+
+	UPROPERTY(BlueprintReadWrite)
+	bool isUp = false;
 	// 위치 수정할 수 있는 함수
 	UFUNCTION()
 	void ChangeMyPos(FVector myPos);

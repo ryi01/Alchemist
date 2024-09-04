@@ -39,8 +39,9 @@ void UKMK_GrabActorComp::TickComponent(float DeltaTime, ELevelTick TickType, FAc
 
 void UKMK_GrabActorComp::CreateElementSucced(FString tagName)
 {
-	if ( count <= 0 )
+	if ( !isCreate )
 	{
+		isCreate = true;
 		newActor = GetWorld()->SpawnActor<AActor>(elementFact,GetOwner()->GetTargetLocation(),FRotator::ZeroRotator);
 		newActor->Tags.Add(FName(*tagName));
 		count++;

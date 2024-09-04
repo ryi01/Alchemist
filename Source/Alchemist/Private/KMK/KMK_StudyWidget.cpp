@@ -5,6 +5,7 @@
 #include "Components/Button.h"
 #include "Components/MultiLineEditableTextBox.h"
 #include "KMK/KMK_ElementGameActor.h"
+#include "KMK/KMK_PlayerMouse.h"
 
 void UKMK_StudyWidget::NativeConstruct()
 {
@@ -29,13 +30,22 @@ void UKMK_StudyWidget::ClickDel()
 {
     RemoveFromParent();
     if(me != nullptr) me->SetPause(false);
-    if( newElement != nullptr) newElement->ChangeMyPos();
+    if ( PlayerMouseComp != nullptr )
+    {
+        PlayerMouseComp->isDeleteWidget = true;
+        PlayerMouseComp->cnt = 0;
+        PlayerMouseComp->IsRay = false;
+    }
 }
 
-void UKMK_StudyWidget::SetButtVisi(bool isActive,APlayerController* pc)
+void UKMK_StudyWidget::SetButtVisi(bool isActive,APlayerController* pc,class UKMK_PlayerMouse* pm)
 {
     ExplainText->SetIsEnabled(false);
     if(pc != nullptr) me = pc;
+    if ( pm != nullptr )
+    {
+        PlayerMouseComp = pm;
+    }
     if ( isActive )
     {
         NextButt->SetVisibility(ESlateVisibility::Hidden);
@@ -48,3 +58,4 @@ void UKMK_StudyWidget::SetButtVisi(bool isActive,APlayerController* pc)
         DeletButt->SetVisibility(ESlateVisibility::Visible);
     }
 }
+
