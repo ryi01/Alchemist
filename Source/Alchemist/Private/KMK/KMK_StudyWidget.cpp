@@ -4,6 +4,7 @@
 #include "KMK/KMK_StudyWidget.h"
 #include "Components/Button.h"
 #include "Components/MultiLineEditableTextBox.h"
+#include "KMK/KMK_ElementGameActor.h"
 
 void UKMK_StudyWidget::NativeConstruct()
 {
@@ -28,6 +29,7 @@ void UKMK_StudyWidget::ClickDel()
 {
     RemoveFromParent();
     if(me != nullptr) me->SetPause(false);
+    if( newElement != nullptr) newElement->ChangeMyPos();
 }
 
 void UKMK_StudyWidget::SetButtVisi(bool isActive,APlayerController* pc)

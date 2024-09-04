@@ -34,6 +34,8 @@ public:
 	UFUNCTION()
 	void ClickDel();
 	UPROPERTY()
+	class UKMK_ElementGameActor* newElement;
+	UPROPERTY()
 	APlayerController* me;
 	UFUNCTION()
 	void SetButtVisi(bool isActive, APlayerController* pc);

@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
@@ -23,6 +23,10 @@ protected:
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-
+	// 생성된 엑터에 정보값을 저장할 예정 => Map 형태
+	TMap<FString,TMap<FString,FString>> myInfos;
+	// 위치 수정할 수 있는 함수
+	UFUNCTION()
+	void ChangeMyPos(FVector myPos);
 		
 };

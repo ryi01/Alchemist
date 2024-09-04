@@ -64,7 +64,10 @@ void UKMK_PlayerMouse::OnMyGrabComp()
 		auto* hitActor = outHit.GetActor();
 		if ( hitActor->ActorHasTag("NewEle") && outHitComp == nullptr )
 		{
+			// 엑터에 컴포넌트에 정보 업데이트
+			//auto*
 
+			// 위잿 생성
 			auto* widget = CastChecked< UKMK_StudyWidget>(CreateWidget(GetWorld(), widgetFact));
 			if ( widget && cnt <= 0 )
 			{

@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "KMK/KMK_ElementGameActor.h"
@@ -30,5 +30,10 @@ void UKMK_ElementGameActor::TickComponent(float DeltaTime, ELevelTick TickType, 
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	// ...
+}
+
+void UKMK_ElementGameActor::ChangeMyPos(FVector myPos)
+{
+
 }
 
