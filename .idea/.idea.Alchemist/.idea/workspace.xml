@@ -15,27 +15,12 @@
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Alchemist/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Alchemist/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Alchemist.sln.DotSettings.user" beforeDir="false" afterPath="$PROJECT_DIR$/Alchemist.sln.DotSettings.user" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Config/DefaultEngine.ini" beforeDir="false" afterPath="$PROJECT_DIR$/Config/DefaultEngine.ini" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Project/KMK/Blueprint/BP_KMK_GameModeBase.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Project/KMK/Blueprint/BP_KMK_GameModeBase.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Project/KMK/Room.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Project/KMK/Room.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Project/SYH/Anim/ABP_SYHMultiPlayer.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Project/SYH/Anim/ABP_SYHMultiPlayer.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Project/SYH/Anim/ABP_SYHPlayer.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Project/SYH/Anim/ABP_SYHPlayer.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Project/SYH/Anim/AM_Look.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Project/SYH/Anim/AM_Look.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Project/SYH/Anim/BS_Move.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Project/SYH/Anim/BS_Move.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Project/SYH/Anim/Looking_UE.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Project/SYH/Blueprints/BP_SYHGameModeBase.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Project/SYH/Blueprints/BP_SYHGameModeBase.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Project/SYH/Blueprints/BP_SYHMultiPlayer.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Project/SYH/Blueprints/BP_SYHMultiPlayer.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Project/SYH/Blueprints/BP_SYHPlayer.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Project/SYH/Blueprints/BP_SYHPlayer.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Project/SYH/Maps/SYHLevel.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Project/SYH/Maps/SYHLevel.umap" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Project/SYH/Quiz/WBP_SYHQuiz.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Project/SYH/Quiz/WBP_SYHQuiz.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Project/SYH/Quiz/WBP_SYHQuizResult.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Project/SYH/Quiz/WBP_SYHQuizResult.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Project/SYH/Quiz/WBP_SYHQuizSelect.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Project/SYH/Quiz/WBP_SYHQuizSelect.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Project/SYH/Quiz/WBP_SYHQuizWait.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Project/SYH/Quiz/WBP_SYHQuizWait.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Project/SYR/character/Walking.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Project/SYR/character/Walking.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Project/SYR/character/Walking__1__Anim_mixamo_com.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Project/SYR/character/Walking__1__Anim_mixamo_com.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/Alchemist/CHJ/Guide_GameInstance.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Alchemist/CHJ/Guide_GameInstance.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/Alchemist/Private/SYH/SYH_MultiPlayer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Alchemist/Private/SYH/SYH_MultiPlayer.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/Alchemist/Private/SYH/SYH_QuizSelect.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Alchemist/Private/SYH/SYH_QuizSelect.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/Alchemist/Public/SYH/SYH_MultiPlayer.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Alchemist/Public/SYH/SYH_MultiPlayer.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/Alchemist/Public/SYH/SYH_QuizWidget.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Alchemist/Public/SYH/SYH_QuizWidget.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -161,11 +146,75 @@
     <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="cidr-memory-view://7" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../Program Files/Epic Games/UE_5.4/Engine/Source/Programs/UnrealBuildTool/UnrealBuildTool.csproj" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../Program Files/Epic Games/UE_5.4/Engine/Source/Runtime/Core/Public/UObject/ScriptDelegates.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../Program Files/Epic Games/UE_5.4/Engine/Source/Runtime/Engine/Private/Collision/WorldCollision.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../Program Files/Epic Games/UE_5.4/Engine/Source/Runtime/Engine/Private/Pawn.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../Program Files/Epic Games/UE_5.4/Engine/Source/Runtime/Engine/Public/WorldCollision.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../Program Files/Epic Games/UE_5.4/Engine/Source/Runtime/UMG/Private/Components/Widget.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Intermediate/Build/Win64/UnrealEditor/Inc/Alchemist/UHT/SYH_MultiPlayer.gen.cpp" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="ProjectColorInfo">{
@@ -180,7 +229,7 @@
   "keyToString": {
     ".NET 실행 설정 프로파일.EpicGames.AspNet.executor": "Debug",
     ".NET 프로젝트.UnrealBuildTool.executor": "Run",
-    "C++ 프로젝트.Alchemist.executor": "Debug",
+    "C++ 프로젝트.Alchemist.executor": "Run",
     "C++ 프로젝트.UE5.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "SYH",
@@ -639,6 +688,7 @@
       <workItem from="1725389006766" duration="651000" />
       <workItem from="1725390141383" duration="515000" />
       <workItem from="1725409452487" duration="10887000" />
+      <workItem from="1725428613932" duration="6663000" />
     </task>
     <task id="LOCAL-00001" summary="1">
       <option name="closed" value="true" />
@@ -677,6 +727,32 @@
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="UnitTestsCoverage.Settings">
+    <option name="coveragePercentColumnWidth" value="150" />
+    <option name="sortOrder" value="DESCENDING" />
+    <option name="sortedColumn" value="1" />
+    <option name="symbolColumnWidth" value="210" />
+    <coverage-tree-state>
+      <expand>
+        <path>
+          <item name="rootNode" type="c53c71d1:RiderDotCoverCoverageTreeModel$RootNode" />
+          <item name="Total 0% 164101/164101" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+        </path>
+        <path>
+          <item name="rootNode" type="c53c71d1:RiderDotCoverCoverageTreeModel$RootNode" />
+          <item name="Total 0% 164101/164101" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+          <item name="Programs 0% 142616/142616" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+        </path>
+        <path>
+          <item name="rootNode" type="c53c71d1:RiderDotCoverCoverageTreeModel$RootNode" />
+          <item name="Total 0% 164101/164101" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+          <item name="Programs 0% 142616/142616" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+          <item name="Shared 0% 55222/55222" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+        </path>
+      </expand>
+      <select />
+    </coverage-tree-state>
   </component>
   <component name="UnityCheckinConfiguration" checkUnsavedScenes="true" />
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
@@ -733,16 +809,6 @@
           <url>file://$PROJECT_DIR$/../../Program Files/Epic Games/UE_5.4/Engine/Source/Runtime/UMG/Private/Components/Widget.cpp</url>
           <line>413</line>
           <option name="timeStamp" value="135" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/Source/Alchemist/Private/SYH/SYH_MultiPlayer.cpp</url>
-          <line>474</line>
-          <option name="timeStamp" value="166" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/Source/Alchemist/Private/SYH/SYH_MultiPlayer.cpp</url>
-          <line>472</line>
-          <option name="timeStamp" value="167" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

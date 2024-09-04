@@ -21,6 +21,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "SYH/SYH_QuizSelect.h"
 #include "SYH/SYH_QuizWaitWidget.h"
+#include "SYH/SYH_QuizWidget.h"
 // Sets default values
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -73,10 +74,10 @@ void ASYH_MultiPlayer::PossessedBy(AController* NewController)
 	{
 		if (!IsLocallyControlled() || GuideWidget != nullptr || QuizWaitWidget != nullptr) return;
 		GuideWidget = Cast<UGuide_MainWidget>(CreateWidget(GetWorld(), GuideWidgetClass));
-		CheckDist();
 		QuizWaitWidget = Cast<USYH_QuizWaitWidget>(CreateWidget(GetWorld(), QuizWaitClass));
 		if(QuizWaitWidget) QuizWaitWidget->AddToViewport();
 		QuizSelectWidget = Cast<USYH_QuizSelect>(CreateWidget(GetWorld(), QuizSelectClass));
+		QuizWidget = Cast<USYH_QuizWidget>(CreateWidget(GetWorld(),QuizClass));
 	}
 }
 
@@ -111,6 +112,7 @@ void ASYH_MultiPlayer::BeginPlay()
 		if(QuizWaitWidget) QuizWaitWidget->AddToViewport();
 		UE_LOG(LogTemp,Error,TEXT("client"));
 		QuizSelectWidget = Cast<USYH_QuizSelect>(CreateWidget(GetWorld(), QuizSelectClass));
+		QuizWidget = Cast<USYH_QuizWidget>(CreateWidget(GetWorld(),QuizClass));
 	}
 	GameInstance = CastChecked<UGuide_GameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 }
@@ -121,7 +123,7 @@ void ASYH_MultiPlayer::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	if(IsLocallyControlled())
 	{
-		if(InQuiz == false) CheckDist();
+		if(InQuiz == false) CheckDist(true);
 		if(UGameplayStatics::GetCurrentLevelName(GetWorld())!="Room")
 		{
 			return;
@@ -136,7 +138,7 @@ void ASYH_MultiPlayer::Tick(float DeltaTime)
 }
 // request를 보낼 수 있는 거리내에 있으면 UI를 띄우게 함
 
-void ASYH_MultiPlayer::CheckDist()
+void ASYH_MultiPlayer::CheckDist(bool bCheck)
 {
 	// 거리내에 있음을 구분하기 위한 bool 값
 	bool bShowUI = false;
@@ -153,7 +155,7 @@ void ASYH_MultiPlayer::CheckDist()
 			}
 		}
 	}
-	if (bShowUI) 
+	if (bShowUI && bCheck) 
 	{
 		ClientRPC_CallFKey(); // UI를 띄움 (client의 UI까지)
 	}
@@ -422,18 +424,27 @@ void ASYH_MultiPlayer::Server_Quiz()
 	bool bHit = GetWorld()->SweepSingleByChannel(OutHit, Start, End, FQuat::Identity, ECC_Visibility, FCollisionShape::MakeSphere(100.f), Params);
 	GEngine->AddOnScreenDebugMessage(1, 2, FColor::Blue, FString::Printf(TEXT("%s"), *OutHit.GetActor()->GetName()));
 	if (bHit)
-	{
-		TargetPlayer = Cast<ASYH_MultiPlayer>(OutHit.GetActor());
-		// target player는 요청을 받은 Player
-		if (TargetPlayer)
-		{
-			// 요청을 받은 플레이어에게 UI를 띄우도록 server가 client 요청
-			this->ClientRPC_ShowQuizWait();
-			// 요청을 보낸 플레이어는 "대기 중" UI를 표시
-			TargetPlayer->ClientRPC_ShowQuizSelect();
-		}
-	}
+    {
+        TargetPlayer = Cast<ASYH_MultiPlayer>(OutHit.GetActor());
+        if (TargetPlayer)
+        {
+            UE_LOG(LogTemp, Log, TEXT("Server_Quiz: TargetPlayer set to %s"), *TargetPlayer->GetName());
+        	this->TargetPlayer = TargetPlayer;
+            // 요청을 받은 플레이어에게 UI를 띄우도록 서버에서 클라이언트로 요청
+            this->ClientRPC_ShowQuizWait();
+            TargetPlayer->ClientRPC_ShowQuizSelect();
+        }
+        else
+        {
+            UE_LOG(LogTemp, Warning, TEXT("Server_Quiz: TargetPlayer is null after Sweep Trace"));
+        }
+    }
+    else
+    {
+        UE_LOG(LogTemp, Warning, TEXT("Server_Quiz: No player hit by Sweep Trace"));
+    }
 }
+
 
 void ASYH_MultiPlayer::ServerRPC_Quiz_Implementation()
 {
@@ -459,19 +470,51 @@ void ASYH_MultiPlayer::HideQuizReject()
 	if(QuizWaitWidget)
 	{
 		QuizWaitWidget->SetRejectVisibility(false);
-		TargetPlayer->InQuiz = false;
+		// 요청을 받은 사람
+		this->InQuiz = false;
 	}
 }
 void ASYH_MultiPlayer::ClientRPC_ShowQuiz_Implementation()
 {
-	
+	if(QuizWaitWidget)
+	{
+		QuizWaitWidget->SetWaitVisibility(false);
+	}
+	if(QuizWidget)
+	{
+		QuizWidget->AddToViewport();
+	}
+}
+void ASYH_MultiPlayer::ServerRPC_AcceptQuiz_Implementation()
+{
+	this->ClientRPC_ShowQuiz();
+	if(TargetPlayer)
+	{
+		TargetPlayer->ClientRPC_ShowQuiz();
+	}
+	else
+	{
+		CheckDist(false);
+		TargetPlayer->ClientRPC_ShowQuiz();
+	}
+}
+
+bool ASYH_MultiPlayer::ServerRPC_AcceptQuiz_Validate()
+{
+	return true;
+
 }
 
 void ASYH_MultiPlayer::ServerRPC_RejectQuiz_Implementation()
 {
-	// 요청을 받은 사람이 현재 controlled
+	//  QuizRequestReceivePlayer는 요청을 하고 대기중인 플레이어
 	if(TargetPlayer)
 	{
+		TargetPlayer->ClientRPC_ShowQuizReject();
+	}
+	else
+	{
+		CheckDist(false);
 		TargetPlayer->ClientRPC_ShowQuizReject();
 	}
 }

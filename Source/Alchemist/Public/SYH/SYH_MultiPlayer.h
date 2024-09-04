@@ -132,7 +132,7 @@ public:
 	class UGuide_GameInstance* GameInstance;
 	UPROPERTY(EditDefaultsOnly)
 	float RequestUIDistance = 300.0f;
-	void CheckDist();
+	void CheckDist(bool bCheck);
 
 	UFUNCTION(Client,Reliable)
 	void ClientRPC_ShowQuizSelect();
@@ -148,8 +148,14 @@ public:
 	void Server_Quiz();
 
 	// select 버튼 이벤트
-	// UFUNCTION(Server, Reliable, WithValidation)
-	// void ServerRPC_AcceptQuiz();
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UUserWidget> QuizClass;
+	UPROPERTY()
+	class USYH_QuizWidget* QuizWidget;
+	
+	UFUNCTION(Server, Reliable, WithValidation)
+	void ServerRPC_AcceptQuiz();
 
 	UFUNCTION(Server, Reliable, WithValidation)
 	void ServerRPC_RejectQuiz();
