@@ -38,7 +38,7 @@ void UKMK_StudyWidget::ClickDel()
     }
 }
 
-void UKMK_StudyWidget::SetButtVisi(bool isActive,APlayerController* pc,class UKMK_PlayerMouse* pm)
+void UKMK_StudyWidget::SetButtVisi(bool isActive,APlayerController* pc, class UKMK_PlayerMouse* pm, int num)
 {
     ExplainText->SetIsEnabled(false);
     if(pc != nullptr) me = pc;
