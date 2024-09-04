@@ -2,6 +2,8 @@
 
 #include "KMK/KMK_SingleIntaraction.h"
 #include "Blueprint/UserWidget.h"
+#include "KMK/KMK_StudyWidget.h"
+#include "Components/MultiLineEditableTextBox.h"
 
 
 
@@ -29,7 +31,7 @@ void UKMK_SingleIntaraction::BeginPlay()
 			textWidget = Cast<UKMK_TextWidget>(owner->GetWidget());
 			if (textWidget)
 			{
-				textWidget->SetChatText(FText::GetEmpty());
+				textWidget->SetChatText(TEXT(""));
 			}
 		}
 	}
@@ -40,13 +42,19 @@ void UKMK_SingleIntaraction::TickComponent(float DeltaTime, ELevelTick TickType,
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 }
 
-void UKMK_SingleIntaraction::CreatePlayerWidget(bool bMake, int num = 0)
+void UKMK_SingleIntaraction::CreatePlayerWidget(bool bMake, int num = 0 , APlayerController* pc = nullptr)
 {
 	if ( widgetFact == nullptr )
 	{
 		return;
 	}
 	auto* wid = CreateWidget(GetWorld(), widgetFact);
+	auto* studyWid = Cast<UKMK_StudyWidget>(wid);
+	if ( studyWid != nullptr )
+	{
+		studyWid->me = pc;
+		studyWid->ExplainText->SetIsEnabled(false);
+	}
 	// 책상 클릭시 카메라 변경
 	if ( bMake )
 	{

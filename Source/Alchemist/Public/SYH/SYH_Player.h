@@ -78,6 +78,9 @@ protected:
 	TSubclassOf<UUserWidget> PopUPWidgetClass;
 	UPROPERTY();
 	class UKMK_PopUpWidget* PopUpWidget;
+	UPROPERTY()
+   class UKMK_PlayerMouse* deskMouse;
+
 protected:
 	// APawn interface
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;

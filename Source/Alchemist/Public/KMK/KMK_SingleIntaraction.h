@@ -42,14 +42,14 @@ public:
 	bool bMouseOnActor = false;
 		
 	UFUNCTION()
-	void CreatePlayerWidget(bool bMake, int num);
+	void CreatePlayerWidget(bool bMake, int num,APlayerController* pc);
 	
 	UFUNCTION()
 	void OnCreateNameWidget(bool bActive)
 	{
 		bMouseOnActor = bActive;
 		if (bActive)
-		textWidget->SetChatText(FText::FromString(*GetOwner()->GetActorLabel()));
-		else textWidget->SetChatText(FText::GetEmpty());
+		textWidget->SetChatText(*GetOwner()->GetActorLabel());
+		else textWidget->SetChatText(TEXT(""));
 	}
 };

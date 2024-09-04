@@ -27,13 +27,17 @@ public:
 	UPROPERTY(EditAnywhere, meta = (BindWidget))
 	class UEditableText* PlayerChat;
 	UPROPERTY(EditAnywhere, Category = "WBP_Chat")
-	TSubclassOf<class UUserWidget> ChatTextWidFact;
+	TArray<TSubclassOf<class UUserWidget>> ChatTextWidFact;
+	UPROPERTY()
+	class UUserWidget* wid;
+	UPROPERTY()
+	class UScrollBoxSlot* a;
 
 	UFUNCTION()
 	void OnClickSendButt();
 
 	UFUNCTION()
-	void MakeChatText(FText text, int num = 0);
+	void MakeChatText(FString text, int num = 0);
 	int count = 0;
 
 	UFUNCTION(BlueprintCallable)

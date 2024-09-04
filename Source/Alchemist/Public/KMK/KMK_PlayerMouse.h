@@ -36,7 +36,10 @@ public:
 	float RayDis = 500;
 	UPROPERTY(EditAnywhere)
 	float distance = 250;
-
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class UUserWidget> widgetFact;
+	UPROPERTY()
+	int cnt = 0;
 	UPROPERTY(EditAnywhere)
 	AActor* HttpActor;
 
@@ -55,4 +58,16 @@ public:
 	// 새로운 엑터 생성하는 함수
 	UFUNCTION()
 	void CopyNewActor(AActor* hitActor, FVector grabPos);
+
+	UPROPERTY(EditAnywhere, Category = NewElementPosisition)
+	TArray<FVector> elementPos;
+
+	UPROPERTY()
+	class UKMK_GrabActorComp* potComp;
+	UPROPERTY()
+	class UKMK_ElementGameActor* elementActor;
+	UPROPERTY()
+	bool isDeleteWidget = false;
+	int eleCount = 0;
+
 };

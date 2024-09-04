@@ -18,6 +18,9 @@
 #include "Alchemist/CHJ/Illustrated_Guide/Guide_Widget/Guide_MainWidget.h"
 #include "Components/Button.h"
 #include "Kismet/GameplayStatics.h"
+#include "PhysicsEngine/PhysicsHandleComponent.h"
+#include "KMK/KMK_DeskComponent.h"
+#include "KMK/KMK_PlayerMouse.h"
 
 DEFINE_LOG_CATEGORY(LogTemplate);
 
@@ -91,7 +94,7 @@ void ASYH_Player::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	if(IsLocallyControlled())
 	{
-		if(UGameplayStatics::GetCurrentLevelName(GetWorld())!="Room")
+		if(UGameplayStatics::GetCurrentLevelName(GetWorld())!="Room1")
 		{
 			return;
 		}
@@ -179,11 +182,24 @@ void ASYH_Player::OnClickedLeft(const FInputActionValue& Value)
 		AActor* HitActor = HitResult.GetActor();
 		if ( HitActor )
 		{
+			auto* desk = HitActor->GetComponentByClass<UKMK_DeskComponent>();
+			auto* mouse = HitActor->GetComponentByClass<UKMK_PlayerMouse>();
+			if ( HitActor->ActorHasTag("Desk") )
+			{
+				if ( desk )
+				{
+					DeskActor = HitActor;
+					mouse->isDesk = true;
+					mouse->handle = GetComponentByClass<UPhysicsHandleComponent>();
+					desk->ChangeMyCamera(true);
+				}
+				return;
+			}
 			count = 0;
 			auto* actorClass = HitActor->GetComponentByClass<UKMK_SingleIntaraction>();
 			if ( actorClass && bCreateWidget )
 			{
-				actorClass->CreatePlayerWidget(true,0);
+				actorClass->CreatePlayerWidget(true,0, PlayerController);
 				//PlayerController->SetPause(true);
 			}
 		}

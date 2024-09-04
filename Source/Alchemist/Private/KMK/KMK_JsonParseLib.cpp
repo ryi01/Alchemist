@@ -21,40 +21,70 @@ FString UKMK_JsonParseLib::MakeJson(const TMap<FString, FString> source)
 	return json;
 }
 // 챗봇의 값 파섹
-TMap<FString, FString> UKMK_JsonParseLib::ChatBotParsec(const FString& json, FString ResultChatBot)
+TMap<FString,TMap<FString,FString>> UKMK_JsonParseLib::ChatBotParsec(const FString& json,TArray<FString> Sections)
 {
 	TSharedRef<TJsonReader<TCHAR>> reader = TJsonReaderFactory<TCHAR>::Create(json);
 	TSharedPtr<FJsonObject> response = MakeShareable(new FJsonObject());
 
-	TMap<FString, FString> result;
-	
+    TMap<FString,TMap<FString,FString>> result;
+  
 	if ( FJsonSerializer::Deserialize(reader, response) )
 	{
-		TArray<TSharedPtr<FJsonValue>> parseDataList = response->GetArrayField(TEXT("원소명"));
-		// 책의 이름과 저자
-		//FString elementName = response->GetStringField(TEXT("원소명"));
-		//if ( elementName.IsEmpty() ) elementName = "네";
-		//result.Add(elementName, ResultChatBot);
-		if(parseDataList.IsEmpty() ) result.Add(TEXT("산소"), ResultChatBot);
+		FString parseDataList1 = response->GetStringField(TEXT("explanation"));
+		if ( response->TryGetStringField(TEXT("explanation"),parseDataList1) && !parseDataList1.IsEmpty() )
+		{
+#pragma region StringParsec
+            int32 StartIndex = 0;
+            for ( int32 i = 0; i < Sections.Num(); i++ )
+            {
+                // 현재 섹션의 시작 위치 찾기
+                int32 SectionStart = json.Find(Sections[ i ],ESearchCase::IgnoreCase,ESearchDir::FromStart,StartIndex);
 
-		// FString elementName = response->GetStringField(TEXT("원소명"));
+                if ( SectionStart != INDEX_NONE )
+                {
+                    // 다음 섹션의 시작 위치 찾기
+                    int32 NextSectionStart = ( i + 1 < Sections.Num() ) ? json.Find(Sections[ i + 1 ],ESearchCase::IgnoreCase,ESearchDir::FromStart,SectionStart + 1) : json.Len();
 
-		GEngine->AddOnScreenDebugMessage(2, 5, FColor::Blue, FString::Printf(TEXT("AI Connect")));
+                    // 섹션 내용 추출
+                    FString SectionContent = json.Mid(SectionStart,NextSectionStart - SectionStart).TrimStartAndEnd();
+
+                    // 각 항목을 저장할 TMap 생성
+                    TMap<FString,FString> SectionDetails;
+
+                    // 섹션 내용을 줄 단위로 분리
+                    TArray<FString> Lines;
+                    SectionContent.ParseIntoArray(Lines,TEXT("\n"),true);
+
+                    for ( FString& Line : Lines )
+                    {
+                        Line = Line.TrimStartAndEnd();
+
+                        // 정보 항목을 "-" 기호를 기준으로 분리
+                        if ( Line.StartsWith(TEXT("- ")) )
+                        {
+                            int32 DelimIndex;
+
+                            if ( Line.FindChar(TEXT(':'),DelimIndex) )
+                            {
+                                FString Key = Line.Mid(2,DelimIndex - 2).TrimStartAndEnd();  // "- "를 제거하고 키 추출
+                                FString Value = Line.Mid(DelimIndex + 1).TrimStartAndEnd();   // ":" 이후를 값으로 저장
+
+                                SectionDetails.Add(Key,Value);
+                            }
+                        }
+                    }
+
+                    // 전체 섹션을 TMap에 추가
+                    result.Add(Sections[ i ],SectionDetails);
+
+                    // 다음 섹션의 시작 인덱스로 이동
+                    StartIndex = NextSectionStart;
+                }
+            }
+
+#pragma endregion
+		}
 	}
-
-	// json 파일을 오브젝트 형식으로 된 배열형태로 받은상태
-	//FString returnValue;
-	//if ( FJsonSerializer::Deserialize(reader, response) )
-	//{
-	//	TArray<TSharedPtr<FJsonValue>> parseDataList = response->GetArrayField(TEXT("items"));
-	//	for ( TSharedPtr<FJsonValue> data : parseDataList )
-	//	{
-	//		// 책의 이름과 저자
-	//		FString bookName = data->AsObject()->GetStringField("bk_nm");
-	//		FString authorName = data->AsObject()->GetStringField("aut_nm");
-	//		returnValue.Append(FString::Printf(TEXT("BookName : %s / AuthorName : %s\n"), *bookName, *authorName));
-	//	}
-	//}
 	return result;
 }
 
