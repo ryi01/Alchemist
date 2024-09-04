@@ -115,6 +115,8 @@ public:
 
 	void ObjectDetect();
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Quiz")
+	class ASYH_MultiPlayer* TargetPlayer;
 	// 퀴즈 관련 함수
 	// 특정거리내에 들어오면 F키를 누르라는 안내 UI를 띄우고싶다.
 	UFUNCTION(Client,Reliable)
@@ -137,29 +139,25 @@ public:
 
 	UFUNCTION(Client,Reliable)
 	void ClientRPC_ShowQuizWait();
+
+	FTimerHandle Timer;
+	void HideQuizReject();
 	UFUNCTION(Server,Reliable,withValidation)
 	void ServerRPC_Quiz();
 
 	void Server_Quiz();
-	// // F키를 누르면 서버에 퀴즈 요청을 보내고 싶다.
-	// UFUNCTION(Server,Reliable,withValidation)
-	// void ServerRPC_SendQuizSelect(FVector start, FVector end, float radius);
-	// // 퀴즈 요청을 다루는 함수
-	// void HandleQuizRequest(AActor* TargetActor);
-	// UPROPERTY();
-	// class ASYH_MultiPlayer* OtherPlayer;
-	//
-	// UFUNCTION(Client,Reliable)	// server -> client
-	// void ClientRPC_ShowQuizSelect();
-	//
 
-	//
-	// // server가 client에게 응답을 기다리는 중 UI 띄우기
-	// UFUNCTION(Client,Reliable)
-	// void ClientRPC_ShowQuizWait();
-	//
-	// // server가 client에게 거절당하였습니다 UI 띄우기
-	// UFUNCTION(Client,Reliable)
-	// void ClientRPC_ShowQuizReject();
+	// select 버튼 이벤트
+	// UFUNCTION(Server, Reliable, WithValidation)
+	// void ServerRPC_AcceptQuiz();
+
+	UFUNCTION(Server, Reliable, WithValidation)
+	void ServerRPC_RejectQuiz();
+
+	UFUNCTION(Client, Reliable)
+	void ClientRPC_ShowQuiz();
+
+	UFUNCTION(Client, Reliable)
+	void ClientRPC_ShowQuizReject();
 
 };

@@ -12,26 +12,30 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3e7ba4d9-04c6-440b-a40d-f809cf4ad7f2" name="변경" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Alchemist/.idea/projectSettingsUpdater.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Alchemist/.idea/projectSettingsUpdater.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Alchemist/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Alchemist/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Alchemist.sln.DotSettings.user" beforeDir="false" afterPath="$PROJECT_DIR$/Alchemist.sln.DotSettings.user" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Config/DefaultEngine.ini" beforeDir="false" afterPath="$PROJECT_DIR$/Config/DefaultEngine.ini" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Project/KMK/Blueprint/BP_KMK_GameModeBase.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Project/KMK/Blueprint/BP_KMK_GameModeBase.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Project/KMK/Room.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Project/KMK/Room.umap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Project/SYH/Anim/ABP_SYHMultiPlayer.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Project/SYH/Anim/ABP_SYHMultiPlayer.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Project/SYH/Anim/ABP_SYHPlayer.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Project/SYH/Anim/ABP_SYHPlayer.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Project/SYH/Anim/AM_Look.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Project/SYH/Anim/AM_Look.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Project/SYH/Anim/BS_Move.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Project/SYH/Anim/BS_Move.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Project/SYH/Anim/Looking_UE.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Project/SYH/Blueprints/BP_SYHGameModeBase.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Project/SYH/Blueprints/BP_SYHGameModeBase.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Project/SYH/Blueprints/BP_SYHMultiPlayer.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Project/SYH/Blueprints/BP_SYHMultiPlayer.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Project/SYH/Blueprints/BP_SYHPlayer.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Project/SYH/Blueprints/BP_SYHPlayer.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Project/SYH/Maps/SYHLevel.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Project/SYH/Maps/SYHLevel.umap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Project/SYH/Quiz/WBP_SYHQuiz.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Project/SYH/Quiz/WBP_SYHQuiz.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Project/SYH/Quiz/WBP_SYHQuizResult.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Project/SYH/Quiz/WBP_SYHQuizResult.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Project/SYH/Quiz/WBP_SYHQuizSelect.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Project/SYH/Quiz/WBP_SYHQuizSelect.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Project/SYH/Quiz/WBP_SYHQuizWait.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Project/SYH/Quiz/WBP_SYHQuizWait.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/Alchemist/CHJ/Guide_GameInstance.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Alchemist/CHJ/Guide_GameInstance.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Project/SYR/character/Walking.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Project/SYR/character/Walking.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Project/SYR/character/Walking__1__Anim_mixamo_com.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Project/SYR/character/Walking__1__Anim_mixamo_com.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/Alchemist/CHJ/Guide_GameInstance.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Alchemist/CHJ/Guide_GameInstance.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/Alchemist/Private/SYH/CameraWidget.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Alchemist/Private/SYH/CameraWidget.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/Alchemist/Private/SYH/SYH_MultiPlayer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Alchemist/Private/SYH/SYH_MultiPlayer.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/Alchemist/Private/SYH/SYH_PlayerAnim.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Alchemist/Private/SYH/SYH_PlayerAnim.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/Alchemist/Private/SYH/SYH_QuizSelect.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Alchemist/Private/SYH/SYH_QuizSelect.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/Alchemist/Private/SYH/SYH_QuizWaitWidget.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Alchemist/Private/SYH/SYH_QuizWaitWidget.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/Alchemist/Public/SYH/SYH_MultiPlayer.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Alchemist/Public/SYH/SYH_MultiPlayer.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/Alchemist/Public/SYH/SYH_QuizSelect.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Alchemist/Public/SYH/SYH_QuizSelect.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/Alchemist/Public/SYH/SYH_QuizWaitWidget.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Alchemist/Public/SYH/SYH_QuizWaitWidget.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -157,48 +161,6 @@
     <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="cidr-memory-view://14" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../Program Files/Epic Games/UE_5.4/Engine/Source/Programs/UnrealBuildTool/UnrealBuildTool.csproj" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../Program Files/Epic Games/UE_5.4/Engine/Source/Runtime/Engine/Private/Collision/WorldCollision.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../Program Files/Epic Games/UE_5.4/Engine/Source/Runtime/Engine/Private/Pawn.cpp" root0="FORCE_HIGHLIGHTING" />
@@ -214,23 +176,23 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;.NET 실행 설정 프로파일.EpicGames.AspNet.executor&quot;: &quot;Debug&quot;,
-    &quot;.NET 프로젝트.UnrealBuildTool.executor&quot;: &quot;Run&quot;,
-    &quot;C++ 프로젝트.Alchemist.executor&quot;: &quot;Run&quot;,
-    &quot;C++ 프로젝트.UE5.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;SYH&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    ".NET 실행 설정 프로파일.EpicGames.AspNet.executor": "Debug",
+    ".NET 프로젝트.UnrealBuildTool.executor": "Run",
+    "C++ 프로젝트.Alchemist.executor": "Debug",
+    "C++ 프로젝트.UE5.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "SYH",
+    "ignore.virus.scanning.warn.message": "true",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected="C++ 프로젝트.Alchemist">
     <configuration name="Alchemist" type="CppProject" factoryName="C++ Project">
       <configuration_1>
@@ -674,6 +636,9 @@
       <workItem from="1725322490568" duration="32786000" />
       <workItem from="1725360290279" duration="9079000" />
       <workItem from="1725377207588" duration="7801000" />
+      <workItem from="1725389006766" duration="651000" />
+      <workItem from="1725390141383" duration="515000" />
+      <workItem from="1725409452487" duration="10887000" />
     </task>
     <task id="LOCAL-00001" summary="1">
       <option name="closed" value="true" />
@@ -768,6 +733,16 @@
           <url>file://$PROJECT_DIR$/../../Program Files/Epic Games/UE_5.4/Engine/Source/Runtime/UMG/Private/Components/Widget.cpp</url>
           <line>413</line>
           <option name="timeStamp" value="135" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/Source/Alchemist/Private/SYH/SYH_MultiPlayer.cpp</url>
+          <line>474</line>
+          <option name="timeStamp" value="166" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/Source/Alchemist/Private/SYH/SYH_MultiPlayer.cpp</url>
+          <line>472</line>
+          <option name="timeStamp" value="167" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

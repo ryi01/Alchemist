@@ -36,6 +36,4 @@ public:
 
 	int32 SlotsIndex = 8;
 
-public:
-
 };

@@ -142,10 +142,10 @@ void ASYH_MultiPlayer::CheckDist()
 	bool bShowUI = false;
 	for(TActorIterator<ASYH_MultiPlayer> It(GetWorld());It;++It)
 	{
-		ASYH_MultiPlayer* OtherPlayer = *It;
-		if(OtherPlayer && OtherPlayer!=this)
+		TargetPlayer = *It;
+		if(TargetPlayer && TargetPlayer!=this)
 		{
-			float Dist = FVector::Dist(this->GetActorLocation(),OtherPlayer->GetActorLocation());
+			float Dist = FVector::Dist(this->GetActorLocation(),TargetPlayer->GetActorLocation());
 			if(Dist<RequestUIDistance)
 			{
 				bShowUI = true;
@@ -321,7 +321,6 @@ void ASYH_MultiPlayer::Camera(const FInputActionValue& Value)
 		// e키를 누르고 카메라가 1인칭 시점인 상태에서 e키를 다시 누르면 원래대로 돌아오게 하고 싶다.
 		else if(anim&& anim->bIsPlayCameraAnim == false)
 		{
-			
 			CameraCompThird->SetActive(true);
 			CameraCompFirst->SetActive(false);
 			if (GetMesh())
@@ -386,7 +385,6 @@ void ASYH_MultiPlayer::Quiz(const FInputActionValue& Value)
 	{
 		ServerRPC_Quiz();  // 클라이언트가 서버에 퀴즈 요청을 보냄
 	}
-
 }
 void ASYH_MultiPlayer::ClientRPC_ShowQuizSelect_Implementation()
 {
@@ -409,6 +407,9 @@ void ASYH_MultiPlayer::ClientRPC_ShowQuizWait_Implementation()
 		QuizWaitWidget->SetWaitVisibility(true);
 	}
 }
+
+
+
 void ASYH_MultiPlayer::Server_Quiz()
 {
 	FHitResult OutHit;
@@ -419,19 +420,18 @@ void ASYH_MultiPlayer::Server_Quiz()
 	Params.AddIgnoredActor(this);
 
 	bool bHit = GetWorld()->SweepSingleByChannel(OutHit, Start, End, FQuat::Identity, ECC_Visibility, FCollisionShape::MakeSphere(100.f), Params);
+	GEngine->AddOnScreenDebugMessage(1, 2, FColor::Blue, FString::Printf(TEXT("%s"), *OutHit.GetActor()->GetName()));
 	if (bHit)
 	{
-		ASYH_MultiPlayer* TargetPlayer = Cast<ASYH_MultiPlayer>(OutHit.GetActor());
+		TargetPlayer = Cast<ASYH_MultiPlayer>(OutHit.GetActor());
 		// target player는 요청을 받은 Player
 		if (TargetPlayer)
 		{
-
 			// 요청을 받은 플레이어에게 UI를 띄우도록 server가 client 요청
 			this->ClientRPC_ShowQuizWait();
 			// 요청을 보낸 플레이어는 "대기 중" UI를 표시
 			TargetPlayer->ClientRPC_ShowQuizSelect();
 		}
-		
 	}
 }
 
@@ -445,58 +445,39 @@ bool ASYH_MultiPlayer::ServerRPC_Quiz_Validate()
 	return true;
 }
 
-// void ASYH_MultiPlayer::ServerRPC_SendQuizSelect_Implementation(FVector start, FVector end, float radius)
-// {
-// 	FHitResult OutHit;
-// 	FCollisionQueryParams Params;
-// 	Params.AddIgnoredActor(this);
-// 	if (GetWorld()->SweepSingleByChannel(OutHit,start,end,FQuat::Identity,ECC_Visibility,FCollisionShape::MakeSphere(radius),Params))
-// 	{
-// 		// 퀴즈 요청 처리
-// 		HandleQuizRequest(OutHit.GetActor());
-// 	}
-// }
-// bool ASYH_MultiPlayer::ServerRPC_SendQuizSelect_Validate(FVector start, FVector end, float radius)
-// {
-// 	// 유효성 검사
-// 	return true;
-// }
-//
-// void ASYH_MultiPlayer::HandleQuizRequest(AActor* TargetActor)
-// {
-// 	// 퀴즈 요청을 보내어 hit이 된 player가 있으면 게임 인스턴스로 요청을 보내서 클라이언트에게 전달하게 하고 싶다.
-// 	if (GameInstance)
-// 	{
-// 		GameInstance->ShowQuizSelect(this, TargetActor);
-// 	}
-// }
-//
-// void ASYH_MultiPlayer::ClientRPC_ShowQuizSelect_Implementation()
-// {
-// 	// 요청 받은 사람의 위젯
-// 	if(QuizSelectWidget)
-// 	{
-// 		QuizSelectWidget->AddToViewport();
-// 		
-// 	}
-// 	// 원래있던 F키를 누르는 위젯 삭제
-// 	if(QuizWaitWidget->IsInViewport())
-// 	{
-// 		QuizWaitWidget->SetRequestVisibility(false);
-// 	}
-// }
-//
-// void ASYH_MultiPlayer::ClientRPC_ShowQuizWait_Implementation()
-// {
-// 	// 요청하는 사람의 위젯
-// 	QuizWaitWidget->SetRequestVisibility(false);
-// 	
-// 	// 응답을 기다리는 중입니다 띄우기
-// 	QuizWaitWidget->SetWaitVisibility(true);
-// }
-//
-// void ASYH_MultiPlayer::ClientRPC_ShowQuizReject_Implementation()
-// {
-// 	QuizWaitWidget->SetWaitVisibility(false);
-// 	QuizWaitWidget->SetRejectVisibility(true);
-// }
+void ASYH_MultiPlayer::ClientRPC_ShowQuizReject_Implementation()
+{
+	if(QuizWaitWidget)
+	{
+		QuizWaitWidget->SetWaitVisibility(false);
+		QuizWaitWidget->SetRejectVisibility(true);
+		GetWorld()->GetTimerManager().SetTimer(Timer,this,&ASYH_MultiPlayer::HideQuizReject,3.0f,false);
+	}
+}
+void ASYH_MultiPlayer::HideQuizReject()
+{
+	if(QuizWaitWidget)
+	{
+		QuizWaitWidget->SetRejectVisibility(false);
+		TargetPlayer->InQuiz = false;
+	}
+}
+void ASYH_MultiPlayer::ClientRPC_ShowQuiz_Implementation()
+{
+	
+}
+
+void ASYH_MultiPlayer::ServerRPC_RejectQuiz_Implementation()
+{
+	// 요청을 받은 사람이 현재 controlled
+	if(TargetPlayer)
+	{
+		TargetPlayer->ClientRPC_ShowQuizReject();
+	}
+}
+
+bool ASYH_MultiPlayer::ServerRPC_RejectQuiz_Validate()
+{
+	return true;
+}
+

@@ -11,7 +11,7 @@ void USYH_QuizSelect::NativeConstruct()
 	Super::NativeConstruct();
 	PlayerController = Cast<APlayerController>(GetOwningPlayer());
 	PlayerController->SetInputMode(FInputModeUIOnly());
-	MultiPlayer = Cast<ASYH_MultiPlayer>(GetOwningPlayerPawn());
+	MultiPlayer = Cast<ASYH_MultiPlayer>(GetOwningPlayerPawn()); // 현재 요청을 받은 사람
 	// GameInstance = CastChecked<UGuide_GameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 	if (YesButt)
 	{
@@ -33,14 +33,7 @@ void USYH_QuizSelect::OnClickedYesButt()
 
 void USYH_QuizSelect::OnClickedPausebutt()
 {
-	// if (MultiPlayer && MultiPlayer->OtherPlayer)
-	// {
-	// 	GameInstance->ShowQuizReject(MultiPlayer->OtherPlayer);
-	// }
-	// else
-	// {
-	// 	UE_LOG(LogTemp, Error, TEXT("MultiPlayer or OtherPlayer is invalid"));
-	// }
+
 	// 	// 요청 받은 사람이 no button을 누르면 UI가 꺼지고 요청을 보낸 사람에게 거절하였다는 UI를 띄우고 싶다.
 	if (GetWorld()->GetNetMode() == NM_DedicatedServer || GetWorld()->GetNetMode() == NM_ListenServer)
 	{
@@ -50,6 +43,7 @@ void USYH_QuizSelect::OnClickedPausebutt()
 		if(MultiPlayer)
 		{
 			MultiPlayer->InQuiz = false;
+			MultiPlayer->ServerRPC_RejectQuiz();
 		}
 		UE_LOG(LogTemp,Error,TEXT("server"));
 	}
@@ -61,12 +55,12 @@ void USYH_QuizSelect::OnClickedPausebutt()
 		if(MultiPlayer)
 		{
 			MultiPlayer->InQuiz = false;
+			MultiPlayer->ServerRPC_RejectQuiz();
 		}
 		UE_LOG(LogTemp,Error,TEXT("client"));
 	}
 }
-// }
-//
+
 // // 이 UI버튼의 결과를 게임인스턴스에 넘겨서
 // // 결과가 yes면 요청하는사람과 받는 사람 모두에게 퀴즈화면을 띄우고
 // // 결과가 no면 요청하는사람은 실패하였다는 UI, 요청 받은사람은 UI가 꺼지게 하고 싶다.
