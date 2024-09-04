@@ -1,7 +1,6 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "SYH/SYH_MultiPlayer.h"
+
+#include "EngineUtils.h"
 #include "Engine/LocalPlayer.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -18,7 +17,11 @@
 #include "Alchemist/CHJ/Guide_GameInstance.h"
 #include "Alchemist/CHJ/Illustrated_Guide/GuideObject/Aluminum_Object.h"
 #include "Alchemist/CHJ/Illustrated_Guide/Guide_Widget/Guide_MainWidget.h"
+#include "Components/TextBlock.h"
 #include "Kismet/GameplayStatics.h"
+#include "SYH/SYH_QuizSelect.h"
+#include "SYH/SYH_QuizWaitWidget.h"
+#include "SYH/SYH_QuizWidget.h"
 // Sets default values
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -65,12 +68,16 @@ ASYH_MultiPlayer::ASYH_MultiPlayer()
 void ASYH_MultiPlayer::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
-	// 서버 위젯
+	
+	// 서버일 때의 위젯 생성
 	if(HasAuthority())
 	{
-		CreatePopUpWidget();
-		if (!IsLocallyControlled() || GuideWidget != nullptr) return;
+		if (!IsLocallyControlled() || GuideWidget != nullptr || QuizWaitWidget != nullptr) return;
 		GuideWidget = Cast<UGuide_MainWidget>(CreateWidget(GetWorld(), GuideWidgetClass));
+		QuizWaitWidget = Cast<USYH_QuizWaitWidget>(CreateWidget(GetWorld(), QuizWaitClass));
+		if(QuizWaitWidget) QuizWaitWidget->AddToViewport();
+		QuizSelectWidget = Cast<USYH_QuizSelect>(CreateWidget(GetWorld(), QuizSelectClass));
+		QuizWidget = Cast<USYH_QuizWidget>(CreateWidget(GetWorld(),QuizClass));
 	}
 }
 
@@ -84,6 +91,7 @@ void ASYH_MultiPlayer::BeginPlay()
 		anim = Cast<USYH_PlayerAnim>(animinstance);
 	}
 	if (IsLocallyControlled())
+		// 내가 컨트롤하는 즉, 내가 플레이하고 있는 캐릭터
 	{
 		PlayerController = Cast<APlayerController>(Controller);
 		if(PlayerController)
@@ -95,14 +103,18 @@ void ASYH_MultiPlayer::BeginPlay()
 			}
 		}
 	}
-	// 클라이언트 위젯
+	// 클라이언트일 때의 위젯 생성
 	if(!HasAuthority())
 	{
-		CreatePopUpWidget();
-		if (!IsLocallyControlled() || GuideWidget != nullptr) return;
+		if (!IsLocallyControlled() || GuideWidget != nullptr || QuizWaitWidget != nullptr ) return;
 		GuideWidget = Cast<UGuide_MainWidget>(CreateWidget(GetWorld(), GuideWidgetClass));
+		QuizWaitWidget = Cast<USYH_QuizWaitWidget>(CreateWidget(GetWorld(), QuizWaitClass));
+		if(QuizWaitWidget) QuizWaitWidget->AddToViewport();
+		UE_LOG(LogTemp,Error,TEXT("client"));
+		QuizSelectWidget = Cast<USYH_QuizSelect>(CreateWidget(GetWorld(), QuizSelectClass));
+		QuizWidget = Cast<USYH_QuizWidget>(CreateWidget(GetWorld(),QuizClass));
 	}
-	
+	GameInstance = CastChecked<UGuide_GameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 }
 
 // Called every frame
@@ -111,6 +123,7 @@ void ASYH_MultiPlayer::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	if(IsLocallyControlled())
 	{
+		if(InQuiz == false) CheckDist(true);
 		if(UGameplayStatics::GetCurrentLevelName(GetWorld())!="Room")
 		{
 			return;
@@ -122,18 +135,65 @@ void ASYH_MultiPlayer::Tick(float DeltaTime)
 			OnMyCheckActor();
 		}
 	}
-	
 }
+// request를 보낼 수 있는 거리내에 있으면 UI를 띄우게 함
+
+void ASYH_MultiPlayer::CheckDist(bool bCheck)
+{
+	// 거리내에 있음을 구분하기 위한 bool 값
+	bool bShowUI = false;
+	for(TActorIterator<ASYH_MultiPlayer> It(GetWorld());It;++It)
+	{
+		TargetPlayer = *It;
+		if(TargetPlayer && TargetPlayer!=this)
+		{
+			float Dist = FVector::Dist(this->GetActorLocation(),TargetPlayer->GetActorLocation());
+			if(Dist<RequestUIDistance)
+			{
+				bShowUI = true;
+				break;
+			}
+		}
+	}
+	if (bShowUI && bCheck) 
+	{
+		ClientRPC_CallFKey(); // UI를 띄움 (client의 UI까지)
+	}
+	else
+	{
+		if (QuizWaitWidget)
+			QuizWaitWidget->SetRequestVisibility(false); // UI를 숨깁니다.
+	}
+}
+
+
+// request text를 켜는 함수
+// server가 띄우는 UI가 client에도 뜨게 하기 위해 필요함
+// 일반함수로 처리도 가능하지만 RPC로 처리해 모든 클라이언트들이 같은 결과를 내도록 함.
+void ASYH_MultiPlayer::ClientRPC_CallFKey_Implementation()
+{
+	if(QuizWaitWidget)
+	{
+		QuizWaitWidget->SetRequestVisibility(true);
+	}
+}
+
 void ASYH_MultiPlayer::OnOffGuide(const FInputActionValue& Value)
 {
 	// 인벤이 화면이 있으면 지우고
 	if (GuideWidget->IsInViewport())
 	{
+		PlayerController->SetShowMouseCursor(false);
+		FInputModeGameOnly Input;
+		PlayerController->SetInputMode(Input);
 		GuideWidget->RemoveFromParent();
 	}
 	// 인벤이 화면에 없으면 생성
 	else
 	{
+		PlayerController->SetShowMouseCursor(true);
+		FInputModeGameAndUI Input;
+		PlayerController->SetInputMode(Input);
 		GuideWidget->AddToViewport();
 	}
 }
@@ -159,6 +219,9 @@ void ASYH_MultiPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		
 		// 도감
 		EnhancedInputComponent->BindAction(IA_Guide, ETriggerEvent::Started, this, &ASYH_MultiPlayer::OnOffGuide);
+
+		// quiz
+		EnhancedInputComponent->BindAction(IA_Quiz,ETriggerEvent::Started,this,&ASYH_MultiPlayer::Quiz);
 		
 	}
 	else
@@ -251,11 +314,11 @@ void ASYH_MultiPlayer::Camera(const FInputActionValue& Value)
 {
 	if(IsLocallyControlled())
 	{
+		// IsEkey = false;
 		// e키를 누르면 애니메이션이 출력되고 시점을 바꾸고 싶다.
 		if ( anim && anim->bIsPlayCameraAnim == true)
 		{
 			PlayerController->SetShowMouseCursor(true);
-			
 		}
 		// e키를 누르고 카메라가 1인칭 시점인 상태에서 e키를 다시 누르면 원래대로 돌아오게 하고 싶다.
 		else if(anim&& anim->bIsPlayCameraAnim == false)
@@ -273,6 +336,10 @@ void ASYH_MultiPlayer::Camera(const FInputActionValue& Value)
 				{
 					anim->CameraWidget->RemoveFromParent();
 					anim->bIsPlayCameraAnim = true;
+					if(APlayerCameraManager* CameraManager = PlayerController->PlayerCameraManager)
+					{
+						CameraManager->SetFOV(0);
+					}
 					PlayerController->SetShowMouseCursor(false);
 					FInputModeGameOnly InputMode;
 					PlayerController->SetInputMode(InputMode);
@@ -281,6 +348,7 @@ void ASYH_MultiPlayer::Camera(const FInputActionValue& Value)
 		}
 	}
 }
+
 
 
 void ASYH_MultiPlayer::OnMyCheckActor()
@@ -304,11 +372,154 @@ void ASYH_MultiPlayer::OnMyCheckActor()
 	}
 }
 
-void ASYH_MultiPlayer::CreatePopUpWidget()
+
+
+void ASYH_MultiPlayer::Quiz(const FInputActionValue& Value)
 {
-	if(!IsLocallyControlled()) return;
-	bCreateWidget = true;
+	if (!QuizWaitWidget || !QuizWaitWidget->IsInViewport()) return;
+	// F키를 누르면 요청을 보낸 사람과 받는 사람의 UI를 다르게 하고 싶다
+	// F키를 눌러 sweep trace를 사용하여 범위내에 있는 다른 플레이어에게 퀴즈 요청을 보내고 싶다.
+	if (HasAuthority())  // 서버에서만 이 로직이 실행됨
+	{
+		Server_Quiz();  // 서버에서 퀴즈 요청을 처리함
+	}
+	else
+	{
+		ServerRPC_Quiz();  // 클라이언트가 서버에 퀴즈 요청을 보냄
+	}
+}
+void ASYH_MultiPlayer::ClientRPC_ShowQuizSelect_Implementation()
+{
+	InQuiz = true;
+	if(QuizWaitWidget)
+	{
+		QuizWaitWidget->SetRequestVisibility(false);// 기존 UI를 숨김
+	}
+	if(QuizSelectWidget)
+	{
+		QuizSelectWidget->AddToViewport();
+	}
+}
+void ASYH_MultiPlayer::ClientRPC_ShowQuizWait_Implementation()
+{
+	InQuiz = true;
+	if (QuizWaitWidget)
+	{
+		QuizWaitWidget->SetRequestVisibility(false); // 기존 UI를 숨김
+		QuizWaitWidget->SetWaitVisibility(true);
+	}
 }
 
 
+
+void ASYH_MultiPlayer::Server_Quiz()
+{
+	FHitResult OutHit;
+	FVector Start = CameraCompThird->GetComponentLocation();
+	FVector End = Start + CameraCompThird->GetForwardVector() * 1000.0f;
+
+	FCollisionQueryParams Params;
+	Params.AddIgnoredActor(this);
+
+	bool bHit = GetWorld()->SweepSingleByChannel(OutHit, Start, End, FQuat::Identity, ECC_Visibility, FCollisionShape::MakeSphere(100.f), Params);
+	if (bHit)
+    {
+        TargetPlayer = Cast<ASYH_MultiPlayer>(OutHit.GetActor());
+        if (TargetPlayer)
+        {
+            UE_LOG(LogTemp, Log, TEXT("Server_Quiz: TargetPlayer set to %s"), *TargetPlayer->GetName());
+        	this->TargetPlayer = TargetPlayer;
+            // 요청을 받은 플레이어에게 UI를 띄우도록 서버에서 클라이언트로 요청
+            this->ClientRPC_ShowQuizWait();
+            TargetPlayer->ClientRPC_ShowQuizSelect();
+        }
+        else
+        {
+            UE_LOG(LogTemp, Warning, TEXT("Server_Quiz: TargetPlayer is null after Sweep Trace"));
+        }
+    }
+    else
+    {
+        UE_LOG(LogTemp, Warning, TEXT("Server_Quiz: No player hit by Sweep Trace"));
+    }
+}
+
+
+void ASYH_MultiPlayer::ServerRPC_Quiz_Implementation()
+{
+	Server_Quiz();
+}
+
+bool ASYH_MultiPlayer::ServerRPC_Quiz_Validate()
+{
+	return true;
+}
+
+void ASYH_MultiPlayer::ClientRPC_ShowQuizReject_Implementation()
+{
+	if(QuizWaitWidget)
+	{
+		QuizWaitWidget->SetWaitVisibility(false);
+		QuizWaitWidget->SetRejectVisibility(true);
+		GetWorld()->GetTimerManager().SetTimer(Timer,this,&ASYH_MultiPlayer::HideQuizReject,3.0f,false);
+	}
+}
+void ASYH_MultiPlayer::HideQuizReject()
+{
+	if(QuizWaitWidget)
+	{
+		QuizWaitWidget->SetRejectVisibility(false);
+		// 요청을 받은 사람
+		this->InQuiz = false;
+	}
+}
+void ASYH_MultiPlayer::ClientRPC_ShowQuiz_Implementation()
+{
+	if(QuizWaitWidget)
+	{
+		QuizWaitWidget->SetWaitVisibility(false);
+	}
+	if(QuizWidget)
+	{
+		QuizWidget->AddToViewport();
+	}
+}
+void ASYH_MultiPlayer::ServerRPC_AcceptQuiz_Implementation()
+{
+	this->ClientRPC_ShowQuiz();
+	if(TargetPlayer)
+	{
+		TargetPlayer->ClientRPC_ShowQuiz();
+	}
+	else
+	{
+		CheckDist(false);
+		TargetPlayer->ClientRPC_ShowQuiz();
+	}
+}
+
+bool ASYH_MultiPlayer::ServerRPC_AcceptQuiz_Validate()
+{
+	return true;
+
+}
+
+void ASYH_MultiPlayer::ServerRPC_RejectQuiz_Implementation()
+{
+	//  QuizRequestReceivePlayer는 요청을 하고 대기중인 플레이어
+	if(TargetPlayer)
+	{
+		TargetPlayer->ClientRPC_ShowQuizReject();
+	}
+	else
+	{
+		CheckDist(false);
+		TargetPlayer->ClientRPC_ShowQuizReject();
+	}
+}
+
+bool ASYH_MultiPlayer::ServerRPC_RejectQuiz_Validate()
+{
+	return true;
+}
 
