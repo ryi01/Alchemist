@@ -34,6 +34,7 @@ void UKMK_PlayerMouse::BeginPlay()
 	{
 		elementPos.Add(FVector(1890, -1970 + 90 * i, 80));
 	}
+	
 }
 
 
@@ -95,6 +96,11 @@ void UKMK_PlayerMouse::OnMyGrabComp()
 			potComp = hitActor->GetComponentByClass<UKMK_GrabActorComp>();
 			if(potComp->ElementArray.IsEmpty() ) return;
 			potComp->CreateElementSucced(TEXT("HI"));
+			FString result = TEXT("");
+			for ( const TPair<FString,int>& pair : potComp->ElementArray )
+			{
+				result += pair.Key + FString::FromInt(pair.Value);
+			}
 			//TArray<AActor*> arrActor;
 			//UGameplayStatics::GetAllActorsOfClass(GetWorld(),AKMK_HttpActorWithAI::StaticClass(),arrActor);
 			//if(arrActor[0])HttpActor = arrActor[0];

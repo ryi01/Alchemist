@@ -6,6 +6,7 @@
 #include "KMK/KMK_JsonParseLib.h"
 #include "KMK/KMK_ChatBotWidget.h"
 #include "Components/EditableText.h"
+#include "../CHJ/Guide_GameInstance.h"
 // Sets default values
 AKMK_HttpActorWithAI::AKMK_HttpActorWithAI()
 {
@@ -17,6 +18,7 @@ AKMK_HttpActorWithAI::AKMK_HttpActorWithAI()
 void AKMK_HttpActorWithAI::BeginPlay()
 {
 	Super::BeginPlay();
+
 	////// UI를 생성해서 기억하고싶다.
 	//HttpUI = Cast<UKMK_ChatBotWidget>(CreateWidget(GetWorld(), HttpUIFactory));
 	//if ( HttpUI )
@@ -24,6 +26,7 @@ void AKMK_HttpActorWithAI::BeginPlay()
 	//	HttpUI->AddToViewport();
 	//	HttpUI->SetHttpActor(this);
 	//}
+	ReqInitInfo();
 }
 
 // Called every frame
@@ -80,19 +83,7 @@ void AKMK_HttpActorWithAI::OnResChatBot(FHttpRequestPtr Request, FHttpResponsePt
 	{
 		// 성공
 		FString respon = Response->GetContentAsString();
-		TArray<FString> SectionName = { TEXT("1. 기본 정보"), TEXT("2. 특성"), TEXT("3. 용도"), TEXT("4. 흥미로운 사실") };
-		TMap<FString,TMap<FString,FString>> result = UKMK_JsonParseLib::ChatBotParsec(respon,SectionName);
-		for ( int i = 0; i < SectionName.Num(); i++ )
-		{
-			FString arr;
-			const TMap<FString,FString>& SupMap = result[ SectionName[ i ] ];
-			for ( const TPair<FString,FString>& Pair : SupMap )
-			{
-				FString t = Pair.Key + "\n" + Pair.Value + "\n\n";
-				arr += t;
-			}
-			HttpUI->MakeChatText(arr,1);
-		}
+		ParsecNewInfo(respon);
 	}
 	else {
 		// 실패
@@ -100,18 +91,20 @@ void AKMK_HttpActorWithAI::OnResChatBot(FHttpRequestPtr Request, FHttpResponsePt
 	}
 }
 
-void AKMK_HttpActorWithAI::ReqElement(TMap<FString, FString> data)
+void AKMK_HttpActorWithAI::ReqElement(FString data)
 {
 	// HTTP 모듈 생성
 	FHttpModule& httpModule = FHttpModule::Get();
 	TSharedRef<IHttpRequest> req = httpModule.CreateRequest();
+	TMap<FString,FString> maps;
+	maps.Add(TEXT("key"),data);
 
 	req->SetURL("https://absolute-logically-hagfish.ngrok-free.app/posttest");
 	req->SetVerb(TEXT("POST"));
 	req->SetHeader(TEXT("content-type"), TEXT("application/json"));
-	req->SetContentAsString(UKMK_JsonParseLib::MakeJson(data));
+	req->SetContentAsString(UKMK_JsonParseLib::MakeJson(maps));
 	// 응답받을 함수를 연결
-	req->OnProcessRequestComplete().BindUObject(this, &AKMK_HttpActorWithAI::OnResChatBot);
+	req->OnProcessRequestComplete().BindUObject(this,&AKMK_HttpActorWithAI::OnResElement);
 	// 서버에 요청
 
 	req->ProcessRequest();
@@ -129,6 +122,79 @@ void AKMK_HttpActorWithAI::OnResElement(FHttpRequestPtr Request, FHttpResponsePt
 	else {
 		// 실패
 		UE_LOG(LogTemp, Warning, TEXT("OnResPostTest Failed..."));
+	}
+}
+
+void AKMK_HttpActorWithAI::ReqInitInfo()
+{
+	// HTTP 모듈 생성
+	FHttpModule& httpModule = FHttpModule::Get();
+	TSharedRef<IHttpRequest> req = httpModule.CreateRequest();
+	req->SetURL("https://absolute-logically-hagfish.ngrok-free.app/base_info");
+	req->SetVerb(TEXT("GET"));
+	req->SetHeader(TEXT("content-type"),TEXT("application/json"));
+	// 응답받을 함수를 연결
+	req->OnProcessRequestComplete().BindUObject(this,&AKMK_HttpActorWithAI::OnResInitInfo);
+	// 서버에 요청
+
+	req->ProcessRequest();
+}
+
+void AKMK_HttpActorWithAI::OnResInitInfo(FHttpRequestPtr Request,FHttpResponsePtr Response,bool bConnectedSuccessfully)
+{
+	if ( bConnectedSuccessfully )
+	{
+		// 성공
+		FString respon = Response->GetContentAsString();
+
+		ParsecNewInfo(respon, true);
+
+	}
+	else {
+		// 실패
+		UE_LOG(LogTemp, Warning, TEXT("OnResPostTest Failed..."));
+	}
+
+}
+
+void AKMK_HttpActorWithAI::ParsecNewInfo(FString& respon, bool isInit)
+{
+	TArray<FString> SectionName = { TEXT("1. 기본 정보"), TEXT("2. 특성"), TEXT("3. 용도"), TEXT("4. 흥미로운 사실") };
+
+	if(!isInit )
+	{
+		TMap<FString,TMap<FString,FString>> result = UKMK_JsonParseLib::ChatBotParsec(respon,SectionName);
+		for ( int i = 0; i < SectionName.Num(); i++ )
+		{
+			FString arr;
+			const TMap<FString,FString>& SupMap = result[ SectionName[ i ] ];
+			for ( const TPair<FString,FString>& Pair : SupMap )
+			{
+				FString t = Pair.Key + "\n" + Pair.Value + "\n\n";
+				arr += t;
+			}
+			HttpUI->MakeChatText(arr,1);
+		}
+	}
+	else
+	{
+		TMap<FString,TMap<FString,FString>> result = UKMK_JsonParseLib::InitInfoParsec(respon,SectionName);
+		for ( int i = 0; i < SectionName.Num(); i++ )
+		{
+			FString arr;
+			const TMap<FString,FString>& SupMap = result[ SectionName[ i ] ];
+			for ( const TPair<FString,FString>& Pair : SupMap )
+			{
+				FString t = Pair.Key + "\n" + Pair.Value + "\n\n";
+				arr += t;
+			}
+
+		}
+		auto* gm = Cast<UGuide_GameInstance>(GetWorld()->GetGameInstance());
+		if ( gm )
+		{
+			gm->SetInitInfo(result, SectionName);
+		}
 	}
 }
 

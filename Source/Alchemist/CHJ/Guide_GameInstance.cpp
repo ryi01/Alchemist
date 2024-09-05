@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "Alchemist/CHJ/Guide_GameInstance.h"
@@ -47,4 +47,10 @@ void UGuide_GameInstance::TakeItemData(int itemIdx)
 			PictureItemQueue.Enqueue(itemIdx); // 큐에 해당 인덱스 저장한다.
 		}
 	 }
+}
+
+void UGuide_GameInstance::SetInitInfo(TMap<FString,TMap<FString,FString>> data,TArray<FString> key)
+{
+	ElementDataMap = data;
+	keyValue = key;
 }

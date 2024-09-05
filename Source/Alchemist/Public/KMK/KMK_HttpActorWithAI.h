@@ -36,9 +36,14 @@ public:
 	void OnResChatBot(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully);
 
 	// SendButt을 눌렀을 때, 요청할 함수
-	void ReqElement(TMap<FString, FString> data);
+	void ReqElement(FString data);
 	// 응답받을 함수
 	void OnResElement(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully);
+
+	void ReqInitInfo();
+	void OnResInitInfo(FHttpRequestPtr Request,FHttpResponsePtr Response,bool bConnectedSuccessfully);
+
+	void ParsecNewInfo(FString& respon, bool isInit = false);
 
 	UPROPERTY()
 	class UKMK_ChatBotWidget* HttpUI;
