@@ -28,8 +28,7 @@ DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 ASYH_MultiPlayer::ASYH_MultiPlayer()
 {
  	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
-		
-
+	
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = false;
 	bUseControllerRotationRoll = false;
@@ -68,7 +67,7 @@ ASYH_MultiPlayer::ASYH_MultiPlayer()
 void ASYH_MultiPlayer::PossessedBy(AController* NewController) // server에서만 불림
 {
 	Super::PossessedBy(NewController);
-	
+
 	// 서버일 때의 위젯 생성
 	if(HasAuthority())
 	{
@@ -318,6 +317,7 @@ void ASYH_MultiPlayer::Camera(const FInputActionValue& Value)
 		// e키를 누르면 애니메이션이 출력되고 시점을 바꾸고 싶다.
 		if ( anim && anim->bIsPlayCameraAnim == true)
 		{
+			anim->Montage_Play(Looking);
 			PlayerController->SetShowMouseCursor(true);
 		}
 		// e키를 누르고 카메라가 1인칭 시점인 상태에서 e키를 다시 누르면 원래대로 돌아오게 하고 싶다.

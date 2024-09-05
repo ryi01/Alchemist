@@ -59,7 +59,7 @@ void USYH_PlayerAnim::AnimNotify_CameraEnd()
 		Multi_me->GetMesh()->SetOwnerNoSee(true);
 	}
 	// 시점을 변경한 후 사진을 찍는 듯한 UI를 띄운다
-	if(CameraWidgetClass )
+	if(CameraWidgetClass)
 	{
 		if(Multi_me->Controller != nullptr) player = CastChecked<APlayerController>(Multi_me->Controller);
 		if(player && player->IsLocalPlayerController())

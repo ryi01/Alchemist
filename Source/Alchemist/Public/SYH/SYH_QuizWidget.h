@@ -16,6 +16,7 @@ class ALCHEMIST_API USYH_QuizWidget : public UUserWidget
 	GENERATED_BODY()
 
 public:
+	FTimerHandle Timer;
 	virtual void NativeConstruct() override;
 	UPROPERTY()
 	class APlayerController* PlayerController;
@@ -36,16 +37,19 @@ public:
 	class UTextBlock* Answer_2;
 	UPROPERTY(meta = (BindWidget))
 	class UTextBlock* Answer_3;
-	FSlateFontInfo QFontInfo;
-	FSlateFontInfo AFontInfo;
+	UPROPERTY(meta = (BindWidgetAnim), Transient)
+	class UWidgetAnimation* WrongAnim;
+	UPROPERTY(meta = (BindWidgetAnim), Transient)
+	class UWidgetAnimation* RightAnim;
+	int32 TextNum;
 	UFUNCTION()
-	void SetQuestionText(int32 TextNum);
+	void SetQuestionText(int32 Num);
 	UFUNCTION()
-	void SetAnswer_1Text(int32 TextNum);
+	void SetAnswer_1Text(int32 Num);
 	UFUNCTION()
-	void SetAnswer_2Text(int32 TextNum);
+	void SetAnswer_2Text(int32 Num);
 	UFUNCTION()
-	void SetAnswer_3Text(int32 TextNum);
+	void SetAnswer_3Text(int32 Num);
 	UFUNCTION()
 	void OnClickedButton_1();
 	UFUNCTION()
@@ -53,6 +57,8 @@ public:
 	UFUNCTION()
 	void OnClickedButton_3();
 
-	
+	void ChangeQandA(int32 Num);
+
+	int32 RightCount =0;
 	
 };

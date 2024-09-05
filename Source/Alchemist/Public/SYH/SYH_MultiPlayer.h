@@ -60,6 +60,8 @@ public:
 
 	UPROPERTY()
 	class USYH_PlayerAnim* anim;
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = Animation)
+	UAnimMontage* Looking;
 	UPROPERTY()
 	class APlayerController* PlayerController;
 	UPROPERTY(BlueprintReadWrite, Category = "UI")
@@ -166,5 +168,5 @@ public:
 
 	UFUNCTION(Client, Reliable)
 	void ClientRPC_ShowQuizReject();
-
+	
 };
