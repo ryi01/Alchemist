@@ -29,6 +29,8 @@ public:
 	UPROPERTY(meta = (BindWidget ))
 	class UMultiLineEditableTextBox* ExplainText;
 
+	FTextBlockStyle fontInfo;
+
 	UFUNCTION()
 	void ClickNext();
 	UFUNCTION()

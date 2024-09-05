@@ -154,7 +154,7 @@ void UKMK_PlayerMouse::CopyNewActor(AActor* hitActor, FVector grabPos)
 	count++;
 	if ( newActor )
 	{
-		if(hitActor->Tags[1].IsValid() && hitActor->Tags[1] != TEXT("Pot"))newActor->Tags.Add(hitActor->Tags[1]);
+		if( hitActor->Tags[ 0 ] != TEXT("Pot") && hitActor->Tags[1].IsValid())newActor->Tags.Add(hitActor->Tags[1]);
 		newActor->Tags.Add("Copy");
 		if ( handle )
 		{
