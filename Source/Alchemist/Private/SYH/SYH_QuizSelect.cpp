@@ -1,3 +1,4 @@
+
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
@@ -5,6 +6,7 @@
 
 #include "Alchemist/CHJ/Guide_GameInstance.h"
 #include "Kismet/GameplayStatics.h"
+#include "SYH/SYH_MultiPlayer.h"
 
 void USYH_QuizSelect::NativeConstruct()
 {

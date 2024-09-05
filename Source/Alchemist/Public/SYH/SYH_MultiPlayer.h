@@ -1,4 +1,4 @@
-
+﻿
 #pragma once
 
 #include "CoreMinimal.h"
@@ -57,6 +57,7 @@ public:
 	// Sets default values for this character's properties
 	ASYH_MultiPlayer();
 	virtual void PossessedBy(AController* NewController) override;
+
 	UPROPERTY()
 	class USYH_PlayerAnim* anim;
 	UPROPERTY()

@@ -65,7 +65,7 @@ ASYH_MultiPlayer::ASYH_MultiPlayer()
 	CameraCompFirst->SetRelativeLocationAndRotation(FVector(0, 20, 160), FRotator(0));
 
 }
-void ASYH_MultiPlayer::PossessedBy(AController* NewController)
+void ASYH_MultiPlayer::PossessedBy(AController* NewController) // server에서만 불림
 {
 	Super::PossessedBy(NewController);
 	
@@ -422,7 +422,6 @@ void ASYH_MultiPlayer::Server_Quiz()
 	Params.AddIgnoredActor(this);
 
 	bool bHit = GetWorld()->SweepSingleByChannel(OutHit, Start, End, FQuat::Identity, ECC_Visibility, FCollisionShape::MakeSphere(100.f), Params);
-	GEngine->AddOnScreenDebugMessage(1, 2, FColor::Blue, FString::Printf(TEXT("%s"), *OutHit.GetActor()->GetName()));
 	if (bHit)
     {
         TargetPlayer = Cast<ASYH_MultiPlayer>(OutHit.GetActor());
