@@ -11,6 +11,8 @@
 #include "KMK/KMK_StudyWidget.h"
 #include "Blueprint/UserWidget.h"
 #include "KMK/KMK_ElementGameActor.h"
+#include "KMK/KMK_TextWidget.h"
+#include "KMK/KMK_SingleIntaraction.h"
 
 // Sets default values for this component's properties
 UKMK_PlayerMouse::UKMK_PlayerMouse()
@@ -46,9 +48,14 @@ void UKMK_PlayerMouse::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 
 	if ( elementActor != nullptr && isDeleteWidget)
 	{
-		GEngine->AddOnScreenDebugMessage(1,1,FColor::Cyan,FString::Printf(TEXT("HIIIIIIIIIIIIIIIII")));
 		isDeleteWidget = false;
 		elementActor->ChangeMyPos(elementPos[eleCount]);
+	}
+	FHitResult HitResult;
+	me->GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility,false,HitResult);
+	if ( HitResult.GetActor() != nullptr && HitResult.bBlockingHit && HitResult.GetActor()->ActorHasTag(TEXT("NewEle")))
+	{
+		OnMyCheckActor(HitResult);
 	}
 	if ( outHitComp == nullptr ) return;
 
@@ -81,12 +88,12 @@ void UKMK_PlayerMouse::OnMyGrabComp()
 				// Actor의 Comp에 정보 업데이트
 			}
 			// 위잿 생성
-			auto* widget = CastChecked< UKMK_StudyWidget>(CreateWidget(GetWorld(), widgetFact));
+			auto* widget = CastChecked< UKMK_TextWidget>(CreateWidget(GetWorld(), widgetFact));
 			if ( widget && cnt <= 0 )
 			{
 
 				widget->AddToViewport();
-				widget->SetButtVisi(true, me, this);
+				widget->SetChatText(TEXT("Hi"));
 				cnt++;
 				me->SetPause(true);
 			}
@@ -119,7 +126,7 @@ void UKMK_PlayerMouse::OnMyGrabComp()
 		if ( hitActor )
 		{
 			// 원본 액터인지 복사본인지 판별
-			if ( hitActor->ActorHasTag("Copy") )
+			if ( hitActor->ActorHasTag(TEXT("Copy") ))
 			{
 				// 이미 복사된 액터이므로 스킵하거나 다른 처리를 할 수 있음
 				outHitComp = outHit.GetComponent();
@@ -155,7 +162,7 @@ void UKMK_PlayerMouse::CopyNewActor(AActor* hitActor, FVector grabPos)
 	if ( newActor )
 	{
 		if(hitActor->Tags[1].IsValid() && hitActor->Tags[1] != TEXT("Pot"))newActor->Tags.Add(hitActor->Tags[1]);
-		newActor->Tags.Add("Copy");
+		newActor->Tags.Add(TEXT("Copy"));
 		if ( handle )
 		{
 			auto* mat = newActor->GetComponentByClass<UStaticMeshComponent>();
@@ -168,6 +175,27 @@ void UKMK_PlayerMouse::CopyNewActor(AActor* hitActor, FVector grabPos)
 				handle->GrabComponentAtLocation(outHitComp, NAME_None, grabPos);
 			}
 		}
+	}
+}
+
+void UKMK_PlayerMouse::OnMyCheckActor(FHitResult HitResult)
+{
+	AActor* HitActor = HitResult.GetActor();
+	if ( interActor != nullptr && HitActor != interActor->GetOwner() )
+	{
+		if ( interActor != nullptr && HitActor != interActor->GetOwner() )
+		{
+			interActor->OnCreateWidget(false);
+		}
+	}
+	if ( HitActor )
+	{
+		interActor = HitActor->GetComponentByClass<UKMK_ElementGameActor>();
+		if ( interActor )
+		{
+			interActor->OnCreateWidget(true);
+		}
+
 	}
 }
 
