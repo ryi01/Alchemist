@@ -13,7 +13,7 @@
 #include "Blueprint/UserWidget.h"
 #include "SYH/CameraWidget.h"
 #include "SYH/SYH_PlayerAnim.h"
-#include "KMK_SingleIntaraction.h"
+#include "KMK/KMK_SingleIntaraction.h"
 #include "Alchemist/CHJ/Guide_GameInstance.h"
 #include "Alchemist/CHJ/Illustrated_Guide/GuideObject/Aluminum_Object.h"
 #include "Alchemist/CHJ/Illustrated_Guide/Guide_Widget/Guide_MainWidget.h"
@@ -65,7 +65,7 @@ ASYH_MultiPlayer::ASYH_MultiPlayer()
 	CameraCompFirst->SetRelativeLocationAndRotation(FVector(0, 20, 160), FRotator(0));
 
 }
-void ASYH_MultiPlayer::PossessedBy(AController* NewController)
+void ASYH_MultiPlayer::PossessedBy(AController* NewController) // server에서만 불림
 {
 	Super::PossessedBy(NewController);
 	

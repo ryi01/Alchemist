@@ -19,7 +19,7 @@ void USYH_QuizWaitWidget::SetWaitVisibility(bool bshow)
 		ESlateVisibility NewVisibility = bshow ? ESlateVisibility::Visible : ESlateVisibility::Hidden;
 		Wait->SetVisibility(NewVisibility);
 
-		UE_LOG(LogTemp, Warning, TEXT("Wait visibility set to: %s"), *UEnum::GetValueAsString(NewVisibility));
+		// UE_LOG(LogTemp, Warning, TEXT("Wait visibility set to: %s"), *UEnum::GetValueAsString(NewVisibility));
 	}
 }
 
@@ -30,7 +30,7 @@ void USYH_QuizWaitWidget::SetRequestVisibility(bool bshow)
 		ESlateVisibility NewVisibility = bshow ? ESlateVisibility::Visible : ESlateVisibility::Hidden;
 		Request->SetVisibility(NewVisibility);
 
-		UE_LOG(LogTemp, Warning, TEXT("Request visibility set to: %s"), *UEnum::GetValueAsString(NewVisibility));
+		// UE_LOG(LogTemp, Warning, TEXT("Request visibility set to: %s"), *UEnum::GetValueAsString(NewVisibility));
 	}
 }
 
