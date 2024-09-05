@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "KMK_TextWidget.h"
 #include "KMK_ElementGameActor.generated.h"
 
 
@@ -26,10 +27,33 @@ public:
 	// 생성된 엑터에 정보값을 저장할 예정 => Map 형태
 	TMap<FString,TMap<FString,FString>> myInfos;
 
+	UPROPERTY(EditDefaultsOnly)
+	class UWidgetComponent* widComp;
+
+	UPROPERTY(EditAnywhere, Category = "WidgetBluePrint")
+	class UKMK_TextWidget* textWidget;
+
 	UPROPERTY(BlueprintReadWrite)
 	bool isUp = false;
 	// 위치 수정할 수 있는 함수
 	UFUNCTION()
 	void ChangeMyPos(FVector myPos);
+
+	UPROPERTY()
+	bool isOnWidget = false;
+
+	UFUNCTION()
+	void OnCreateWidget(bool isActive)
+	{
+		isOnWidget = isActive;
+		if ( isActive )
+		{
+			textWidget->SetVisibility(ESlateVisibility::Visible);
+		}
+		else
+		{
+			textWidget->SetVisibility(ESlateVisibility::Hidden);
+		}
+	}
 		
 };

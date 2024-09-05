@@ -15,10 +15,8 @@ UCLASS()
 class ALCHEMIST_API UGuide_IconWidget : public UUserWidget
 {
 	GENERATED_BODY()
-
-	virtual void NativeConstruct() override;
-
 	
+	virtual void NativeConstruct() override;
 
 public:
 	UPROPERTY(meta = (BindWidget))
