@@ -19,8 +19,8 @@ UKMK_ElementGameActor::UKMK_ElementGameActor()
 void UKMK_ElementGameActor::BeginPlay()
 {
 	Super::BeginPlay();
-	textWidget = Cast<UKMK_TextWidget>(GetOwner()->GetComponentByClass<UWidgetComponent>());
-	textWidget->SetVisibility(ESlateVisibility::Visible);
+	textWidget = Cast<UKMK_TextWidget>(GetOwner()->GetComponentByClass<UWidgetComponent>()->GetWidget());
+	if(textWidget)textWidget->SetVisibility(ESlateVisibility::Hidden);
 	// ...
 	
 }

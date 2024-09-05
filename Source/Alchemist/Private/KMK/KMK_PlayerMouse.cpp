@@ -46,17 +46,12 @@ void UKMK_PlayerMouse::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 	if( !IsRay ) OnMyPutComp(outHitComp);
 	else OnMyGrabComp();
 
-	if ( elementActor != nullptr && isDeleteWidget)
-	{
-		isDeleteWidget = false;
-		elementActor->ChangeMyPos(elementPos[eleCount]);
-	}
-	FHitResult HitResult;
-	me->GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility,false,HitResult);
-	if ( HitResult.GetActor() != nullptr && HitResult.bBlockingHit && HitResult.GetActor()->ActorHasTag(TEXT("NewEle")))
-	{
-		OnMyCheckActor(HitResult);
-	}
+	//FHitResult HitResult;
+	//me->GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility,false,HitResult);
+	//if ( HitResult.GetActor() != nullptr && HitResult.bBlockingHit && HitResult.GetActor()->ActorHasTag(TEXT("NewEle")))
+	//{
+	//	OnMyCheckActor(HitResult);
+	//}
 	if ( outHitComp == nullptr ) return;
 
 	TArray<FVector> pos = GetMouseWorldDirection();
@@ -83,19 +78,15 @@ void UKMK_PlayerMouse::OnMyGrabComp()
 		{
 			// 엑터에 컴포넌트에 정보 업데이트
 			elementActor = hitActor->GetComponentByClass<UKMK_ElementGameActor>();
-			if ( elementActor != nullptr )
+			if(elementActor == nullptr ) return;
+			if ( !elementActor->isOnWidget)
 			{
+				elementActor->OnCreateWidget(true,TEXT("결과원소 : O2\n이름 : 산소(기체)\n사용처 : 숨을 쉬는데 사용된다"));
 				// Actor의 Comp에 정보 업데이트
-			}
-			// 위잿 생성
-			auto* widget = CastChecked< UKMK_TextWidget>(CreateWidget(GetWorld(), widgetFact));
-			if ( widget && cnt <= 0 )
-			{
-
-				widget->AddToViewport();
-				widget->SetChatText(TEXT("Hi"));
-				cnt++;
-				me->SetPause(true);
+				elementActor->ChangeMyPos(elementPos[ eleCount ]);
+				eleCount++;
+				potComp->isCreate = false;
+				GEngine->AddOnScreenDebugMessage(1, 1, FColor::Green, FString::Printf(TEXT("%d"), eleCount));
 			}
 			return;
 		}
@@ -185,7 +176,7 @@ void UKMK_PlayerMouse::OnMyCheckActor(FHitResult HitResult)
 	{
 		if ( interActor != nullptr && HitActor != interActor->GetOwner() )
 		{
-			interActor->OnCreateWidget(false);
+			//interActor->OnCreateWidget(false);
 		}
 	}
 	if ( HitActor )
@@ -193,7 +184,7 @@ void UKMK_PlayerMouse::OnMyCheckActor(FHitResult HitResult)
 		interActor = HitActor->GetComponentByClass<UKMK_ElementGameActor>();
 		if ( interActor )
 		{
-			interActor->OnCreateWidget(true);
+			//interActor->OnCreateWidget(true);
 		}
 
 	}

@@ -20,5 +20,5 @@ public:
 
 	static TMap<FString,TMap<FString,FString>>  ChatBotParsec(const FString& json, TArray<FString> ResultChatBot);
 
-	static TMap<FString,FString>  ResultAlchemistParsec(const FString& json,FString ResultAlchemist);
+	static TMap<FString,FString>  ResultAlchemistParsec(const FString& json);
 };

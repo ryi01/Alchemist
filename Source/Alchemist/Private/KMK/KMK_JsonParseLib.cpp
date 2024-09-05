@@ -88,7 +88,7 @@ TMap<FString,TMap<FString,FString>> UKMK_JsonParseLib::ChatBotParsec(const FStri
 	return result;
 }
 
-TMap<FString, FString> UKMK_JsonParseLib::ResultAlchemistParsec(const FString& json, FString ResultAlchemist)
+TMap<FString, FString> UKMK_JsonParseLib::ResultAlchemistParsec(const FString& json)
 {
     TSharedRef<TJsonReader<TCHAR>> reader = TJsonReaderFactory<TCHAR>::Create(json);
     TSharedPtr<FJsonObject> response = MakeShareable(new FJsonObject());
@@ -97,17 +97,17 @@ TMap<FString, FString> UKMK_JsonParseLib::ResultAlchemistParsec(const FString& j
     {
         FString stringValue = response->GetStringField(TEXT("조합 가능 여부"));
         bool isCreate = stringValue.Equals(TEXT("true"), ESearchCase::IgnoreCase);
-        if (!isCreate)
+        if (isCreate)
         {
-            return;
-        }
-        FString FinalEle = response->GetStringField(TEXT("결과원소"));
-        FString EleName = response->GetStringField(TEXT("이름"));
-        FString UsingEle = response->GetStringField(TEXT("사용처"));
+            FString FinalEle = response->GetStringField(TEXT("결과원소"));
+            FString EleName = response->GetStringField(TEXT("이름"));
+            FString UsingEle = response->GetStringField(TEXT("사용처"));
 
-        result.Add(TEXT("Final"), FinalEle);
-        result.Add(TEXT("Name"),EleName);
-        result.Add(TEXT("Using"),UsingEle);
+            result.Add(TEXT("Final"),FinalEle);
+            result.Add(TEXT("Name"),EleName);
+            result.Add(TEXT("Using"),UsingEle);
+        }
+
     }
 	return result;
 }

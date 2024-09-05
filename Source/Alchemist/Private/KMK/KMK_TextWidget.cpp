@@ -12,5 +12,5 @@
 void UKMK_TextWidget::SetChatText(FString text)
 {
     ResChatText->SetText(FText::FromString(text));  
-    ResChatText->SetIsEnabled(false);
+    ResChatText->SetIsReadOnly(true);
 }

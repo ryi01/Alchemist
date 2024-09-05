@@ -30,6 +30,7 @@ public:
 	TSubclassOf<AActor> elementFact;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	bool isCreate = false;
+	UPROPERTY()
 	AActor* newActor; 
 	UFUNCTION()
 	void CreateElementSucced(FString tagName);

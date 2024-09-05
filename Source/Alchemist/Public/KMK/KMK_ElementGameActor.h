@@ -43,12 +43,14 @@ public:
 	bool isOnWidget = false;
 
 	UFUNCTION()
-	void OnCreateWidget(bool isActive)
+	void OnCreateWidget(bool isActive, FString text)
 	{
 		isOnWidget = isActive;
 		if ( isActive )
 		{
 			textWidget->SetVisibility(ESlateVisibility::Visible);
+			textWidget->SetChatText(text);
+
 		}
 		else
 		{

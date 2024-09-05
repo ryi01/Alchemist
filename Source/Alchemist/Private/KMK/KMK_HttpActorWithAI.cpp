@@ -123,18 +123,7 @@ void AKMK_HttpActorWithAI::OnResElement(FHttpRequestPtr Request, FHttpResponsePt
 	{
 		// 성공
 		FString respon = Response->GetContentAsString();
-		TMap<FString,TMap<FString,FString>> result = UKMK_JsonParseLib::ResultAlchemistParsec();
-		for ( int i = 0; i < SectionName.Num(); i++ )
-		{
-			FString arr;
-			const TMap<FString,FString>& SupMap = result[ SectionName[ i ] ];
-			for ( const TPair<FString,FString>& Pair : SupMap )
-			{
-				FString t = Pair.Key + "\n" + Pair.Value + "\n\n";
-				arr += t;
-			}
-			HttpUI->MakeChatText(arr,1);
-		}
+		TMap<FString, FString> result = UKMK_JsonParseLib::ResultAlchemistParsec(respon);
 
 	}
 	else {

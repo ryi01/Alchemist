@@ -32,7 +32,6 @@ void UKMK_StudyWidget::ClickDel()
     if(me != nullptr) me->SetPause(false);
     if ( PlayerMouseComp != nullptr )
     {
-        PlayerMouseComp->isDeleteWidget = true;
         PlayerMouseComp->cnt = 0;
         PlayerMouseComp->IsRay = false;
     }
