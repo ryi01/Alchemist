@@ -2,6 +2,7 @@
 
 
 #include "KMK/KMK_ElementGameActor.h"
+#include "Components/WidgetComponent.h"
 
 // Sets default values for this component's properties
 UKMK_ElementGameActor::UKMK_ElementGameActor()
@@ -18,7 +19,8 @@ UKMK_ElementGameActor::UKMK_ElementGameActor()
 void UKMK_ElementGameActor::BeginPlay()
 {
 	Super::BeginPlay();
-
+	textWidget = Cast<UKMK_TextWidget>(GetOwner()->GetComponentByClass<UWidgetComponent>()->GetWidget());
+	if(textWidget)textWidget->SetVisibility(ESlateVisibility::Hidden);
 	// ...
 	
 }

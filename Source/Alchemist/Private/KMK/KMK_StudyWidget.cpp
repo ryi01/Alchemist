@@ -32,13 +32,12 @@ void UKMK_StudyWidget::ClickDel()
     if(me != nullptr) me->SetPause(false);
     if ( PlayerMouseComp != nullptr )
     {
-        PlayerMouseComp->isDeleteWidget = true;
         PlayerMouseComp->cnt = 0;
         PlayerMouseComp->IsRay = false;
     }
 }
 
-void UKMK_StudyWidget::SetButtVisi(bool isActive,APlayerController* pc,class UKMK_PlayerMouse* pm)
+void UKMK_StudyWidget::SetButtVisi(bool isActive,APlayerController* pc, class UKMK_PlayerMouse* pm, int num)
 {
     ExplainText->SetIsEnabled(false);
     if(pc != nullptr) me = pc;

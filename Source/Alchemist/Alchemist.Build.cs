@@ -8,7 +8,7 @@ public class Alchemist : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput", "UMG", "Json", "JsonUtilities", "HTTP" ,"SlateCore"});
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput", "UMG", "Json", "JsonUtilities", "HTTP" ,"SlateCore", "WebBrowser", "WebBrowserWidget", "MediaAssets"});
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 

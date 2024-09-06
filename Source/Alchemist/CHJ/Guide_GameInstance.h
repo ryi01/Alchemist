@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
@@ -35,5 +35,9 @@ public:
 	TQueue<int32> PictureItemQueue; // 큐에 해당 인덱스 담아서 중복 체크한다.
 
 	int32 SlotsIndex = 8;
+	// 상세정보 넣은 곳
+	TMap<FString,TMap<FString,FString>> ElementDataMap;
+	TArray<FString> keyValue; // 섹션 이름
 
+	void SetInitInfo(TMap<FString,TMap<FString,FString>> data,TArray<FString> key);
 };
