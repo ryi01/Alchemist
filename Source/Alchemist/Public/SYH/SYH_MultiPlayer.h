@@ -101,7 +101,7 @@ protected:
 
 public:
 	UPROPERTY(EditAnywhere)
-	bool InQuiz= false;
+	bool InQuiz;
 	//UPROPERTY(EditDefaultsOnly,BlueprintReadWrite)
 	//bool bIsCamera = false;
 	// Called when the game starts or when spawned
@@ -117,7 +117,8 @@ public:
 	FORCEINLINE class UCameraComponent* GetCameraCompThird() const { return CameraCompThird; }
 
 	void ObjectDetect();
-
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Quiz")
+	class ASYH_MultiPlayer* me;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Quiz")
 	class ASYH_MultiPlayer* TargetPlayer;
 	// 퀴즈 관련 함수
@@ -134,7 +135,7 @@ public:
 	class USYH_QuizSelect* QuizSelectWidget;
 	class UGuide_GameInstance* GameInstance;
 	UPROPERTY(EditDefaultsOnly)
-	float RequestUIDistance = 300.0f;
+	float RequestUIDistance = 200.0f;
 	void CheckDist(bool bCheck);
 
 	UFUNCTION(Client,Reliable)
@@ -168,5 +169,25 @@ public:
 
 	UFUNCTION(Client, Reliable)
 	void ClientRPC_ShowQuizReject();
+
+	// 승자 패자 구별
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UUserWidget> QuizResultClass;
+	UPROPERTY()
+	class USYH_QuizWidgetResult* QuizResultWidget;
+	UFUNCTION(Server, Reliable, WithValidation)
+	void ServerRPC_SendRightCount(int32 Count);
 	
+	int32 RightCount = -1;
+
+	void Server_Compare();
+
+	UFUNCTION(Client, Reliable)
+	void ClientRPC_ShowWinResult();
+	UFUNCTION(Client, Reliable)
+	void ClientRPC_ShowLoseResult();
+	UFUNCTION(Client, Reliable)
+	void ClientRPC_ShowSameResult();
+	UFUNCTION(Client, Reliable)
+	void ClientRPC_ShowWaitResult();
 };

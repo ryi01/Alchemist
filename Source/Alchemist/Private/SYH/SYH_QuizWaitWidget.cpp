@@ -4,12 +4,13 @@
 #include "SYH/SYH_QuizWaitWidget.h"
 
 #include "Components/TextBlock.h"
+#include "SYH/SYH_MultiPlayer.h"
 
 
 void USYH_QuizWaitWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
-	
+	MultiPlayer = Cast<ASYH_MultiPlayer>(GetOwningPlayerPawn());
 }
 
 void USYH_QuizWaitWidget::SetWaitVisibility(bool bshow)

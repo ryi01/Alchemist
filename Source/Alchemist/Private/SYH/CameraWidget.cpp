@@ -12,7 +12,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Input/Reply.h"
 #include "SYH/SYH_MultiPlayer.h"
-
+#include "SYH/SYH_QuizWaitWidget.h"
 
 
 void UCameraWidget::NativeConstruct()
@@ -24,13 +24,18 @@ void UCameraWidget::NativeConstruct()
 		ZoomSlider->OnValueChanged.AddDynamic(this, &UCameraWidget::OnSliderValueChanged);
 	}
 	playercontroller = Cast<APlayerController>(GetOwningPlayer());
+	if(playercontroller)
+	{
+		playercontroller->SetShowMouseCursor(true);
+	}
 	me = CastChecked<ASYH_MultiPlayer>(GetOwningPlayerPawn());
 }
 void UCameraWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 {
 	Super::NativeTick(MyGeometry, InDeltaTime);
 	UpdateTextVisibility();
-	playercontroller->SetShowMouseCursor(true);
+	
+	
 }
 
 void UCameraWidget::OnSliderValueChanged(float value)

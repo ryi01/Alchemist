@@ -16,8 +16,8 @@ void USYH_QuizWidget::NativeConstruct()
 	PlayerController->SetShowMouseCursor(true);
 	FInputModeUIOnly input;
 	PlayerController->SetInputMode(input);
-
-	MultiPlayer = Cast<ASYH_MultiPlayer>(PlayerController->GetLocalPlayer());
+	MultiPlayer = Cast<ASYH_MultiPlayer>(GetOwningPlayerPawn());
+	
 	if (Button_1)
 	{
 		Button_1->OnClicked.AddDynamic(this, &USYH_QuizWidget::OnClickedButton_1);
@@ -118,6 +118,9 @@ void USYH_QuizWidget::SetAnswer_3Text(int32 Num)
 
 void USYH_QuizWidget::OnClickedButton_1()
 {
+	Button_1->SetIsEnabled(false);
+	Button_2->SetIsEnabled(false);
+	Button_3->SetIsEnabled(false);
 	FTimerHandle TimerHandle;
 
 	// 첫번쨰 문제 정답처리
@@ -159,6 +162,12 @@ void USYH_QuizWidget::OnClickedButton_1()
 		RightCount++;
 		// 정답 애니메이션 출력
 		PlayAnimation(RightAnim);
+		RemoveFromParent();
+		PlayerController->SetInputMode(FInputModeGameOnly());
+		if(MultiPlayer) // 요청을 받은 사람
+		{
+			MultiPlayer->ServerRPC_SendRightCount(RightCount);
+		}
 		// 여기에 count한 문제 수 출력 추가
 		UE_LOG(LogTemp,Error,TEXT("count : %d"),RightCount);
 	}
@@ -166,6 +175,9 @@ void USYH_QuizWidget::OnClickedButton_1()
 
 void USYH_QuizWidget::OnClickedButton_2()
 {
+	Button_1->SetIsEnabled(false);
+	Button_2->SetIsEnabled(false);
+	Button_3->SetIsEnabled(false);
 	FTimerHandle TimerHandle;
 
 	// 첫번쨰 문제 오답처리
@@ -207,6 +219,12 @@ void USYH_QuizWidget::OnClickedButton_2()
 	{
 		// 오답 애니메이션 출력
 		PlayAnimation(WrongAnim);
+		RemoveFromParent();
+		PlayerController->SetInputMode(FInputModeGameOnly());
+		if(MultiPlayer) // 요청을 받은 사람
+		{
+			MultiPlayer->ServerRPC_SendRightCount(RightCount);
+		}
 		// 여기에 count한 문제 수 출력 추가
 		UE_LOG(LogTemp,Error,TEXT("count : %d"),RightCount);
 	}
@@ -214,6 +232,9 @@ void USYH_QuizWidget::OnClickedButton_2()
 
 void USYH_QuizWidget::OnClickedButton_3()
 {
+	Button_1->SetIsEnabled(false);
+	Button_2->SetIsEnabled(false);
+	Button_3->SetIsEnabled(false);
 	FTimerHandle TimerHandle;
 	if(TextNum==0)
 	{
@@ -252,6 +273,12 @@ void USYH_QuizWidget::OnClickedButton_3()
 	{
 		// 오답 애니메이션 출력
 		PlayAnimation(WrongAnim);
+		RemoveFromParent();
+		PlayerController->SetInputMode(FInputModeGameOnly());
+		if(MultiPlayer) // 요청을 받은 사람
+		{
+			MultiPlayer->ServerRPC_SendRightCount(RightCount);
+		}
 		// 여기에 count한 문제 수 출력 추가
 		UE_LOG(LogTemp,Error,TEXT("count : %d"),RightCount);
 	}
@@ -259,6 +286,9 @@ void USYH_QuizWidget::OnClickedButton_3()
 
 void USYH_QuizWidget::ChangeQandA(int32 Num)
 {
+	Button_1->SetIsEnabled(true);
+	Button_2->SetIsEnabled(true);
+	Button_3->SetIsEnabled(true);
 	SetQuestionText(Num);
 	SetAnswer_1Text(Num);
 	SetAnswer_2Text(Num);

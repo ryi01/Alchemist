@@ -59,6 +59,6 @@ public:
 
 	void ChangeQandA(int32 Num);
 
-	int32 RightCount =0;
+	int32 RightCount = 0;
 	
 };
