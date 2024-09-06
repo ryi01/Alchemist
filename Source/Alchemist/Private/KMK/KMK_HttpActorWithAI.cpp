@@ -112,7 +112,12 @@ void AKMK_HttpActorWithAI::OnResElement(FHttpRequestPtr Request, FHttpResponsePt
 		// 성공
 		FString respon = Response->GetContentAsString();
 		TMap<FString, FString> result = UKMK_JsonParseLib::ResultAlchemistParsec(respon);
+		if ( result.IsEmpty() )
+		{
+			return;
+		}
 		FString s;
+
 		s += TEXT("결과원소 : ") + result[ TEXT("Result") ] + TEXT("\n") + TEXT("이름 : ") + result[ TEXT("Name") ] + TEXT("\n") + TEXT("사용하는 곳 : ") + TEXT("\n") + result[ TEXT("Using") ] + TEXT("\n");
 		PotComp->CreateElementSucced(result[TEXT("Result")], s);
 		UE_LOG(LogTemp,Warning,TEXT("String Length: %s"),*result[TEXT("Result")]);
@@ -145,7 +150,7 @@ void AKMK_HttpActorWithAI::OnResInitInfo(FHttpRequestPtr Request,FHttpResponsePt
 		// 성공
 		FString respon = Response->GetContentAsString();
 
-		ParsecNewInfo(respon, true);
+		ParsecNewInfo(respon,true);
 
 	}
 	else {
@@ -158,7 +163,11 @@ void AKMK_HttpActorWithAI::OnResInitInfo(FHttpRequestPtr Request,FHttpResponsePt
 void AKMK_HttpActorWithAI::ParsecNewInfo(FString& respon, bool isInit)
 {
 	TArray<FString> SectionName = { TEXT("1. 기본 정보"), TEXT("2. 특성"), TEXT("3. 용도"), TEXT("4. 흥미로운 사실") };
-
+	if ( respon.IsEmpty() )
+	{
+		HttpUI->MakeChatText(respon, 1);
+		return;
+	}
 	if(!isInit )
 	{
 		TMap<FString,TMap<FString,FString>> result = UKMK_JsonParseLib::ChatBotParsec(respon,SectionName);
