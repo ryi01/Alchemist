@@ -15,44 +15,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3e7ba4d9-04c6-440b-a40d-f809cf4ad7f2" name="변경" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Alchemist/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Alchemist/.idea/encodings.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Alchemist/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Alchemist/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Alchemist.sln.DotSettings.user" beforeDir="false" afterPath="$PROJECT_DIR$/Alchemist.sln.DotSettings.user" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Config/DefaultEngine.ini" beforeDir="false" afterPath="$PROJECT_DIR$/Config/DefaultEngine.ini" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Project/KMK/Blueprint/BP_KMK_GameModeBase.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Project/KMK/Blueprint/BP_KMK_GameModeBase.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Project/KMK/Room.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Project/KMK/Room.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Project/KMK/Room1.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Project/KMK/Room1.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Project/KMK/UI/WBP_PopUpWidget.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Project/KMK/UI/WBP_PopUpWidget.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Project/SYH/Anim/ABP_SYHMultiPlayer.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Project/SYH/Anim/ABP_SYHMultiPlayer.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Project/SYH/Anim/AM_Look.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Project/SYH/Anim/AM_Look.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Project/SYH/Anim/BS_Move.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Project/SYH/Anim/BS_Move.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Project/SYH/Anim/Looking_UEq.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Project/SYH/Blueprints/BP_SYHGameModeBase.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Project/SYH/Blueprints/BP_SYHGameModeBase.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Project/SYH/Blueprints/BP_SYHMultiPlayer.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Project/SYH/Blueprints/BP_SYHMultiPlayer.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Project/SYH/Font/SB_어그로_B.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Project/SYH/Font/SB_어그로_B.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Project/SYH/Font/SB_어그로_B_Font.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Project/SYH/Font/SB_어그로_B_Font.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Project/SYH/Font/SB_어그로_L.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Project/SYH/Font/SB_어그로_L.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Project/SYH/Font/SB_어그로_L_Font.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Project/SYH/Font/SB_어그로_L_Font.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Project/SYH/Font/SB_어그로_M.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Project/SYH/Font/SB_어그로_M.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Project/SYH/Font/SB_어그로_M_Font.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Project/SYH/Font/SB_어그로_M_Font.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Project/SYH/Font/SUITE-Light.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Project/SYH/Font/SUITE-Light.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Project/SYH/Font/SUITE-Light_Font.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Project/SYH/Font/SUITE-Light_Font.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Project/SYH/Font/SUITE-Medium.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Project/SYH/Font/SUITE-Medium_Font.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Project/SYH/Font/SUITE-Regular.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Project/SYH/Font/SUITE-Regular.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Project/SYH/Font/SUITE-Regular_Font.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Project/SYH/Font/SUITE-Regular_Font.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Project/SYH/Maps/SYHLevel.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Project/SYH/Maps/SYHLevel.umap" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Project/SYH/Quiz/WBP_SYHQuiz.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Project/SYH/Quiz/WBP_SYHQuiz.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Project/SYH/Quiz/WBP_SYHQuizResult.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Project/SYH/Quiz/WBP_SYHQuizResult.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Project/SYH/Quiz/WBP_SYHQuizSelect.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Project/SYH/Quiz/WBP_SYHQuizSelect.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Project/SYH/Quiz/WBP_SYHQuizWait.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Project/SYH/Quiz/WBP_SYHQuizWait.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Project/SYH/UI/WBP_SYHZoom.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Project/SYH/UI/WBP_SYHZoom.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Project/SYH/UI/cameraframe_frame.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/Alchemist/Private/SYH/CameraWidget.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Alchemist/Private/SYH/CameraWidget.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/Alchemist/Private/SYH/SYH_MultiPlayer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Alchemist/Private/SYH/SYH_MultiPlayer.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/Alchemist/Private/SYH/SYH_QuizWaitWidget.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Alchemist/Private/SYH/SYH_QuizWaitWidget.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/Alchemist/Private/SYH/SYH_QuizSelect.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Alchemist/Private/SYH/SYH_QuizSelect.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/Alchemist/Private/SYH/SYH_QuizWidget.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Alchemist/Private/SYH/SYH_QuizWidget.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/Alchemist/Public/SYH/SYH_MultiPlayer.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Alchemist/Public/SYH/SYH_MultiPlayer.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/Alchemist/Public/SYH/SYH_QuizWidget.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Alchemist/Public/SYH/SYH_QuizWidget.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -93,21 +62,79 @@
     <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="cidr-memory-view://8" root0="FORCE_HIGHLIGHTING" />
+    <setting file="cidr-memory-view://9" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../Program Files/Epic Games/UE_5.4/Engine/Source/Runtime/Core/Public/Templates/Invoke.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../Program Files/Epic Games/UE_5.4/Engine/Source/Runtime/Core/Public/UObject/ScriptDelegates.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../Program Files/Epic Games/UE_5.4/Engine/Source/Runtime/CoreUObject/Public/Templates/Casts.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../Program Files/Epic Games/UE_5.4/Engine/Source/Runtime/Engine/Classes/Animation/AnimMontage.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../Program Files/Epic Games/UE_5.4/Engine/Source/Runtime/Engine/Classes/GameFramework/Actor.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../Program Files/Epic Games/UE_5.4/Engine/Source/Runtime/Engine/Classes/GameFramework/Pawn.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../Program Files/Epic Games/UE_5.4/Engine/Source/Runtime/Engine/Classes/GameFramework/PlayerController.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../Program Files/Epic Games/UE_5.4/Engine/Source/Runtime/Engine/Private/Actor.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../Program Files/Epic Games/UE_5.4/Engine/Source/Runtime/Engine/Private/Character.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../Program Files/Epic Games/UE_5.4/Engine/Source/Runtime/Engine/Private/Pawn.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../Program Files/Epic Games/UE_5.4/Engine/Source/Runtime/NavigationSystem/Public/NavSystemConfigOverride.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../Program Files/Epic Games/UE_5.4/Engine/Source/Runtime/UMG/Private/Components/TextBlock.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../Program Files/Epic Games/UE_5.4/Engine/Source/Runtime/UMG/Private/Components/Widget.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.38.33130/include/atomic" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/Alchemist/CHJ/Illustrated_Guide/Guide_Widget/Guide_DetailWidget.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/Alchemist/CHJ/Illustrated_Guide/Guide_Widget/Guide_DetailWidget.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/Alchemist/Private/SYH/SYH_QuizSelect.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/Alchemist/Private/SYH/SYH_QuizWaitWidget.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/Alchemist/Private/SYH/SYH_QuizWidget.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Source/Alchemist/Private/SYH/SYH_QuizWidgetResult.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/Alchemist/Public/SYH/SYH_QuizSelect.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/Alchemist/Public/SYH/SYH_QuizWaitWidget.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/Alchemist/Public/SYH/SYH_QuizWidget.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Source/Alchemist/Public/SYH/SYH_QuizWidgetResult.h" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="ProjectColorInfo">{
@@ -118,20 +145,20 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;C++ 프로젝트.Alchemist.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;NewSYH2&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "C++ 프로젝트.Alchemist.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "NewSYH2",
+    "ignore.virus.scanning.warn.message": "true",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected="C++ 프로젝트.Alchemist">
     <configuration name="Alchemist" type="CppProject" factoryName="C++ Project">
       <configuration_1>
@@ -580,6 +607,10 @@
       <workItem from="1725498920910" duration="6249000" />
       <workItem from="1725508509930" duration="476000" />
       <workItem from="1725508999248" duration="3627000" />
+      <workItem from="1725514984975" duration="12197000" />
+      <workItem from="1725581126974" duration="6862000" />
+      <workItem from="1725593832191" duration="14377000" />
+      <workItem from="1725612557091" duration="11476000" />
     </task>
     <task id="LOCAL-00001" summary="1">
       <option name="closed" value="true" />
