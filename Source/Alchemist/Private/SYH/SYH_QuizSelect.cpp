@@ -34,6 +34,7 @@ void USYH_QuizSelect::OnClickedYesButt()
 	PlayerController->SetInputMode(FInputModeGameOnly());
 	if(MultiPlayer) // 요청을 받은 사람
 	{
+		MultiPlayer->InQuiz = true;
 		MultiPlayer->ServerRPC_AcceptQuiz();
 	}
 	

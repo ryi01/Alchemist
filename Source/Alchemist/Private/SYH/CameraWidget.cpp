@@ -12,6 +12,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Input/Reply.h"
 #include "SYH/SYH_MultiPlayer.h"
+#include "SYH/SYH_QuizSelect.h"
 #include "SYH/SYH_QuizWaitWidget.h"
 
 
@@ -34,8 +35,6 @@ void UCameraWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 {
 	Super::NativeTick(MyGeometry, InDeltaTime);
 	UpdateTextVisibility();
-	
-	
 }
 
 void UCameraWidget::OnSliderValueChanged(float value)
