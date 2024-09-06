@@ -36,7 +36,7 @@ public:
 	void OnResChatBot(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully);
 
 	// SendButt을 눌렀을 때, 요청할 함수
-	void ReqElement(FString data);
+	void ReqElement(FString data, class UKMK_GrabActorComp* comp);
 	// 응답받을 함수
 	void OnResElement(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully);
 
@@ -45,6 +45,8 @@ public:
 
 	void ParsecNewInfo(FString& respon, bool isInit = false);
 
+	UPROPERTY()
+	class UKMK_GrabActorComp* PotComp;
 	UPROPERTY()
 	class UKMK_ChatBotWidget* HttpUI;
 	// 인터페이스를 위한 UI

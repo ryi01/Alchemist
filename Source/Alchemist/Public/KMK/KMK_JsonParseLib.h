@@ -23,6 +23,6 @@ public:
 
 	static TMap<FString,FString>  ResultAlchemistParsec(const FString& json);
 
-	static TMap<FString,FString> SplitSectionLight(FString json,TArray<FString> Sections);
-	static TMap<FString,TMap<FString,FString>> SplitSection(FString json,TArray<FString> Sections);
+	static TMap<FString,FString> SplitSectionLight(const FString& json,TArray<FString> Sections);
+	static TMap<FString,TMap<FString,FString>> SplitSection(const FString& json,TArray<FString> Sections);
 };

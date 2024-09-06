@@ -80,13 +80,14 @@ void UKMK_PlayerMouse::OnMyGrabComp()
 			// 엑터에 컴포넌트에 정보 업데이트
 			elementActor = hitActor->GetComponentByClass<UKMK_ElementGameActor>();
 			if(elementActor == nullptr ) return;
-			if ( !elementActor->isOnWidget)
+			if ( !elementActor->isOnWidget && eleCount < elementPos.Num())
 			{
-				elementActor->OnCreateWidget(true,TEXT("결과원소 : O2\n이름 : 산소(기체)\n사용처 : 숨을 쉬는데 사용된다"));
+				elementActor->OnCreateWidget(true);
 				// Actor의 Comp에 정보 업데이트
 				elementActor->ChangeMyPos(elementPos[ eleCount ]);
 				eleCount++;
 				potComp->isCreate = false;
+				potComp->ElementArray.Empty();
 				GEngine->AddOnScreenDebugMessage(1, 1, FColor::Green, FString::Printf(TEXT("%d"), eleCount));
 			}
 			return;
@@ -95,28 +96,24 @@ void UKMK_PlayerMouse::OnMyGrabComp()
 		{
 			potComp = hitActor->GetComponentByClass<UKMK_GrabActorComp>();
 			if(potComp->ElementArray.IsEmpty() ) return;
-			potComp->CreateElementSucced(TEXT("HI"));
+
 			FString result = TEXT("");
-			for ( const TPair<FString,int>& pair : potComp->ElementArray )
+
+			TArray<AActor*> arrActor;
+			UGameplayStatics::GetAllActorsOfClass(GetWorld(),AKMK_HttpActorWithAI::StaticClass(),arrActor);
+			if(arrActor[0])HttpActor = arrActor[0];
+			if ( HttpActor == nullptr ) return;
+			auto* httpComp = CastChecked<AKMK_HttpActorWithAI>(HttpActor);
+			if ( httpComp )
 			{
-				result += pair.Key + FString::FromInt(pair.Value);
+				for ( const TPair<FString,int>& pair : potComp->ElementArray )
+				{
+					FString value = "";
+					if(pair.Value != 1 ) value = FString::FromInt(pair.Value);
+					result += pair.Key + value;
+				}
+				httpComp->ReqElement(result, potComp);
 			}
-			//TArray<AActor*> arrActor;
-			//UGameplayStatics::GetAllActorsOfClass(GetWorld(),AKMK_HttpActorWithAI::StaticClass(),arrActor);
-			//if(arrActor[0])HttpActor = arrActor[0];
-			//if ( HttpActor == nullptr ) return;
-			//auto* httpComp = CastChecked<AKMK_HttpActorWithAI>(HttpActor);
-			//if ( httpComp )
-			//{
-			//	TMap<FString,FString> ConvertedMap;
-			//	for ( const TPair<FString,int>& pair : potComp->ElementArray )
-			//	{
-			//		ConvertedMap.Add(pair.Key,FString::FromInt(pair.Value));
-			//	}
-			//	httpComp->ReqElement(ConvertedMap);
-			//	potComp->CreateElementSucced();
-			//	potComp->ElementArray.Empty();
-			//}
 			return;
 		}
 

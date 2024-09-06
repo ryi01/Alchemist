@@ -33,7 +33,7 @@ TMap<FString,TMap<FString,FString>> UKMK_JsonParseLib::ChatBotParsec(const FStri
 		FString parseDataList1 = response->GetStringField(TEXT("explanation"));
 		if ( response->TryGetStringField(TEXT("explanation"),parseDataList1) && !parseDataList1.IsEmpty() )
 		{
-            result = SplitSection(json, Sections);
+            result = SplitSection(parseDataList1, Sections);
 		}
 	}
 	return result;
@@ -47,15 +47,15 @@ TMap<FString, FString> UKMK_JsonParseLib::ResultAlchemistParsec(const FString& j
 	TMap<FString, FString> result;
     if ( FJsonSerializer::Deserialize(reader,response) )
     {
-        FString stringValue = response->GetStringField(TEXT("조합 가능 여부"));
+        FString stringValue = response->GetStringField(TEXT("combinable"));
         bool isCreate = stringValue.Equals(TEXT("true"), ESearchCase::IgnoreCase);
         if (isCreate)
         {
-            FString FinalEle = response->GetStringField(TEXT("결과원소"));
-            FString EleName = response->GetStringField(TEXT("이름"));
-            FString UsingEle = response->GetStringField(TEXT("사용처"));
+            FString FinalEle = response->GetStringField(TEXT("resultElement"));
+            FString EleName = response->GetStringField(TEXT("fullName"));
+            FString UsingEle = response->GetStringField(TEXT("uses"));
 
-            result.Add(TEXT("Final"),FinalEle);
+            result.Add(TEXT("Result"),FinalEle);
             result.Add(TEXT("Name"),EleName);
             result.Add(TEXT("Using"),UsingEle);
         }
@@ -69,12 +69,11 @@ TMap<FString,TMap<FString,FString>> UKMK_JsonParseLib::InitInfoParsec(const FStr
     TSharedPtr<FJsonObject> response = MakeShareable(new FJsonObject());
 
     TMap<FString,TMap<FString,FString>> result;
-    FString name = TEXT("1");
     // 섹션별로 파싱 (SplitSection 함수 호출)
-    TMap<FString,FString> ElementRes = SplitSectionLight(json,Sections);
+    // TMap<FString,FString> ElementRes = SplitSectionLight(json,Sections);
     
     // 최종 result에 추가
-    result.Add(name,ElementRes);
+    //result.Add(name,ElementRes);
 
     if ( FJsonSerializer::Deserialize(reader,response) )
     {
@@ -86,23 +85,23 @@ TMap<FString,TMap<FString,FString>> UKMK_JsonParseLib::InitInfoParsec(const FStr
                 TSharedPtr<FJsonObject> eleObject = ElementValue->AsObject();
                 if ( eleObject.IsValid() )
                 {
-                   // FString name = eleObject->GetStringField(TEXT("element_base"));
-                    //FString infoString = eleObject->GetStringField(TEXT("base_info"));
-                   // if ( !name.IsEmpty() && !infoString.IsEmpty() )
-                   // {
+                   FString name = eleObject->GetStringField(TEXT("element_base"));
+                   FString infoString = eleObject->GetStringField(TEXT("base_info"));
+                   if ( !name.IsEmpty() && !infoString.IsEmpty() )
+                   {
                         // 섹션별로 파싱 (SplitSection 함수 호출)
-                   //     TMap<FString,FString> ElementRes = SplitSectionLight(infoString,Sections);
+                        TMap<FString,FString> ElementRes = SplitSectionLight(infoString,Sections);
 
                         // 최종 result에 추가
-                   //     result.Add(name,ElementRes);
-                   // }
+                        result.Add(name,ElementRes);
+                   }
                 }
             }
         }
     }
     return result;
 }
-TMap<FString,FString> UKMK_JsonParseLib::SplitSectionLight(FString json,TArray<FString> Sections)
+TMap<FString,FString> UKMK_JsonParseLib::SplitSectionLight(const FString& json,TArray<FString> Sections)
 {
     int32 StartIndex = 0;
     TMap<FString,FString> result;
@@ -133,11 +132,24 @@ TMap<FString,FString> UKMK_JsonParseLib::SplitSectionLight(FString json,TArray<F
     return result;
 }
 
-TMap<FString,TMap<FString,FString>> UKMK_JsonParseLib::SplitSection(FString json,TArray<FString> Sections)
+TMap<FString,TMap<FString,FString>> UKMK_JsonParseLib::SplitSection(const FString& json,TArray<FString> Sections)
 {
 #pragma region StringParsec
     int32 StartIndex = 0;
     TMap<FString,TMap<FString,FString>> result;
+    // 첫 번째 섹션의 시작 위치를 찾습니다.
+    int32 FirstSectionStart = json.Find(Sections[ 0 ],ESearchCase::IgnoreCase,ESearchDir::FromStart);
+    if ( FirstSectionStart != INDEX_NONE )
+    {
+        // 첫 번째 섹션 이전의 내용을 "Header"로 저장
+        FString HeaderContent = json.Left(FirstSectionStart).TrimStartAndEnd();
+        TMap<FString,FString> HeaderDetails;
+        HeaderDetails.Add(TEXT("Content"),HeaderContent);
+        result.Add(TEXT("Header"),HeaderDetails);
+
+        // StartIndex를 첫 번째 섹션 시작 위치로 설정
+        StartIndex = FirstSectionStart;
+    }
     for ( int32 i = 0; i < Sections.Num(); i++ )
     {
         // 현재 섹션의 시작 위치 찾기
@@ -154,11 +166,15 @@ TMap<FString,TMap<FString,FString>> UKMK_JsonParseLib::SplitSection(FString json
             // 각 항목을 저장할 TMap 생성
             TMap<FString,FString> SectionDetails;
 
+            // 모든 줄바꿈 문자를 통일
+            SectionContent.ReplaceInline(TEXT("\\n"),TEXT("\n"));
+            SectionContent.ReplaceInline(TEXT("\r\n"),TEXT("\n"));  // \r\n을 \n으로 변경
+            SectionContent.ReplaceInline(TEXT("\r"),TEXT("\n"));    // \r도 \n으로 변경
+
             // 섹션 내용을 줄 단위로 분리
             TArray<FString> Lines;
             SectionContent.ParseIntoArray(Lines,TEXT("\n"),true);
-
-            for ( FString& Line : Lines )
+            for ( FString& Line : Lines ) 
             {
                 Line = Line.TrimStartAndEnd();
 
@@ -182,6 +198,18 @@ TMap<FString,TMap<FString,FString>> UKMK_JsonParseLib::SplitSection(FString json
 
             // 다음 섹션의 시작 인덱스로 이동
             StartIndex = NextSectionStart;
+        }
+    }
+    UE_LOG(LogTemp,Warning,TEXT("String Length: %d, %d"),StartIndex,json.Len());
+    // 마지막 섹션 이후의 텍스트를 "Footer"로 저장
+    if ( StartIndex < json.Len() )
+    {
+        FString FooterContent = json.Mid(StartIndex).TrimStartAndEnd();
+        if ( !FooterContent.IsEmpty() ) // Footer 내용이 비어있지 않을 경우에만 추가
+        {
+            TMap<FString,FString> FooterDetails;
+            FooterDetails.Add(TEXT("Content"),FooterContent);
+            result.Add(TEXT("Footer"),FooterDetails);
         }
     }
     return result;

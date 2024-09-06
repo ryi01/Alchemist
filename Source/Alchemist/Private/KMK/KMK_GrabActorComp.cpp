@@ -3,6 +3,8 @@
 
 #include "KMK/KMK_GrabActorComp.h"
 #include "Components/BoxComponent.h"
+#include "KMK/KMK_SingleIntaraction.h"
+#include "KMK/KMK_ElementGameActor.h"
 
 // Sets default values for this component's properties
 UKMK_GrabActorComp::UKMK_GrabActorComp()
@@ -37,13 +39,19 @@ void UKMK_GrabActorComp::TickComponent(float DeltaTime, ELevelTick TickType, FAc
 
 }
 
-void UKMK_GrabActorComp::CreateElementSucced(FString tagName)
+void UKMK_GrabActorComp::CreateElementSucced(FString tagName, const FString& text)
 {
 	if ( !isCreate )
 	{
 		isCreate = true;
 		newActor = GetWorld()->SpawnActor<AActor>(elementFact,GetOwner()->GetTargetLocation(),FRotator::ZeroRotator);
 		newActor->Tags.Add(FName(*tagName));
+		auto* newText = newActor->GetComponentByClass<UKMK_ElementGameActor>();
+		if ( newText )
+		{
+			newText->SetTextWidget(text);
+			newText->OnCreateWidget(false);
+		}
 		count++;
 	}
 }

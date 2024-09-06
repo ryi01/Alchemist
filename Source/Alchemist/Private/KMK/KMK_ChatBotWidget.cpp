@@ -25,7 +25,7 @@ void UKMK_ChatBotWidget::OnClickSendButt()
         // AI에게 정보값 보내기
         MakeChatText(PlayerChat->GetText().ToString());
         PlayerChat->SetIsEnabled(false);
-        httpActor->ReqChatBot1(*PlayerChat->GetText().ToString());
+        httpActor->ReqChatBot(*PlayerChat->GetText().ToString());
         PlayerChat->SetText(FText::GetEmpty());
     }
 }
