@@ -33,7 +33,7 @@ public:
 	TSubclassOf<class UUserWidget>widgetFact;
 	
 	UPROPERTY(EditAnywhere, Category = "WidgetBluePrint")
-	class UKMK_TextWidget* textWidget;
+	AActor* textWidget;
 
 	UPROPERTY(EditAnywhere)
 	bool bClickActor = false;
@@ -48,8 +48,6 @@ public:
 	void OnCreateNameWidget(bool bActive)
 	{
 		bMouseOnActor = bActive;
-		if (bActive)
-		textWidget->SetChatText(*GetOwner()->GetActorLabel());
-		else textWidget->SetChatText(TEXT(""));
+		textWidget->FindComponentByClass<UStaticMeshComponent>()->SetVisibility(bActive);
 	}
 };

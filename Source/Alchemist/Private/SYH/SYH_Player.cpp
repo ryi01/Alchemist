@@ -94,7 +94,7 @@ void ASYH_Player::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	if(IsLocallyControlled())
 	{
-		if(UGameplayStatics::GetCurrentLevelName(GetWorld())!="Room1")
+		if(UGameplayStatics::GetCurrentLevelName(GetWorld())!="Room")
 		{
 			return;
 		}

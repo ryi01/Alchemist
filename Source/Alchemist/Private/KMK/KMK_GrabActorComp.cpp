@@ -5,6 +5,7 @@
 #include "Components/BoxComponent.h"
 #include "KMK/KMK_SingleIntaraction.h"
 #include "KMK/KMK_ElementGameActor.h"
+#include "Components/WidgetComponent.h"
 
 // Sets default values for this component's properties
 UKMK_GrabActorComp::UKMK_GrabActorComp()
@@ -28,7 +29,11 @@ void UKMK_GrabActorComp::BeginPlay()
 	{
 		box->OnComponentBeginOverlap.AddDynamic(this, &UKMK_GrabActorComp::BeginOverlap);
 	}
-	
+	auto* wid = GetOwner()->GetComponentByClass<UWidgetComponent>();
+	if ( wid )
+	{
+		wid->GetWidget()->SetVisibility(ESlateVisibility::Hidden);
+	}
 }
 
 
@@ -53,6 +58,15 @@ void UKMK_GrabActorComp::CreateElementSucced(FString tagName, const FString& tex
 			newText->OnCreateWidget(false);
 		}
 		count++;
+	}
+}
+
+void UKMK_GrabActorComp::CreateElementFailed()
+{
+	if ( httpActor != nullptr && cnt < 1 )
+	{
+		httpActor->ReqRecommandEle(json);
+		cnt++;
 	}
 }
 

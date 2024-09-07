@@ -22,19 +22,7 @@ void UKMK_SingleIntaraction::BeginPlay()
 	Super::BeginPlay();
 
 	// 오너의 widget 들고오기
-	auto* owner = GetOwner()->FindComponentByClass< UWidgetComponent>();
-	if (owner)
-	{
-		if(textWidget!= nullptr) owner->SetWidgetClass(textWidget->GetClass());
-		if (owner->GetWidget() != nullptr)
-		{
-			textWidget = Cast<UKMK_TextWidget>(owner->GetWidget());
-			if (textWidget)
-			{
-				textWidget->SetChatText(TEXT(""));
-			}
-		}
-	}
+	if(textWidget != nullptr)textWidget->GetComponentByClass<UStaticMeshComponent>()->SetVisibility(false);
 }
 // Called every frame
 void UKMK_SingleIntaraction::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)

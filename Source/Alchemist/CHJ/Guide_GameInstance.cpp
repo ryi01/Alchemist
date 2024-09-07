@@ -54,3 +54,18 @@ void UGuide_GameInstance::SetInitInfo(TMap<FString,TMap<FString,FString>> data,T
 	ElementDataMap = data;
 	keyValue = key;
 }
+
+TMap<FString,FString> UGuide_GameInstance::SetMyDataText(FString myName)
+{
+	FString name;
+	// 영어만 남기기
+	for ( TCHAR Char : myName )
+	{
+		if ( 'a' <= Char && Char <= 'z' || 'A' <= Char && Char <= 'Z' ) // 알파벳 문자만 추가
+		{
+			name.AppendChar(Char);
+		}
+	}
+	TMap<FString,FString> result = ElementDataMap[name];
+	return result;
+}

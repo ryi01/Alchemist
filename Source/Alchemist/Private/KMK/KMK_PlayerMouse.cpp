@@ -113,6 +113,7 @@ void UKMK_PlayerMouse::OnMyGrabComp()
 					result += pair.Key + value;
 				}
 				httpComp->ReqElement(result, potComp);
+				potComp->SetHttpActor(httpComp,result);
 			}
 			return;
 		}

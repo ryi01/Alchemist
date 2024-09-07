@@ -6,6 +6,8 @@
 #include "Components/MultiLineEditableTextBox.h"
 #include "KMK/KMK_ElementGameActor.h"
 #include "KMK/KMK_PlayerMouse.h"
+#include "Components/TextBlock.h"
+#include "Components/Image.h"
 
 void UKMK_StudyWidget::NativeConstruct()
 {
@@ -39,7 +41,7 @@ void UKMK_StudyWidget::ClickDel()
 
 void UKMK_StudyWidget::SetButtVisi(bool isActive,APlayerController* pc, class UKMK_PlayerMouse* pm, int num)
 {
-    ExplainText->SetIsEnabled(false);
+    ExplainText->SetIsReadOnly(true);
     if(pc != nullptr) me = pc;
     if ( pm != nullptr )
     {
@@ -56,5 +58,12 @@ void UKMK_StudyWidget::SetButtVisi(bool isActive,APlayerController* pc, class UK
         PreButt->SetVisibility(ESlateVisibility::Visible);
         DeletButt->SetVisibility(ESlateVisibility::Visible);
     }
+}
+
+void UKMK_StudyWidget::SetMyText(const FString& name, const FString& text, class UTexture2D *myTexture)
+{
+    ElementName->SetText(FText::FromString(name));
+    ExplainText->SetText(FText::FromString(text));
+    Image3D->SetBrushFromTexture(myTexture);
 }
 

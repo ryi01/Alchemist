@@ -56,6 +56,9 @@ public:
 	UPROPERTY()
 	class UKMK_PlayerMouse* PlayerMouseComp;
 
+	UFUNCTION()
+	void SetMyText(const FString& name, const FString& text,class UTexture2D *myTexture);
+
 	void ChangePage(int pageNo);
 
 	void AddStringText();
