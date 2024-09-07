@@ -16,14 +16,13 @@ class ALCHEMIST_API USYH_QuizWidget : public UUserWidget
 	GENERATED_BODY()
 
 public:
-<<<<<<< HEAD
-=======
+
 	virtual void NativeConstruct() override;
 	UPROPERTY()
 	class APlayerController* PlayerController;
 	UPROPERTY()
 	class ASYH_MultiPlayer* MultiPlayer;
->>>>>>> NewSYH2
+
 	UPROPERTY(meta = (BindWidget))
 	class UTextBlock* Question;
 
@@ -33,18 +32,14 @@ public:
 	class UButton* Button_2;
 	UPROPERTY(meta = (BindWidget))
 	class UButton* Button_3;
-<<<<<<< HEAD
 
-=======
->>>>>>> NewSYH2
 	UPROPERTY(meta = (BindWidget))
 	class UTextBlock* Answer_1;
 	UPROPERTY(meta = (BindWidget))
 	class UTextBlock* Answer_2;
 	UPROPERTY(meta = (BindWidget))
 	class UTextBlock* Answer_3;
-<<<<<<< HEAD
-=======
+
 	FSlateFontInfo QFontInfo;
 	FSlateFontInfo AFontInfo;
 	UFUNCTION()
@@ -64,5 +59,5 @@ public:
 
 	
 	
->>>>>>> NewSYH2
+
 };
