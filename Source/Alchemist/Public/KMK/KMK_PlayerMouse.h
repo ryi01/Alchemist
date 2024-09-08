@@ -71,6 +71,8 @@ public:
 
 	int eleCount = 0;
 	UPROPERTY()
+	class AKMK_HttpActorWithAI* httpComp;
+	UPROPERTY()
 	class UKMK_ElementGameActor* interActor;
 private:
 	void OnMyCheckActor(FHitResult HitResult);

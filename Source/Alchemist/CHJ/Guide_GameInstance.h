@@ -40,4 +40,6 @@ public:
 	TArray<FString> keyValue; // 섹션 이름
 
 	void SetInitInfo(TMap<FString,TMap<FString,FString>> data,TArray<FString> key);
+
+	TMap<FString,FString> SetMyDataText(FString myName);
 };

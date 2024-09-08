@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "Alchemist/CHJ/Illustrated_Guide/Guide_Widget/Guide_EntryWidget.h"
@@ -9,11 +9,13 @@
 #include "Components/TextBlock.h"
 #include "components/Image.h"
 #include "Components/SizeBox.h"
+#include "KMK/KMK_StudyWidget.h"
+#include "../../Guide_GameInstance.h"
 
 UGuide_EntryWidget::UGuide_EntryWidget(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
 {
-	 ConstructorHelpers::FClassFinder<UGuide_DetailWidget> FindDetailWidgetClass(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/Project/CHJ/Illerstrated_Guide/Guide_Widget/WBP_Guide_DetailWidget.WBP_Guide_DetailWidget_C'"));
+	 ConstructorHelpers::FClassFinder<UKMK_StudyWidget> FindDetailWidgetClass(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/Project/KMK/UI/WBP_ExplainElementGame.WBP_ExplainElementGame_C'"));
 	 if (FindDetailWidgetClass.Succeeded())
 	 {
 	 	DetailWidgetClass = FindDetailWidgetClass.Class;
@@ -75,8 +77,19 @@ FReply UGuide_EntryWidget::NativeOnMouseButtonDown(const FGeometry& InGeometry, 
 	// 	Reply.DetectDrag(TakeWidget(), EKeys::LeftMouseButton);
 	// }
 	UE_LOG(LogTemp, Warning, TEXT("click"));
-	UGuide_DetailWidget* DetailWidget = CreateWidget<UGuide_DetailWidget>(GetOwningPlayer(), DetailWidgetClass);
-	DetailWidget->AddToViewport();
+	UKMK_StudyWidget* DetailWidget = CreateWidget<UKMK_StudyWidget>(GetOwningPlayer(), DetailWidgetClass);
+	auto* gm = Cast<UGuide_GameInstance>(GetWorld()->GetGameInstance());
+	if ( gm )
+	{
+		TMap<FString,FString> result = gm->SetMyDataText(myData.Element_name);
+		FString s;
+		for ( int i = 0; i < gm->keyValue.Num(); i++ )
+		{
+			s += result[ gm->keyValue[ i ] ] + TEXT("\n\n");
+		}
+		DetailWidget->SetMyText(myData.Element_name,s,myData.Element_thumbnail);
+		DetailWidget->AddToViewport();
+	}
 	return Reply;
 }
 // 엘레먼트 데이터 받아서 텍스트, 이미지 바꾼다 
@@ -84,6 +97,7 @@ void UGuide_EntryWidget::SetElementData(FElementDatas& Data)
 {
 	//Text_Count->SetText(FText::FromString( Data.Element_name));
 	Image_Icon->SetBrushFromTexture(Data.Element_thumbnail);
+	myData = Data;
 }
 
 void UGuide_EntryWidget::SetSizeBoxScale(float X, float Y)

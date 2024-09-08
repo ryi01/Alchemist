@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "KMK_HttpActorWithAI.h"
 #include "KMK_GrabActorComp.generated.h"
 
 // 항아리 엑터에 넣을 컴포넌트
@@ -23,7 +24,7 @@ protected:
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	TMap<FString, int32> ElementArray;
 
 	UPROPERTY(EditAnywhere)
@@ -34,9 +35,24 @@ public:
 	AActor* newActor; 
 	UFUNCTION()
 	void CreateElementSucced(FString tagName,const FString& text);
+	UFUNCTION()
+	void CreateElementFailed();
+	UPROPERTY(BlueprintReadWrite)
+	int cnt = 0;
+
+	UPROPERTY()
+	FString json;
+	UPROPERTY()
+	class AKMK_HttpActorWithAI* httpActor;
 	UPROPERTY()
 	int count = 0;
 
+	UFUNCTION()
+	void SetHttpActor(class AKMK_HttpActorWithAI* actor, const FString data)
+	{
+		httpActor = actor;
+		json = data;
+	}
 	UFUNCTION()
 	// 오버랩 감지를 위한 함수 선언
 	virtual void BeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);

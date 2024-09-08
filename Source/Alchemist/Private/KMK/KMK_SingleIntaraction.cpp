@@ -22,19 +22,7 @@ void UKMK_SingleIntaraction::BeginPlay()
 	Super::BeginPlay();
 
 	// 오너의 widget 들고오기
-	auto* owner = GetOwner()->FindComponentByClass< UWidgetComponent>();
-	if (owner)
-	{
-		if(textWidget!= nullptr) owner->SetWidgetClass(textWidget->GetClass());
-		if (owner->GetWidget() != nullptr)
-		{
-			textWidget = Cast<UKMK_TextWidget>(owner->GetWidget());
-			if (textWidget)
-			{
-				textWidget->SetChatText(TEXT(""));
-			}
-		}
-	}
+	if(textWidget != nullptr)textWidget->GetComponentByClass<UStaticMeshComponent>()->SetVisibility(false);
 }
 // Called every frame
 void UKMK_SingleIntaraction::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
@@ -49,12 +37,6 @@ void UKMK_SingleIntaraction::CreatePlayerWidget(bool bMake, int num = 0 , APlaye
 		return;
 	}
 	auto* wid = CreateWidget(GetWorld(), widgetFact);
-	auto* studyWid = Cast<UKMK_StudyWidget>(wid);
-	if ( studyWid != nullptr )
-	{
-		studyWid->me = pc;
-		studyWid->ExplainText->SetIsEnabled(false);
-	}
 	// 책상 클릭시 카메라 변경
 	if ( bMake )
 	{

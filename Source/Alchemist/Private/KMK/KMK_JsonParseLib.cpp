@@ -34,6 +34,12 @@ TMap<FString,TMap<FString,FString>> UKMK_JsonParseLib::ChatBotParsec(const FStri
 		if ( response->TryGetStringField(TEXT("explanation"),parseDataList1) && !parseDataList1.IsEmpty() )
 		{
             result = SplitSection(parseDataList1, Sections);
+            if ( result.IsEmpty() )
+            {
+                TMap<FString,FString> failedInfo;
+                failedInfo.Add(TEXT("Fail"), parseDataList1);
+                result.Add(TEXT("Fail"),failedInfo);
+            }
 		}
 	}
 	return result;
@@ -47,18 +53,23 @@ TMap<FString, FString> UKMK_JsonParseLib::ResultAlchemistParsec(const FString& j
 	TMap<FString, FString> result;
     if ( FJsonSerializer::Deserialize(reader,response) )
     {
-        FString stringValue = response->GetStringField(TEXT("combinable"));
-        bool isCreate = stringValue.Equals(TEXT("true"), ESearchCase::IgnoreCase);
-        if (isCreate)
-        {
-            FString FinalEle = response->GetStringField(TEXT("resultElement"));
-            FString EleName = response->GetStringField(TEXT("fullName"));
-            FString UsingEle = response->GetStringField(TEXT("uses"));
 
-            result.Add(TEXT("Result"),FinalEle);
-            result.Add(TEXT("Name"),EleName);
-            result.Add(TEXT("Using"),UsingEle);
+        FString stringValue = response->GetStringField(TEXT("combinable"));
+        if ( response->TryGetStringField(TEXT("combinable"),stringValue) && !stringValue.IsEmpty() )
+        {
+            bool isCreate = stringValue.Equals(TEXT("true"),ESearchCase::IgnoreCase);
+            if ( isCreate )
+            {
+                FString FinalEle = response->GetStringField(TEXT("resultElement"));
+                FString EleName = response->GetStringField(TEXT("fullName"));
+                FString UsingEle = response->GetStringField(TEXT("uses"));
+
+                result.Add(TEXT("Result"),FinalEle);
+                result.Add(TEXT("Name"),EleName);
+                result.Add(TEXT("Using"),UsingEle);
+            }
         }
+        else result.IsEmpty();
 
     }
 	return result;
@@ -101,6 +112,70 @@ TMap<FString,TMap<FString,FString>> UKMK_JsonParseLib::InitInfoParsec(const FStr
     }
     return result;
 }
+
+TMap<FString,TMap<FString,FString>> UKMK_JsonParseLib::RecommandEleParsec(const FString& json)
+{
+    TSharedRef<TJsonReader<TCHAR>> reader = TJsonReaderFactory<TCHAR>::Create(json);
+    TSharedPtr<FJsonObject> response = MakeShareable(new FJsonObject());
+
+    TMap<FString,TMap<FString,FString>> result;
+    if ( FJsonSerializer::Deserialize(reader,response) )
+    {
+        // 'similar' 필드에서 텍스트 가져오기
+        FString InputText;
+
+        if ( response->TryGetStringField(TEXT("similar"),InputText) )
+        {
+            UE_LOG(LogTemp,Warning,TEXT("Similar Field Found: %s"),*InputText);
+            // 1. 먼저 각 항목을 1., 2., 3.으로 나눔
+            TArray<FString> Sections;
+            InputText.ParseIntoArray(Sections,TEXT("\n\n"),true); // 두 개의 개행으로 구분
+
+            for ( int32 i = 0; i < Sections.Num(); ++i ) // 첫 번째 설명을 제외하기 위해 인덱스를 1로 시작
+            {
+
+                FString Section = Sections[ i ].TrimStartAndEnd(); // 각 섹션의 앞뒤 공백 제거
+
+                // 각 섹션의 제목을 추출 (예: "1. 리튬 (Lithium, Li)")
+                FString SectionTitle;
+                int32 SectionTitleEnd = Section.Find(TEXT("\n"));
+                if ( SectionTitleEnd != INDEX_NONE )
+                {
+                    SectionTitle = Section.Left(SectionTitleEnd).TrimStartAndEnd();
+                    // 섹션 제목 다음 부분만 남김
+                    Section = Section.Mid(SectionTitleEnd + 1).TrimStartAndEnd();
+                }
+                else
+                {
+                    SectionTitle = Section.TrimStartAndEnd();
+                }
+
+                // 2. a), b)로 나누기
+                TArray<FString> SubSections;
+                Section.ParseIntoArray(SubSections,TEXT("   b)"),true); // b)로 나눔
+
+                if ( SubSections.Num() == 2 )
+                {
+                    FString ASection = SubSections[ 0 ].Replace(TEXT("   a)"),TEXT("a)")).TrimStartAndEnd(); // a) 부분 정리
+                    FString BSection = SubSections[ 1 ].TrimStartAndEnd(); // b) 부분 앞뒤 공백 제거
+
+                    // 3. 하위 섹션을 TMap으로 저장
+                    TMap<FString,FString> SubMap;
+                    SubMap.Add(TEXT("a)"),ASection);
+                    SubMap.Add(TEXT("b)"),BSection);
+
+                    // 4. 전체 결과에 추가
+                    result.Add(SectionTitle,SubMap);
+                }
+            }
+        }
+    }
+    return result;
+}
+
+
+
+#pragma region SplitString
 TMap<FString,FString> UKMK_JsonParseLib::SplitSectionLight(const FString& json,TArray<FString> Sections)
 {
     int32 StartIndex = 0;
@@ -174,7 +249,7 @@ TMap<FString,TMap<FString,FString>> UKMK_JsonParseLib::SplitSection(const FStrin
             // 섹션 내용을 줄 단위로 분리
             TArray<FString> Lines;
             SectionContent.ParseIntoArray(Lines,TEXT("\n"),true);
-            for ( FString& Line : Lines ) 
+            for ( FString& Line : Lines )
             {
                 Line = Line.TrimStartAndEnd();
 
@@ -197,14 +272,34 @@ TMap<FString,TMap<FString,FString>> UKMK_JsonParseLib::SplitSection(const FStrin
             result.Add(Sections[ i ],SectionDetails);
 
             // 다음 섹션의 시작 인덱스로 이동
-            StartIndex = NextSectionStart;
+            if ( i != Sections.Num() - 1 )StartIndex = NextSectionStart;
+
         }
     }
     UE_LOG(LogTemp,Warning,TEXT("String Length: %d, %d"),StartIndex,json.Len());
     // 마지막 섹션 이후의 텍스트를 "Footer"로 저장
     if ( StartIndex < json.Len() )
     {
-        FString FooterContent = json.Mid(StartIndex).TrimStartAndEnd();
+        // json의 StartIndex부터 FooterContent를 추출
+        FString FooterContent = json.Mid(StartIndex);
+
+        // '\n\n'을 기준으로 마지막 섹션의 시작을 찾는다
+        int32 FooterStartIndex = FooterContent.Find(TEXT("\n\n"),ESearchCase::IgnoreCase,ESearchDir::FromEnd);
+
+        // FooterStartIndex 이후의 텍스트만 사용
+        if ( FooterStartIndex != INDEX_NONE )
+        {
+            FooterContent = FooterContent.Mid(FooterStartIndex + 2).TrimStartAndEnd(); // '\n\n' 이후의 텍스트 추출
+        }
+        else
+        {
+            // 만약 '\n\n'을 찾지 못하면 전체 내용을 Trim해서 사용
+            FooterContent.Empty();
+        }
+
+        // 로그로 FooterContent의 상태를 출력해서 디버깅
+        UE_LOG(LogTemp,Warning,TEXT("FooterContent: %s"),*FooterContent);
+
         if ( !FooterContent.IsEmpty() ) // Footer 내용이 비어있지 않을 경우에만 추가
         {
             TMap<FString,FString> FooterDetails;
@@ -215,3 +310,6 @@ TMap<FString,TMap<FString,FString>> UKMK_JsonParseLib::SplitSection(const FStrin
     return result;
 #pragma endregion
 }
+#pragma endregion
+
+

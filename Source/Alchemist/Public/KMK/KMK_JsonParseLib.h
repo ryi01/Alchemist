@@ -25,4 +25,7 @@ public:
 
 	static TMap<FString,FString> SplitSectionLight(const FString& json,TArray<FString> Sections);
 	static TMap<FString,TMap<FString,FString>> SplitSection(const FString& json,TArray<FString> Sections);
+
+
+	static TMap<FString,TMap<FString,FString>> RecommandEleParsec(const FString& json);
 };
