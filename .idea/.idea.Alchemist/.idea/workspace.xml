@@ -16,12 +16,8 @@
   <component name="ChangeListManager">
     <list default="true" id="3e7ba4d9-04c6-440b-a40d-f809cf4ad7f2" name="변경" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Alchemist/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Alchemist/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Alchemist.sln.DotSettings.user" beforeDir="false" afterPath="$PROJECT_DIR$/Alchemist.sln.DotSettings.user" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Project/SYH/Quiz/WBP_SYHQuiz.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Project/SYH/Quiz/WBP_SYHQuiz.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/Alchemist/Private/SYH/CameraWidget.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Alchemist/Private/SYH/CameraWidget.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/Alchemist/Private/SYH/SYH_MultiPlayer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Alchemist/Private/SYH/SYH_MultiPlayer.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/Alchemist/Private/SYH/SYH_QuizSelect.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Alchemist/Private/SYH/SYH_QuizSelect.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/Alchemist/Private/SYH/SYH_QuizWidget.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Alchemist/Private/SYH/SYH_QuizWidget.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Config/DefaultEngine.ini" beforeDir="false" afterPath="$PROJECT_DIR$/Config/DefaultEngine.ini" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Project/KMK/Room1.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Project/KMK/Room1.umap" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -145,20 +141,20 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "C++ 프로젝트.Alchemist.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "NewSYH2",
-    "ignore.virus.scanning.warn.message": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;C++ 프로젝트.Alchemist.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;NewSYH2&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected="C++ 프로젝트.Alchemist">
     <configuration name="Alchemist" type="CppProject" factoryName="C++ Project">
       <configuration_1>
@@ -611,6 +607,8 @@
       <workItem from="1725581126974" duration="6862000" />
       <workItem from="1725593832191" duration="14377000" />
       <workItem from="1725612557091" duration="11476000" />
+      <workItem from="1725626207555" duration="472000" />
+      <workItem from="1725789970486" duration="369000" />
     </task>
     <task id="LOCAL-00001" summary="1">
       <option name="closed" value="true" />
