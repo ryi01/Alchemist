@@ -17,16 +17,8 @@ public:
 	UPROPERTY(meta = (BindWidget))
 	class UTextBlock* Name1;
 	UPROPERTY(meta = (BindWidget))
-	class UTextBlock* Name2;
-	UPROPERTY(meta = (BindWidget))
-	class UTextBlock* Name3;
-	UPROPERTY(meta = (BindWidget))
-	class UMultiLineEditableText* Info1;
-	UPROPERTY(meta = (BindWidget))
-	class UMultiLineEditableText* Info2;
-	UPROPERTY(meta = (BindWidget))
-	class UMultiLineEditableText* Info3;
+	class UMultiLineEditableText* Info1;;
 
 	UFUNCTION()
-	void SetNameAndText(int num,const FString& nameText,const FString& infoText);
+	void SetNameAndText(const FString& nameText,const FString& infoText);
 };

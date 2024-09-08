@@ -45,7 +45,7 @@ public:
 
 	void ParsecNewInfo(FString& respon, bool isInit = false);
 
-	UPROPERTY()
+	UPROPERTY(BlueprintReadWrite)
 	class UKMK_GrabActorComp* PotComp;
 	UPROPERTY()
 	class UKMK_ChatBotWidget* HttpUI;
@@ -56,5 +56,9 @@ public:
 	// 인터페이스를 위한 UI
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<class UUserWidget> HttpUIFactory;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<class UUserWidget> DetailUIFactory;
 
+	UPROPERTY(BlueprintReadWrite)
+	bool isWidgetOn = false;
 };

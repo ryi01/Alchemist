@@ -10,6 +10,7 @@
 #include "KMK/KMK_GrabActorComp.h"
 #include "Components/WidgetComponent.h"
 #include "KMK/KMK_RecommandWidget.h"
+#include "KMK/KMK_MakeEleWidget.h"
 // Sets default values
 AKMK_HttpActorWithAI::AKMK_HttpActorWithAI()
 {
@@ -184,12 +185,18 @@ void AKMK_HttpActorWithAI::OnResRecommandEle(FHttpRequestPtr Request,FHttpRespon
 				auto* widComp = PotComp->GetOwner()->GetComponentByClass<UWidgetComponent>();
 				if ( widComp )
 				{
-					auto* wid = Cast<UKMK_RecommandWidget>(widComp->GetWidget());
-					if ( wid )
+					auto* mainPotWid = Cast<UKMK_MakeEleWidget>(widComp->GetWidget());
+					if ( mainPotWid )
 					{
-						FString s = result[name[ i - 1 ]][TEXT("a)")] + TEXT("\n\n") + TEXT("b)") + result[ name[ i - 1 ] ][ TEXT("b)") ];
-						wid->SetVisibility(ESlateVisibility::Visible);
-						wid->SetNameAndText(i, name[i - 1], s);
+						mainPotWid->SetVisibility(ESlateVisibility::Visible);
+						auto* wid = Cast<UKMK_RecommandWidget>(CreateWidget(GetWorld(),DetailUIFactory));
+						if ( wid )
+						{
+							FString s = result[ name[ i - 1 ] ][ TEXT("a)") ] + TEXT("\n\n") + TEXT("b)") + result[ name[ i - 1 ] ][ TEXT("b)") ];
+							wid->SetNameAndText(name[ i - 1 ],s);
+							mainPotWid->SetSlotChild(wid, this);
+							isWidgetOn = true;
+						}
 					}
 				}
 			}

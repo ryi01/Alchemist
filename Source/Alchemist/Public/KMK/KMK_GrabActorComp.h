@@ -24,7 +24,7 @@ protected:
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	TMap<FString, int32> ElementArray;
 
 	UPROPERTY(EditAnywhere)
@@ -37,7 +37,7 @@ public:
 	void CreateElementSucced(FString tagName,const FString& text);
 	UFUNCTION()
 	void CreateElementFailed();
-
+	UPROPERTY(BlueprintReadWrite)
 	int cnt = 0;
 
 	UPROPERTY()

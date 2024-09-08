@@ -29,6 +29,10 @@ UKMK_PlayerMouse::UKMK_PlayerMouse()
 void UKMK_PlayerMouse::BeginPlay()
 {
 	Super::BeginPlay();
+	TArray<AActor*> arrActor;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(),AKMK_HttpActorWithAI::StaticClass(),arrActor);
+	if ( arrActor[ 0 ] )HttpActor = arrActor[ 0 ];
+	httpComp = CastChecked<AKMK_HttpActorWithAI>(HttpActor);
 	me = CastChecked<APlayerController>(GetWorld()->GetFirstPlayerController());
 	for ( int i = 0; i < 5; i++ )
 	{
@@ -42,7 +46,7 @@ void UKMK_PlayerMouse::BeginPlay()
 void UKMK_PlayerMouse::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-	if(me == nullptr ) return;
+    if ( me == nullptr || httpComp == nullptr || httpComp->isWidgetOn ) return;
 
 	if( !IsRay ) OnMyPutComp(outHitComp);
 	else OnMyGrabComp();
@@ -98,12 +102,7 @@ void UKMK_PlayerMouse::OnMyGrabComp()
 			if(potComp->ElementArray.IsEmpty() ) return;
 
 			FString result = TEXT("");
-
-			TArray<AActor*> arrActor;
-			UGameplayStatics::GetAllActorsOfClass(GetWorld(),AKMK_HttpActorWithAI::StaticClass(),arrActor);
-			if(arrActor[0])HttpActor = arrActor[0];
-			if ( HttpActor == nullptr ) return;
-			auto* httpComp = CastChecked<AKMK_HttpActorWithAI>(HttpActor);
+			
 			if ( httpComp )
 			{
 				for ( const TPair<FString,int>& pair : potComp->ElementArray )
