@@ -37,12 +37,6 @@ void UKMK_SingleIntaraction::CreatePlayerWidget(bool bMake, int num = 0 , APlaye
 		return;
 	}
 	auto* wid = CreateWidget(GetWorld(), widgetFact);
-	auto* studyWid = Cast<UKMK_StudyWidget>(wid);
-	if ( studyWid != nullptr )
-	{
-		studyWid->me = pc;
-		studyWid->ExplainText->SetIsEnabled(false);
-	}
 	// 책상 클릭시 카메라 변경
 	if ( bMake )
 	{
