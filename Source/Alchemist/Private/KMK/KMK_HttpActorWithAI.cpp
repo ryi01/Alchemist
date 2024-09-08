@@ -215,7 +215,7 @@ void AKMK_HttpActorWithAI::ParsecNewInfo(FString& respon, bool isInit)
 	if(!isInit )
 	{
 		TMap<FString,TMap<FString,FString>> result = UKMK_JsonParseLib::ChatBotParsec(respon,SectionName);
-		if ( !result[TEXT("Fail")][ TEXT("Fail") ].IsEmpty() )
+		if ( result.Contains(TEXT("Fail")) )
 		{
 			HttpUI->MakeChatText(result[ TEXT("Fail") ][ TEXT("Fail") ],1);
 			return;
@@ -228,14 +228,14 @@ void AKMK_HttpActorWithAI::ParsecNewInfo(FString& respon, bool isInit)
 			for ( const TPair<FString,FString>& Pair : SupMap )
 			{
 				FString t = Pair.Key + TEXT("\n") + Pair.Value + TEXT("\n\n");
-				if ( i == 0 && count == 0 && !result[ TEXT("Header") ][ TEXT("Content") ].IsEmpty() )
+				if ( i == 0 && count == 0 && result.Contains(TEXT("Header")) )
 				{
 					arr += result[ TEXT("Header") ][ TEXT("Content") ] + TEXT("\n\n") + t;
 					count++;
 				}
 				else arr += t;
 			}
-			if ( !result[ TEXT("Footer") ][ TEXT("Content") ].IsEmpty() )
+			if ( result.Contains(TEXT("Footer")) )
 			{
 				arr += TEXT("\n\n") + result[ TEXT("Footer") ][ TEXT("Content") ];
 			}
