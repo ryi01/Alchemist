@@ -6,6 +6,7 @@
 #include "KMK/KMK_SingleIntaraction.h"
 #include "KMK/KMK_ElementGameActor.h"
 #include "Components/WidgetComponent.h"
+#include "KMK/KMK_MakeEleWidget.h"
 
 // Sets default values for this component's properties
 UKMK_GrabActorComp::UKMK_GrabActorComp()
@@ -29,10 +30,14 @@ void UKMK_GrabActorComp::BeginPlay()
 	{
 		box->OnComponentBeginOverlap.AddDynamic(this, &UKMK_GrabActorComp::BeginOverlap);
 	}
-	auto* wid = GetOwner()->GetComponentByClass<UWidgetComponent>();
-	if ( wid )
+    auto* wid = GetOwner()->FindComponentByClass<UWidgetComponent>();
+    if ( wid != nullptr)
 	{
-		wid->GetWidget()->SetVisibility(ESlateVisibility::Hidden);
+		auto* mainPotWid = Cast<UKMK_MakeEleWidget>(wid->GetWidget());
+		if ( mainPotWid != nullptr )
+		{
+			mainPotWid->SetVisibility(ESlateVisibility::Hidden);
+		}
 	}
 }
 

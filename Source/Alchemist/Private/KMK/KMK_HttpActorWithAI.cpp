@@ -182,7 +182,7 @@ void AKMK_HttpActorWithAI::OnResRecommandEle(FHttpRequestPtr Request,FHttpRespon
 			result.GetKeys(name);
 			for ( int i = 1; i <= result.Num(); i++ )
 			{
-				auto* widComp = PotComp->GetOwner()->GetComponentByClass<UWidgetComponent>();
+				auto* widComp = PotComp->GetOwner()->FindComponentByClass<UWidgetComponent>();
 				if ( widComp )
 				{
 					auto* mainPotWid = Cast<UKMK_MakeEleWidget>(widComp->GetWidget());
