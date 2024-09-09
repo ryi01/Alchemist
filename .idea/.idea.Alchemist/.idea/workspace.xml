@@ -16,9 +16,6 @@
   <component name="ChangeListManager">
     <list default="true" id="3e7ba4d9-04c6-440b-a40d-f809cf4ad7f2" name="변경" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Alchemist/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Alchemist/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Project/KMK/Room.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Project/KMK/Room.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Project/KMK/RoomClient.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Project/KMK/RoomClient.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Project/KMK/UI/WBP_PopUpWidget.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Project/KMK/UI/WBP_PopUpWidget.uasset" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -142,20 +139,20 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;C++ 프로젝트.Alchemist.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;NewSYH2&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "C++ 프로젝트.Alchemist.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "NewMain",
+    "ignore.virus.scanning.warn.message": "true",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected="C++ 프로젝트.Alchemist">
     <configuration name="Alchemist" type="CppProject" factoryName="C++ Project">
       <configuration_1>
@@ -612,7 +609,6 @@
       <workItem from="1725789970486" duration="369000" />
       <workItem from="1725790410371" duration="713000" />
       <workItem from="1725791214405" duration="4667000" />
-      <workItem from="1725840796269" duration="2884000" />
     </task>
     <task id="LOCAL-00001" summary="1">
       <option name="closed" value="true" />
