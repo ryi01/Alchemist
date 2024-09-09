@@ -143,7 +143,7 @@
   "keyToString": {
     "C++ 프로젝트.Alchemist.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "NewMain",
+    "git-widget-placeholder": "NewSYH2",
     "ignore.virus.scanning.warn.message": "true",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -609,6 +609,7 @@
       <workItem from="1725789970486" duration="369000" />
       <workItem from="1725790410371" duration="713000" />
       <workItem from="1725791214405" duration="4667000" />
+      <workItem from="1725844177296" duration="150000" />
     </task>
     <task id="LOCAL-00001" summary="1">
       <option name="closed" value="true" />
