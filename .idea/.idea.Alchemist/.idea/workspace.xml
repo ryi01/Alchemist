@@ -15,10 +15,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3e7ba4d9-04c6-440b-a40d-f809cf4ad7f2" name="변경" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.Alchemist/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Alchemist/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Config/DefaultEngine.ini" beforeDir="false" afterPath="$PROJECT_DIR$/Config/DefaultEngine.ini" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Project/KMK/Blueprint/BP_KMK_GameModeBase.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Project/KMK/Blueprint/BP_KMK_GameModeBase.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Project/KMK/Room.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Project/KMK/Room.umap" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Project/KMK/UI/WBP_PopUpWidget.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Project/KMK/UI/WBP_PopUpWidget.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Project/SYH/Blueprints/BP_SYHGameModeBase.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Project/SYH/Blueprints/BP_SYHGameModeBase.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Project/SYH/Blueprints/BP_SYHPlayer.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Project/SYH/Blueprints/BP_SYHPlayer.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Project/SYH/Maps/SYHLevel.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Project/SYH/Maps/SYHLevel.umap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Project/SYH/UI/WBP_SYHZoom.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Project/SYH/UI/WBP_SYHZoom.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/Alchemist/Private/SYH/SYH_MultiPlayer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Alchemist/Private/SYH/SYH_MultiPlayer.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/Alchemist/Private/SYH/SYH_Player.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Alchemist/Private/SYH/SYH_Player.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -611,6 +618,7 @@
       <workItem from="1725626207555" duration="472000" />
       <workItem from="1725789970486" duration="369000" />
       <workItem from="1725790410371" duration="713000" />
+      <workItem from="1725791214405" duration="4667000" />
     </task>
     <task id="LOCAL-00001" summary="1">
       <option name="closed" value="true" />

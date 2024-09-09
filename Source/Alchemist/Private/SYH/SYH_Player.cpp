@@ -94,10 +94,10 @@ void ASYH_Player::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	if(IsLocallyControlled())
 	{
-		if(UGameplayStatics::GetCurrentLevelName(GetWorld())!="Room")
-		{
-			return;
-		}
+		// if(UGameplayStatics::GetCurrentLevelName(GetWorld())!="Room" || UGameplayStatics::GetCurrentLevelName(GetWorld())!="RoomClient")
+		// {
+		// 	return;
+		// }
 		PlayerController->GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, false, HitResult);
 	
 		if (HitResult.GetActor() != nullptr && HitResult.bBlockingHit)

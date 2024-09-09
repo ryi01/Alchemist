@@ -135,7 +135,7 @@ void ASYH_MultiPlayer::Tick(float DeltaTime)
 	}
 	if(IsLocallyControlled())
 	{
-		if(UGameplayStatics::GetCurrentLevelName(GetWorld())!=TEXT("Room1") || UGameplayStatics::GetCurrentLevelName(GetWorld())!=TEXT("SYHLevel"))
+		if(UGameplayStatics::GetCurrentLevelName(GetWorld())!=TEXT("SYHLevel"))
 		{
 			return;
 		}
