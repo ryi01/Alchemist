@@ -16,7 +16,8 @@ class ALCHEMIST_API USYH_QuizWaitWidget : public UUserWidget
 
 public:
 	virtual void NativeConstruct() override;
-	
+	UPROPERTY()
+	class ASYH_MultiPlayer* MultiPlayer;
 	UPROPERTY(EditAnywhere, meta = (BindWidget),BlueprintReadWrite);
 	class UTextBlock* Wait;
 	UPROPERTY(EditAnywhere, meta = (BindWidget),BlueprintReadWrite);

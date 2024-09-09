@@ -25,24 +25,40 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	// ai의 url 담을 변수
-	UPROPERTY(EditAnywhere, Category = "AI_URL")
-	FString Aurl;
 	FString MyData;
 	// SendButt을 눌렀을 때, 요청할 함수
 	void ReqChatBot(FString json);
-	void ReqChatBot1(FString json);
 	// 응답받을 함수
 	void OnResChatBot(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully);
 
 	// SendButt을 눌렀을 때, 요청할 함수
-	void ReqElement(TMap<FString, FString> data);
+	void ReqElement(FString data, class UKMK_GrabActorComp* comp);
 	// 응답받을 함수
 	void OnResElement(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully);
 
+	void ReqInitInfo();
+	void OnResInitInfo(FHttpRequestPtr Request,FHttpResponsePtr Response,bool bConnectedSuccessfully);
+
+	// 추천 받는 원소
+	void ReqRecommandEle(FString data);
+	void OnResRecommandEle(FHttpRequestPtr Request,FHttpResponsePtr Response,bool bConnectedSuccessfully);
+
+	void ParsecNewInfo(FString& respon, bool isInit = false);
+
+	UPROPERTY(BlueprintReadWrite)
+	class UKMK_GrabActorComp* PotComp;
 	UPROPERTY()
 	class UKMK_ChatBotWidget* HttpUI;
+
+	UPROPERTY()
+	class UKMK_RecommandWidget* RecUI;
+
 	// 인터페이스를 위한 UI
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<class UUserWidget> HttpUIFactory;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<class UUserWidget> DetailUIFactory;
+
+	UPROPERTY(BlueprintReadWrite)
+	bool isWidgetOn = false;
 };

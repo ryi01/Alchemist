@@ -12,7 +12,8 @@
 #include "Kismet/GameplayStatics.h"
 #include "Input/Reply.h"
 #include "SYH/SYH_MultiPlayer.h"
-
+#include "SYH/SYH_QuizSelect.h"
+#include "SYH/SYH_QuizWaitWidget.h"
 
 
 void UCameraWidget::NativeConstruct()
@@ -24,13 +25,16 @@ void UCameraWidget::NativeConstruct()
 		ZoomSlider->OnValueChanged.AddDynamic(this, &UCameraWidget::OnSliderValueChanged);
 	}
 	playercontroller = Cast<APlayerController>(GetOwningPlayer());
+	if(playercontroller)
+	{
+		playercontroller->SetShowMouseCursor(true);
+	}
 	me = CastChecked<ASYH_MultiPlayer>(GetOwningPlayerPawn());
 }
 void UCameraWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 {
 	Super::NativeTick(MyGeometry, InDeltaTime);
 	UpdateTextVisibility();
-	playercontroller->SetShowMouseCursor(true);
 }
 
 void UCameraWidget::OnSliderValueChanged(float value)
@@ -77,26 +81,29 @@ bool UCameraWidget::IsTaggedActorInView()
 
 	if(!playercontroller) return false;
 
-	for(AActor* actor : TaggedActors)
+	for (AActor* actor : TaggedActors)
 	{
-		if(actor)
+		if (actor)
 		{
 			FVector2D ScreenPos;
 			FVector ActorPos = actor->GetActorLocation();
-			if(playercontroller->ProjectWorldLocationToScreen(ActorPos,ScreenPos))
-			{
-				FVector2D CameraPos = CameraImage->GetCachedGeometry().GetAbsolutePosition();
-				FVector2D CameraSize = CameraImage->GetCachedGeometry().GetLocalSize();
 
-				if(ScreenPos.X >= CameraPos.X && ScreenPos.X <= CameraPos.X + CameraSize.X &&
-					ScreenPos.Y >= CameraPos.Y && ScreenPos.Y <= CameraPos.Y + CameraSize.Y)
+			// 스크린 좌표로 변환
+			if (playercontroller->ProjectWorldLocationToScreen(ActorPos, ScreenPos))
+			{
+				// 뷰포트 크기를 가져옴
+				FVector2D ViewportSize;
+				GEngine->GameViewport->GetViewportSize(ViewportSize);
+
+				// 화면 내에 Actor가 있는지 확인 (스크린 좌표가 뷰포트 내에 있는지)
+				if (ScreenPos.X >= 0 && ScreenPos.X <= ViewportSize.X &&
+					ScreenPos.Y >= 0 && ScreenPos.Y <= ViewportSize.Y)
 				{
-					return true;
+					return true;  // 감지 성공
 				}
 			}
 		}
 	}
-
 	return false;
 }
 

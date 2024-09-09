@@ -11,6 +11,8 @@
 #include "KMK/KMK_StudyWidget.h"
 #include "Blueprint/UserWidget.h"
 #include "KMK/KMK_ElementGameActor.h"
+#include "KMK/KMK_TextWidget.h"
+#include "KMK/KMK_SingleIntaraction.h"
 
 // Sets default values for this component's properties
 UKMK_PlayerMouse::UKMK_PlayerMouse()
@@ -27,11 +29,16 @@ UKMK_PlayerMouse::UKMK_PlayerMouse()
 void UKMK_PlayerMouse::BeginPlay()
 {
 	Super::BeginPlay();
+	TArray<AActor*> arrActor;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(),AKMK_HttpActorWithAI::StaticClass(),arrActor);
+	if ( arrActor[ 0 ] )HttpActor = arrActor[ 0 ];
+	httpComp = CastChecked<AKMK_HttpActorWithAI>(HttpActor);
 	me = CastChecked<APlayerController>(GetWorld()->GetFirstPlayerController());
 	for ( int i = 0; i < 5; i++ )
 	{
 		elementPos.Add(FVector(1890, -1970 + 90 * i, 80));
 	}
+	
 }
 
 
@@ -39,17 +46,17 @@ void UKMK_PlayerMouse::BeginPlay()
 void UKMK_PlayerMouse::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-	if(me == nullptr ) return;
+    if ( me == nullptr || httpComp == nullptr || httpComp->isWidgetOn ) return;
 
 	if( !IsRay ) OnMyPutComp(outHitComp);
 	else OnMyGrabComp();
 
-	if ( elementActor != nullptr && isDeleteWidget)
-	{
-		GEngine->AddOnScreenDebugMessage(1,1,FColor::Cyan,FString::Printf(TEXT("HIIIIIIIIIIIIIIIII")));
-		isDeleteWidget = false;
-		elementActor->ChangeMyPos(elementPos[eleCount]);
-	}
+	//FHitResult HitResult;
+	//me->GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility,false,HitResult);
+	//if ( HitResult.GetActor() != nullptr && HitResult.bBlockingHit && HitResult.GetActor()->ActorHasTag(TEXT("NewEle")))
+	//{
+	//	OnMyCheckActor(HitResult);
+	//}
 	if ( outHitComp == nullptr ) return;
 
 	TArray<FVector> pos = GetMouseWorldDirection();
@@ -76,19 +83,16 @@ void UKMK_PlayerMouse::OnMyGrabComp()
 		{
 			// 엑터에 컴포넌트에 정보 업데이트
 			elementActor = hitActor->GetComponentByClass<UKMK_ElementGameActor>();
-			if ( elementActor != nullptr )
+			if(elementActor == nullptr ) return;
+			if ( !elementActor->isOnWidget && eleCount < elementPos.Num())
 			{
+				elementActor->OnCreateWidget(true);
 				// Actor의 Comp에 정보 업데이트
-			}
-			// 위잿 생성
-			auto* widget = CastChecked< UKMK_StudyWidget>(CreateWidget(GetWorld(), widgetFact));
-			if ( widget && cnt <= 0 )
-			{
-
-				widget->AddToViewport();
-				widget->SetButtVisi(true, me, this);
-				cnt++;
-				me->SetPause(true);
+				elementActor->ChangeMyPos(elementPos[ eleCount ]);
+				eleCount++;
+				potComp->isCreate = false;
+				potComp->ElementArray.Empty();
+				GEngine->AddOnScreenDebugMessage(1, 1, FColor::Green, FString::Printf(TEXT("%d"), eleCount));
 			}
 			return;
 		}
@@ -96,30 +100,27 @@ void UKMK_PlayerMouse::OnMyGrabComp()
 		{
 			potComp = hitActor->GetComponentByClass<UKMK_GrabActorComp>();
 			if(potComp->ElementArray.IsEmpty() ) return;
-			potComp->CreateElementSucced(TEXT("HI"));
-			//TArray<AActor*> arrActor;
-			//UGameplayStatics::GetAllActorsOfClass(GetWorld(),AKMK_HttpActorWithAI::StaticClass(),arrActor);
-			//if(arrActor[0])HttpActor = arrActor[0];
-			//if ( HttpActor == nullptr ) return;
-			//auto* httpComp = CastChecked<AKMK_HttpActorWithAI>(HttpActor);
-			//if ( httpComp )
-			//{
-			//	TMap<FString,FString> ConvertedMap;
-			//	for ( const TPair<FString,int>& pair : potComp->ElementArray )
-			//	{
-			//		ConvertedMap.Add(pair.Key,FString::FromInt(pair.Value));
-			//	}
-			//	httpComp->ReqElement(ConvertedMap);
-			//	potComp->CreateElementSucced();
-			//	potComp->ElementArray.Empty();
-			//}
+
+			FString result = TEXT("");
+			
+			if ( httpComp )
+			{
+				for ( const TPair<FString,int>& pair : potComp->ElementArray )
+				{
+					FString value = "";
+					if(pair.Value != 1 ) value = FString::FromInt(pair.Value);
+					result += pair.Key + value;
+				}
+				httpComp->ReqElement(result, potComp);
+				potComp->SetHttpActor(httpComp,result);
+			}
 			return;
 		}
 
 		if ( hitActor )
 		{
 			// 원본 액터인지 복사본인지 판별
-			if ( hitActor->ActorHasTag("Copy") )
+			if ( hitActor->ActorHasTag(TEXT("Copy") ))
 			{
 				// 이미 복사된 액터이므로 스킵하거나 다른 처리를 할 수 있음
 				outHitComp = outHit.GetComponent();
@@ -154,7 +155,7 @@ void UKMK_PlayerMouse::CopyNewActor(AActor* hitActor, FVector grabPos)
 	count++;
 	if ( newActor )
 	{
-		if(hitActor->Tags[1].IsValid() && hitActor->Tags[1] != TEXT("Pot"))newActor->Tags.Add(hitActor->Tags[1]);
+		if( hitActor->Tags[ 0 ] != TEXT("Pot") && hitActor->Tags[1].IsValid())newActor->Tags.Add(hitActor->Tags[1]);
 		newActor->Tags.Add("Copy");
 		if ( handle )
 		{
@@ -171,6 +172,27 @@ void UKMK_PlayerMouse::CopyNewActor(AActor* hitActor, FVector grabPos)
 	}
 }
 
+void UKMK_PlayerMouse::OnMyCheckActor(FHitResult HitResult)
+{
+	AActor* HitActor = HitResult.GetActor();
+	if ( interActor != nullptr && HitActor != interActor->GetOwner() )
+	{
+		if ( interActor != nullptr && HitActor != interActor->GetOwner() )
+		{
+			//interActor->OnCreateWidget(false);
+		}
+	}
+	if ( HitActor )
+	{
+		interActor = HitActor->GetComponentByClass<UKMK_ElementGameActor>();
+		if ( interActor )
+		{
+			//interActor->OnCreateWidget(true);
+		}
+
+	}
+}
+
 TArray<FVector> UKMK_PlayerMouse::GetMouseWorldDirection()
 {
 	TArray<FVector> arr;
@@ -181,6 +203,3 @@ TArray<FVector> UKMK_PlayerMouse::GetMouseWorldDirection()
 	arr.Add(WorldDirection);
 	return arr;
 }
-
-
-

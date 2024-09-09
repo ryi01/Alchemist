@@ -34,6 +34,7 @@ void USYH_QuizSelect::OnClickedYesButt()
 	PlayerController->SetInputMode(FInputModeGameOnly());
 	if(MultiPlayer) // 요청을 받은 사람
 	{
+		MultiPlayer->InQuiz = true;
 		MultiPlayer->ServerRPC_AcceptQuiz();
 	}
 	
@@ -74,7 +75,3 @@ void USYH_QuizSelect::OnClickedPausebutt()
 	// 	UE_LOG(LogTemp,Error,TEXT("client"));
 	// }
 }
-
-// // 이 UI버튼의 결과를 게임인스턴스에 넘겨서
-// // 결과가 yes면 요청하는사람과 받는 사람 모두에게 퀴즈화면을 띄우고
-// // 결과가 no면 요청하는사람은 실패하였다는 UI, 요청 받은사람은 UI가 꺼지게 하고 싶다.
