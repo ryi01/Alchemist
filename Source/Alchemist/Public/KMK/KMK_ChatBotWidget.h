@@ -33,7 +33,7 @@ public:
 	UPROPERTY()
 	class UScrollBoxSlot* a;
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void OnClickSendButt();
 
 	UFUNCTION()
