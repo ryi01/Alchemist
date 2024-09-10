@@ -29,9 +29,9 @@ public:
 	UPROPERTY()
 	class UCameraComponent* DeskCameraComponent;
 	UPROPERTY(EditAnywhere)
-	class ACameraActor* ToViewCamera;
+	class ACameraActor* PlayerViewCam;
 	UPROPERTY()
-	class UCameraComponent* TopViewCameraComponent;
+	class UCameraComponent* PlayerCamera;
 	UPROPERTY()
 	class APlayerController* player;
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
@@ -50,7 +50,7 @@ public:
 		else
 		{
 			// 플레이어 카메라 활성화
-			if( TopViewCameraComponent)player->SetViewTarget(TopViewCameraComponent->GetOwner());
+			if( PlayerCamera)player->SetViewTarget(PlayerCamera->GetOwner());
 		}
 	}
 	// 카메라 찾는 함수
