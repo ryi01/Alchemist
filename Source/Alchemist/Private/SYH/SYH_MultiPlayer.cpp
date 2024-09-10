@@ -215,8 +215,7 @@ void ASYH_MultiPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent)) {
 		
 		// Jumping
-		EnhancedInputComponent->BindAction(IA_Jump, ETriggerEvent::Started, this, &ACharacter::Jump);
-		EnhancedInputComponent->BindAction(IA_Jump, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
+		EnhancedInputComponent->BindAction(IA_Jump, ETriggerEvent::Started, this, &ASYH_MultiPlayer::MyJump);
 
 		// Moving
 		EnhancedInputComponent->BindAction(IA_Move, ETriggerEvent::Triggered, this, &ASYH_MultiPlayer::Move);
@@ -329,7 +328,6 @@ void ASYH_MultiPlayer::Camera(const FInputActionValue& Value)
 		// e키를 누르면 애니메이션이 출력되고 시점을 바꾸고 싶다.
 		if ( anim && anim->bIsPlayCameraAnim == true)
 		{
-			anim->Montage_Play(Looking);
 			PlayerController->SetShowMouseCursor(true);
 		}
 		// e키를 누르고 카메라가 1인칭 시점인 상태에서 e키를 다시 누르면 원래대로 돌아오게 하고 싶다.
@@ -362,6 +360,10 @@ void ASYH_MultiPlayer::Camera(const FInputActionValue& Value)
 	}
 }
 
+void ASYH_MultiPlayer::MyJump(const FInputActionValue& Value)
+{
+
+}
 
 
 void ASYH_MultiPlayer::OnMyCheckActor()
@@ -381,7 +383,6 @@ void ASYH_MultiPlayer::OnMyCheckActor()
 		{
 			interActor->OnCreateNameWidget(true);
 		}
-
 	}
 }
 

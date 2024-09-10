@@ -60,8 +60,6 @@ public:
 
 	UPROPERTY()
 	class USYH_PlayerAnim* anim;
-	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = Animation)
-	UAnimMontage* Looking;
 	UPROPERTY()
 	class APlayerController* PlayerController;
 	UPROPERTY(BlueprintReadWrite, Category = "UI")
@@ -88,6 +86,8 @@ protected:
 	void Look(const FInputActionValue& Value);
 			
 	void Camera(const FInputActionValue& Value);
+
+	void MyJump(const FInputActionValue& Value);
 
 	void OnMyCheckActor();
 
@@ -123,7 +123,7 @@ public:
 	class ASYH_MultiPlayer* TargetPlayer;
 	// 퀴즈 관련 함수
 	// 특정거리내에 들어오면 F키를 누르라는 안내 UI를 띄우고싶다.
-	UFUNCTION(Client,Reliable)
+	UFUNCTION(NetMulticast,Reliable)
 	void ClientRPC_CallFKey(); 
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<UUserWidget> QuizWaitClass;
