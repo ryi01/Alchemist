@@ -30,7 +30,7 @@ public:
 	class UCameraComponent* DeskCameraComponent;
 	UPROPERTY(EditAnywhere)
 	class ACameraActor* PlayerViewCam;
-	UPROPERTY()
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	class UCameraComponent* PlayerCamera;
 	UPROPERTY()
 	class APlayerController* player;
@@ -44,6 +44,7 @@ public:
 		// 책상 클릭시 카메라 변경
 		if (OnClick)
 		{
+			player->SetShowMouseCursor(true);
 			// 데스크 카메라 활성화
 			if( DeskCameraComponent)player->SetViewTarget(DeskCameraComponent->GetOwner());
 		}

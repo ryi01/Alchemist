@@ -27,7 +27,7 @@ public:
 	/** Follow camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
 	UCameraComponent* CameraCompThird;
-	
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
 	class UCameraComponent* CameraCompFirst;
 	/** MappingContext */
@@ -48,7 +48,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* IA_Camera;
-	
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* IA_Guide;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
@@ -86,7 +86,7 @@ protected:
 
 	/** Called for looking input */
 	void Look(const FInputActionValue& Value);
-			
+
 	void Camera(const FInputActionValue& Value);
 
 	void MyJump(const FInputActionValue& Value);
@@ -100,7 +100,7 @@ protected:
 	// void Quiz(const FInputActionValue& Value);
 	UPROPERTY()
 	class AAluminum_Object* Aluminum;
-	
+
 	int count = 0;
 
 public:
@@ -128,7 +128,7 @@ public:
 	// 퀴즈 관련 함수
 	// 특정거리내에 들어오면 F키를 누르라는 안내 UI를 띄우고싶다.
 	UFUNCTION(NetMulticast,Reliable)
-	void ClientRPC_CallFKey(); 
+	void ClientRPC_CallFKey();
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<UUserWidget> QuizWaitClass;
 	UPROPERTY()
@@ -161,7 +161,7 @@ public:
 	TSubclassOf<UUserWidget> QuizClass;
 	UPROPERTY()
 	class USYH_QuizWidget* QuizWidget;
-	
+
 	UFUNCTION(Server, Reliable, WithValidation)
 	void ServerRPC_AcceptQuiz();
 
@@ -181,7 +181,7 @@ public:
 	class USYH_QuizWidgetResult* QuizResultWidget;
 	UFUNCTION(Server, Reliable, WithValidation)
 	void ServerRPC_SendRightCount(int32 Count);
-	
+
 	int32 RightCount = -1;
 
 	void Server_Compare();
@@ -194,7 +194,7 @@ public:
 	void ClientRPC_ShowSameResult();
 	UFUNCTION(Client, Reliable)
 	void ClientRPC_ShowWaitResult();
-	
+
 	UPROPERTY(EditDefaultsOnly,BlueprintReadWrite,Replicated)
 	bool IsWin;
 	UPROPERTY(EditDefaultsOnly,BlueprintReadWrite,Replicated)
@@ -205,4 +205,6 @@ public:
 	TSubclassOf<UUserWidget> MenuClass;
 	UPROPERTY()
 	class USYH_MenuWidget* MenuWidget;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class UPlayerInteractionComponent* interactionComp;
 };

@@ -6,6 +6,7 @@
 #include "Camera/CameraActor.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/Character.h"
+#include "SYH/SYH_MultiPlayer.h"
 
 // Sets default values for this component's properties
 UKMK_DeskComponent::UKMK_DeskComponent()
@@ -23,8 +24,10 @@ void UKMK_DeskComponent::BeginPlay()
 	// 책상을 비추는 카메라를 찾고 비활성화 시키는 함수
 	player = GetWorld()->GetFirstPlayerController();
 	check(player);
-	if ( player && PlayerViewCam != nullptr )
+	if ( player)
 	{
+		AActor* viewTarget = player->GetViewTarget();
+		PlayerViewCam = Cast<ACameraActor>(viewTarget);
 		FindDeskCam();
 	}
 }
@@ -36,6 +39,8 @@ void UKMK_DeskComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAc
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 	// 변경된 카메라 활성 시키는 함수
 	// ChangeMyCamera(bActive);
+	if(bActive)player->SetShowMouseCursor(true);
+	else player->SetShowMouseCursor(false);
 }
 
 void UKMK_DeskComponent::FindDeskCam()
@@ -50,7 +55,7 @@ void UKMK_DeskComponent::FindDeskCam()
 		// 카메라 엑터가 있는 경우 ACameraActor로 변환
 		auto* CameraActor = Cast<ACameraActor>(Actor);
 		// UCameraComponent 뽑아내기
-		auto* CamComp = CameraActor->GetComponentByClass<UCameraComponent>();
+		auto* CamComp = CameraActor->FindComponentByClass<UCameraComponent>();
 		// 데스크라면
 		if(CamComp)
 		{
@@ -62,6 +67,7 @@ void UKMK_DeskComponent::FindDeskCam()
 					DeskCameraComponent = CamComp;
 					// 비활성화
 					DeskCameraComponent->SetActive(false);
+					if(PlayerViewCam)PlayerViewCam->GetComponentByClass<UCameraComponent>()->SetActive(true);
 				}
 			}
 		}

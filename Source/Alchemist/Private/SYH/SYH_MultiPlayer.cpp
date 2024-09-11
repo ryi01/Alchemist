@@ -1,4 +1,4 @@
-#include "SYH/SYH_MultiPlayer.h"
+﻿#include "SYH/SYH_MultiPlayer.h"
 
 #include "EngineUtils.h"
 #include "Engine/LocalPlayer.h"
@@ -25,21 +25,22 @@
 #include "SYH/SYH_QuizWaitWidget.h"
 #include "SYH/SYH_QuizWidget.h"
 #include "SYH/SYH_QuizWidgetResult.h"
+#include "KMK/PlayerInteractionComponent.h"
 // Sets default values
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
 ASYH_MultiPlayer::ASYH_MultiPlayer()
 {
  	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
-	
+
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = false;
 	bUseControllerRotationRoll = false;
 
 	// Configure character movement
-	GetCharacterMovement()->bOrientRotationToMovement = false; 
+	GetCharacterMovement()->bOrientRotationToMovement = false;
 	GetCharacterMovement()->bUseControllerDesiredRotation = true;
-	GetCharacterMovement()->RotationRate = FRotator(0.0f, 500.0f, 0.0f); 
+	GetCharacterMovement()->RotationRate = FRotator(0.0f, 500.0f, 0.0f);
 
 	GetCharacterMovement()->JumpZVelocity = 700.f;
 	GetCharacterMovement()->AirControl = 0.35f;
@@ -51,7 +52,7 @@ ASYH_MultiPlayer::ASYH_MultiPlayer()
 	// Create a camera boom (pulls in towards the player if there is a collision)
 	SpringArmComp = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArmComp"));
 	SpringArmComp->SetupAttachment(RootComponent);
-	SpringArmComp->TargetArmLength = 150.0f; // The camera follows at this distance behind the character	
+	SpringArmComp->TargetArmLength = 150.0f; // The camera follows at this distance behind the character
 	SpringArmComp->bUsePawnControlRotation = true; // Rotate the arm based on the controller
 	SpringArmComp->SetRelativeLocation(FVector(0,40,60));
 
@@ -65,6 +66,8 @@ ASYH_MultiPlayer::ASYH_MultiPlayer()
 	CameraCompFirst->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 	CameraCompFirst->SetActive(false);
 	CameraCompFirst->SetRelativeLocationAndRotation(FVector(0, 20, 160), FRotator(0));
+
+	interactionComp = CreateDefaultSubobject<UPlayerInteractionComponent>(TEXT("Interaction"));
 
 }
 void ASYH_MultiPlayer::PossessedBy(AController* NewController) // server에서만 불림
@@ -100,7 +103,7 @@ void ASYH_MultiPlayer::BeginPlay()
 		PlayerController = Cast<APlayerController>(Controller);
 		if(PlayerController)
 		{
-			
+
 			if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
 			{
 				Subsystem->AddMappingContext(IMC_Player, 0);
@@ -121,6 +124,7 @@ void ASYH_MultiPlayer::BeginPlay()
 		MenuWidget = Cast<USYH_MenuWidget>(CreateWidget(GetWorld(),MenuClass));
 	}
 	GameInstance = CastChecked<UGuide_GameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+
 }
 
 // Called every frame
@@ -131,7 +135,7 @@ void ASYH_MultiPlayer::Tick(float DeltaTime)
 	{
 		if (IsLocallyControlled())
 		{
-			if (!InQuiz) 
+			if (!InQuiz)
 			{
 				CheckDist(true);
 			}
@@ -144,7 +148,7 @@ void ASYH_MultiPlayer::Tick(float DeltaTime)
 			return;
 		}
 		PlayerController->GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, false, HitResult);
-	
+
 		if (HitResult.GetActor() != nullptr && HitResult.bBlockingHit)
 		{
 			OnMyCheckActor();
@@ -171,7 +175,7 @@ void ASYH_MultiPlayer::CheckDist(bool bCheck)
 			}
 		}
 	}
-	if (bShowUI && bCheck && InQuiz == false) 
+	if (bShowUI && bCheck && InQuiz == false)
 	{
 		ClientRPC_CallFKey(); // UI를 띄움 (client의 UI까지)
 	}
@@ -217,7 +221,7 @@ void ASYH_MultiPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 	// Set up action bindings
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent)) {
-		
+
 		// Jumping
 		EnhancedInputComponent->BindAction(IA_Jump, ETriggerEvent::Started, this, &ASYH_MultiPlayer::MyJump);
 
@@ -229,7 +233,7 @@ void ASYH_MultiPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 		// Camera
 		EnhancedInputComponent->BindAction(IA_Camera, ETriggerEvent::Started, this, &ASYH_MultiPlayer::Camera);
-		
+
 		// 도감
 		EnhancedInputComponent->BindAction(IA_Guide, ETriggerEvent::Started, this, &ASYH_MultiPlayer::OnOffGuide);
 
@@ -237,7 +241,7 @@ void ASYH_MultiPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		EnhancedInputComponent->BindAction(IA_Quiz,ETriggerEvent::Started,this,&ASYH_MultiPlayer::Quiz);
 		// esc키
 		EnhancedInputComponent->BindAction(IA_Menu,ETriggerEvent::Started,this,&ASYH_MultiPlayer::Menu);
-		
+		interactionComp->SetupInputBinding(EnhancedInputComponent);
 	}
 	else
 	{
@@ -256,7 +260,7 @@ void ASYH_MultiPlayer::ObjectDetect()
 	ECollisionChannel TraceChannel = ECC_Visibility;
 	FCollisionQueryParams Params;
 	Params.AddIgnoredActor(this);
-	
+
 	bool bHit = GetWorld()->SweepSingleByChannel(OutHit,start,end,FQuat::Identity,TraceChannel,FCollisionShape::MakeSphere(Radius),Params);
 	if(bHit)
 	{
@@ -302,11 +306,11 @@ void ASYH_MultiPlayer::Move(const FInputActionValue& Value)
 
 		// get forward vector
 		const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
-	
-		// get right vector 
+
+		// get right vector
 		const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 
-		// add movement 
+		// add movement
 		AddMovementInput(ForwardDirection, MovementVector.Y);
 		AddMovementInput(RightDirection, MovementVector.X);
 	}
@@ -327,7 +331,7 @@ void ASYH_MultiPlayer::Look(const FInputActionValue& Value)
 
 void ASYH_MultiPlayer::Camera(const FInputActionValue& Value)
 {
-	
+
 	if(IsLocallyControlled())
 	{
 		InQuiz = true; // 사진을 찍고 있으면 F키를 누르라는 Ui가 뜨지 않게함
@@ -562,7 +566,7 @@ void ASYH_MultiPlayer::Server_Compare()
 		ASYH_MultiPlayer* OtherPlayer = *It;
 		if (OtherPlayer && OtherPlayer != this)
 		{
-			
+
 			if(OtherPlayer->RightCount == -1)
 			{
 				ClientRPC_ShowWaitResult();
