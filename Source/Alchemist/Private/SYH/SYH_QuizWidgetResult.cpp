@@ -32,8 +32,9 @@ void USYH_QuizWidgetResult::SetWinVisibility(bool bshow)
 		if(MultiPlayer) // 요청을 받은 사람
 		{
 			MultiPlayer->InQuiz = false;
+			
 		}
-		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this ,&USYH_QuizWidgetResult::DeleteUI, 2.0f, false);
+		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this ,&USYH_QuizWidgetResult::DeleteWinUI, 2.0f, false);
 	}
 	else
 	{
@@ -54,7 +55,7 @@ void USYH_QuizWidgetResult::SetLoseVisibility(bool bshow)
 		{
 			MultiPlayer->InQuiz = false;
 		}
-		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this ,&USYH_QuizWidgetResult::DeleteUI, 2.0f, false);
+		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this ,&USYH_QuizWidgetResult::DeleteLoseUI, 2.0f, false);
 	}
 	else
 	{
@@ -96,6 +97,19 @@ void USYH_QuizWidgetResult::SetWaitVisibility(bool bshow)
 	}
 }
 
+void USYH_QuizWidgetResult::DeleteWinUI()
+{
+	MultiPlayer->IsWin = true;
+	MultiPlayer->TargetPlayer->IsLose = true;
+	RemoveFromParent();
+}
+
+void USYH_QuizWidgetResult::DeleteLoseUI()
+{
+	MultiPlayer->IsLose = true;
+	MultiPlayer->TargetPlayer->IsWin = true;
+	RemoveFromParent();
+}
 void USYH_QuizWidgetResult::DeleteUI()
 {
 	RemoveFromParent();

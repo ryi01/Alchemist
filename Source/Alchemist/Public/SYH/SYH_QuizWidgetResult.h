@@ -40,5 +40,9 @@ public:
 	UFUNCTION()
 	void SetWaitVisibility(bool bshow);
 	UFUNCTION()
+	void DeleteWinUI();
+	UFUNCTION()
+	void DeleteLoseUI();
+	UFUNCTION()
 	void DeleteUI();
 };

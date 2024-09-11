@@ -53,6 +53,8 @@ public:
 	UInputAction* IA_Guide;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* IA_Quiz;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* IA_Menu;
 
 	// Sets default values for this character's properties
 	ASYH_MultiPlayer();
@@ -92,6 +94,8 @@ protected:
 	void OnMyCheckActor();
 
 	void Quiz(const FInputActionValue& Value);
+
+	void Menu(const FInputActionValue& Value);
 
 	// void Quiz(const FInputActionValue& Value);
 	UPROPERTY()
@@ -190,4 +194,15 @@ public:
 	void ClientRPC_ShowSameResult();
 	UFUNCTION(Client, Reliable)
 	void ClientRPC_ShowWaitResult();
+	
+	UPROPERTY(EditDefaultsOnly,BlueprintReadWrite,Replicated)
+	bool IsWin;
+	UPROPERTY(EditDefaultsOnly,BlueprintReadWrite,Replicated)
+	bool IsLose;
+
+	//esc
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UUserWidget> MenuClass;
+	UPROPERTY()
+	class USYH_MenuWidget* MenuWidget;
 };

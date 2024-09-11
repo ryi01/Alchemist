@@ -19,6 +19,8 @@
 #include "Alchemist/CHJ/Illustrated_Guide/Guide_Widget/Guide_MainWidget.h"
 #include "Components/TextBlock.h"
 #include "Kismet/GameplayStatics.h"
+#include "Net/UnrealNetwork.h"
+#include "SYH/SYH_MenuWidget.h"
 #include "SYH/SYH_QuizSelect.h"
 #include "SYH/SYH_QuizWaitWidget.h"
 #include "SYH/SYH_QuizWidget.h"
@@ -79,6 +81,7 @@ void ASYH_MultiPlayer::PossessedBy(AController* NewController) // server에서�
 		QuizSelectWidget = Cast<USYH_QuizSelect>(CreateWidget(GetWorld(), QuizSelectClass));
 		QuizWidget = Cast<USYH_QuizWidget>(CreateWidget(GetWorld(),QuizClass));
 		QuizResultWidget = Cast<USYH_QuizWidgetResult>(CreateWidget(GetWorld(),QuizResultClass));
+		MenuWidget = Cast<USYH_MenuWidget>(CreateWidget(GetWorld(),MenuClass));
 	}
 }
 
@@ -97,7 +100,7 @@ void ASYH_MultiPlayer::BeginPlay()
 		PlayerController = Cast<APlayerController>(Controller);
 		if(PlayerController)
 		{
-			PlayerController->SetShowMouseCursor(false);
+			
 			if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
 			{
 				Subsystem->AddMappingContext(IMC_Player, 0);
@@ -115,6 +118,7 @@ void ASYH_MultiPlayer::BeginPlay()
 		QuizSelectWidget = Cast<USYH_QuizSelect>(CreateWidget(GetWorld(), QuizSelectClass));
 		QuizWidget = Cast<USYH_QuizWidget>(CreateWidget(GetWorld(),QuizClass));
 		QuizResultWidget = Cast<USYH_QuizWidgetResult>(CreateWidget(GetWorld(),QuizResultClass));
+		MenuWidget = Cast<USYH_MenuWidget>(CreateWidget(GetWorld(),MenuClass));
 	}
 	GameInstance = CastChecked<UGuide_GameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 }
@@ -231,6 +235,8 @@ void ASYH_MultiPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 		// quiz
 		EnhancedInputComponent->BindAction(IA_Quiz,ETriggerEvent::Started,this,&ASYH_MultiPlayer::Quiz);
+		// esc키
+		EnhancedInputComponent->BindAction(IA_Menu,ETriggerEvent::Started,this,&ASYH_MultiPlayer::Menu);
 		
 	}
 	else
@@ -442,6 +448,15 @@ void ASYH_MultiPlayer::Quiz(const FInputActionValue& Value)
 		ServerRPC_Quiz();  // 클라이언트가 서버에 퀴즈 요청을 보냄
 	}
 }
+
+void ASYH_MultiPlayer::Menu(const FInputActionValue& Value)
+{
+	if(MenuWidget)
+	{
+		MenuWidget->AddToViewport();
+	}
+}
+
 void ASYH_MultiPlayer::ClientRPC_ShowQuizSelect_Implementation()
 {
 	if(QuizWaitWidget)
@@ -622,7 +637,6 @@ void ASYH_MultiPlayer::ClientRPC_ShowSameResult_Implementation()
 
 void ASYH_MultiPlayer::ClientRPC_ShowLoseResult_Implementation()
 {
-	FTimerHandle timer;
 	if(QuizResultWidget->IsInViewport())
 	{
 		QuizResultWidget->SetWaitVisibility(false);
@@ -651,4 +665,10 @@ void ASYH_MultiPlayer::ClientRPC_ShowWinResult_Implementation()
 	}
 	RightCount = -1;
 	TargetPlayer->RightCount = -1;
+}
+void ASYH_MultiPlayer::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	DOREPLIFETIME(ASYH_MultiPlayer,IsWin);
+	DOREPLIFETIME(ASYH_MultiPlayer,IsLose);
 }
