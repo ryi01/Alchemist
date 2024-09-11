@@ -94,10 +94,6 @@ void ASYH_Player::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	if(IsLocallyControlled())
 	{
-		// if(UGameplayStatics::GetCurrentLevelName(GetWorld())!="Room" || UGameplayStatics::GetCurrentLevelName(GetWorld())!="RoomClient")
-		// {
-		// 	return;
-		// }
 		PlayerController->GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, false, HitResult);
 	
 		if (HitResult.GetActor() != nullptr && HitResult.bBlockingHit)
@@ -200,7 +196,7 @@ void ASYH_Player::OnClickedLeft(const FInputActionValue& Value)
 			if ( actorClass && bCreateWidget )
 			{
 				actorClass->CreatePlayerWidget(true,0, PlayerController);
-				//PlayerController->SetPause(true);
+				PlayerController->SetShowMouseCursor(true);
 			}
 		}
 	}

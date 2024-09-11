@@ -190,4 +190,7 @@ public:
 	void ClientRPC_ShowSameResult();
 	UFUNCTION(Client, Reliable)
 	void ClientRPC_ShowWaitResult();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class UPlayerInteractionComponent* interactionComp;
 };

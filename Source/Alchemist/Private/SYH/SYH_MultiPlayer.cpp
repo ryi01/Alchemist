@@ -1,4 +1,4 @@
-#include "SYH/SYH_MultiPlayer.h"
+﻿#include "SYH/SYH_MultiPlayer.h"
 
 #include "EngineUtils.h"
 #include "Engine/LocalPlayer.h"
@@ -23,6 +23,7 @@
 #include "SYH/SYH_QuizWaitWidget.h"
 #include "SYH/SYH_QuizWidget.h"
 #include "SYH/SYH_QuizWidgetResult.h"
+#include "KMK/PlayerInteractionComponent.h"
 // Sets default values
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -63,6 +64,8 @@ ASYH_MultiPlayer::ASYH_MultiPlayer()
 	CameraCompFirst->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 	CameraCompFirst->SetActive(false);
 	CameraCompFirst->SetRelativeLocationAndRotation(FVector(0, 20, 160), FRotator(0));
+
+	interactionComp = CreateDefaultSubobject<UPlayerInteractionComponent>(TEXT("Interaction"));
 
 }
 void ASYH_MultiPlayer::PossessedBy(AController* NewController) // server에서만 불림
@@ -115,8 +118,10 @@ void ASYH_MultiPlayer::BeginPlay()
 		QuizSelectWidget = Cast<USYH_QuizSelect>(CreateWidget(GetWorld(), QuizSelectClass));
 		QuizWidget = Cast<USYH_QuizWidget>(CreateWidget(GetWorld(),QuizClass));
 		QuizResultWidget = Cast<USYH_QuizWidgetResult>(CreateWidget(GetWorld(),QuizResultClass));
+
 	}
 	GameInstance = CastChecked<UGuide_GameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+
 }
 
 // Called every frame
@@ -232,6 +237,8 @@ void ASYH_MultiPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 		// quiz
 		EnhancedInputComponent->BindAction(IA_Quiz,ETriggerEvent::Started,this,&ASYH_MultiPlayer::Quiz);
+
+		interactionComp->SetupInputBinding(EnhancedInputComponent);
 		
 	}
 	else
