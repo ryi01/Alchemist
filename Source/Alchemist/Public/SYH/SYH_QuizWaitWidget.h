@@ -18,6 +18,8 @@ public:
 	virtual void NativeConstruct() override;
 	UPROPERTY()
 	class ASYH_MultiPlayer* MultiPlayer;
+	UPROPERTY()
+    class APlayerController* PlayerController;
 	UPROPERTY(EditAnywhere, meta = (BindWidget),BlueprintReadWrite);
 	class UTextBlock* Wait;
 	UPROPERTY(EditAnywhere, meta = (BindWidget),BlueprintReadWrite);

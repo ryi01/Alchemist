@@ -74,3 +74,13 @@ void USYH_PlayerAnim::AnimNotify_CameraEnd()
 		}
 	}
 }
+
+void USYH_PlayerAnim::AnimNotify_WinEnd()
+{
+	Multi_me->IsWin = false;
+}
+
+void USYH_PlayerAnim::AnimNotify_LoseEnd()
+{
+	Multi_me->IsLose = false;
+}

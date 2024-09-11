@@ -50,4 +50,9 @@ public:
 	// 몸 굽히기
 	UPROPERTY(EditDefaultsOnly,BlueprintReadWrite)
 	float PitchAngle;
+
+	UFUNCTION()
+	void AnimNotify_WinEnd();
+	UFUNCTION()
+	void AnimNotify_LoseEnd();
 };

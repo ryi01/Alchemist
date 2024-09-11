@@ -6,6 +6,7 @@
 #include "Engine/GameInstance.h"
 #include "Alchemist/CHJ/Illustrated_Guide/Guide_Component/GuideComponent.h"
 #include "SYH/SYH_MultiPlayer.h"
+#include "Interfaces/OnlineSessionInterface.h"
 #include "Guide_GameInstance.generated.h"
 
 /**
@@ -42,4 +43,29 @@ public:
 	void SetInitInfo(TMap<FString,TMap<FString,FString>> data,TArray<FString> key);
 
 	TMap<FString,FString> SetMyDataText(FString myName);
+
+	// --------- session ------------------
+	// 세션 생성, 검색, 접속 함수
+	UFUNCTION(BlueprintCallable, Category = "Network")
+	void Create();
+
+	UFUNCTION(BlueprintCallable, Category = "Network")
+	void Find();
+
+	UFUNCTION(BlueprintCallable, Category = "Network")
+	void Join();
+
+protected:
+	TSharedPtr<class FOnlineSessionSearch> SessionSearch;
+private:
+	// 델리게이트 함수
+	void OnCreateSessionComplete(FName SessionName, bool bWasSuccessful);
+	void OnFindSessionComplete(bool bWasSuccessful);
+	void OnJoinSessionComplete(FName SessionName,EOnJoinSessionCompleteResult::Type Result);
+	void OnDestroySessionComplete(FName SessionName, bool bWasSuccessful);
+
+	FOnCreateSessionCompleteDelegate OnCreateSessionCompleteDelegate;
+	FOnFindSessionsCompleteDelegate OnFindSessionsCompleteDelegate;
+	FOnJoinSessionCompleteDelegate OnJoinSessionCompleteDelegate;
+	FOnDestroySessionCompleteDelegate OnDestroySessionCompleteDelegate;
 };
