@@ -7,6 +7,7 @@
 #include "KMK/KMK_ElementGameActor.h"
 #include "Components/WidgetComponent.h"
 #include "KMK/KMK_MakeEleWidget.h"
+#include "../CHJ/Guide_GameInstance.h"
 
 // Sets default values for this component's properties
 UKMK_GrabActorComp::UKMK_GrabActorComp()
@@ -33,12 +34,14 @@ void UKMK_GrabActorComp::BeginPlay()
     auto* wid = GetOwner()->FindComponentByClass<UWidgetComponent>();
     if ( wid != nullptr)
 	{
-		auto* mainPotWid = Cast<UKMK_MakeEleWidget>(wid->GetWidget());
-		if ( mainPotWid != nullptr )
-		{
-			mainPotWid->SetVisibility(ESlateVisibility::Hidden);
-		}
+		//auto* mainPotWid = Cast<UKMK_MakeEleWidget>(wid->GetWidget());
+		//if ( mainPotWid != nullptr )
+		//{
+		//	mainPotWid->SetVisibility(ESlateVisibility::Hidden);
+		//}	
 	}
+	GI = Cast<UGuide_GameInstance>(GetWorld()->GetGameInstance());
+	if(GI ) GI->SetPot(this);
 }
 
 
@@ -89,4 +92,15 @@ void UKMK_GrabActorComp::BeginOverlap(UPrimitiveComponent* OverlappedComponent, 
 	}
 
 }
+
+// 엘리먼트가 모아지면 태그 여부 확인하고 BP를 생성함
+void UKMK_GrabActorComp::CreateElementBP(FString tag)
+{
+	if(collectionEle >= elementPosArray.Num() || collectionTag.Contains(tag) ) return;
+	collectionEle++;
+	auto eleActor = GetWorld()->SpawnActor<AActor>(elementFactory,elementPosArray[ collectionEle ],FRotator::ZeroRotator);
+	eleActor->Tags.Add(FName(*tag));
+	eleActor->SetActorHiddenInGame(false);
+}
+
 

@@ -199,7 +199,6 @@ public:
 	bool IsWin;
 	UPROPERTY(EditDefaultsOnly,BlueprintReadWrite,Replicated)
 	bool IsLose;
-
 	//esc
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<UUserWidget> MenuClass;

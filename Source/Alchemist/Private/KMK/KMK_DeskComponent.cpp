@@ -21,15 +21,6 @@ UKMK_DeskComponent::UKMK_DeskComponent()
 void UKMK_DeskComponent::BeginPlay()
 {
 	Super::BeginPlay();	
-	// 책상을 비추는 카메라를 찾고 비활성화 시키는 함수
-	player = GetWorld()->GetFirstPlayerController();
-	check(player);
-	if ( player)
-	{
-		AActor* viewTarget = player->GetViewTarget();
-		PlayerViewCam = Cast<ACameraActor>(viewTarget);
-		FindDeskCam();
-	}
 }
 
 
@@ -40,11 +31,15 @@ void UKMK_DeskComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAc
 	// 변경된 카메라 활성 시키는 함수
 	// ChangeMyCamera(bActive);
 	if(bActive)player->SetShowMouseCursor(true);
-	else player->SetShowMouseCursor(false);
 }
 
-void UKMK_DeskComponent::FindDeskCam()
+void UKMK_DeskComponent::FindDeskCam(APlayerController* pc)
 {
+	player = pc;
+	if(!player) return;
+	AActor* viewTarget = player->GetViewTarget();
+	UE_LOG(LogTemp, Warning, TEXT("FInd"));
+	PlayerViewCam = Cast<ACameraActor>(viewTarget);
 	// 카메라 actor들을 담을 변수
 	TArray<AActor*> FoundActors;
 	// 레벨에서 카메라를 가진 엑터를 모두 찾기

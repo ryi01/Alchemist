@@ -26,7 +26,7 @@ public:
 
 	UPROPERTY()
 	class UPhysicsHandleComponent* handle;
-	UPROPERTY()
+	UPROPERTY(BlueprintReadWrite)
 	class APlayerController* me;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool IsRay = false;

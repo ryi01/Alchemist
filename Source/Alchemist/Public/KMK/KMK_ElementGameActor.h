@@ -45,16 +45,16 @@ public:
 	UFUNCTION()
 	void OnCreateWidget(bool isActive)
 	{
-		isOnWidget = isActive;
-		if ( isActive )
-		{
-			textWidget->SetVisibility(ESlateVisibility::Visible);
+		//isOnWidget = isActive;
+		//if ( isActive )
+		//{
+		//	textWidget->SetVisibility(ESlateVisibility::Visible);
 
-		}
-		else
-		{
-			textWidget->SetVisibility(ESlateVisibility::Hidden);
-		}
+		//}
+		//else
+		//{
+		//	textWidget->SetVisibility(ESlateVisibility::Hidden);
+		//}
 	}
 	UFUNCTION()
 	void SetTextWidget(FString text)

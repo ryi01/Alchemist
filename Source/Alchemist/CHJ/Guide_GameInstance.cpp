@@ -5,6 +5,7 @@
 #include "Interfaces/OnlineSessionInterface.h"
 #include "OnlineSessionSettings.h"
 #include "SYH/SYH_QuizWaitWidget.h"
+#include "KMK/KMK_GrabActorComp.h"
 
 UGuide_GameInstance::UGuide_GameInstance()
 {
@@ -53,11 +54,15 @@ void UGuide_GameInstance::Init()
 			SessionInterface->OnDestroySessionCompleteDelegates.Add(OnDestroySessionCompleteDelegate);
 		}
 	}
+
+	// 항아리 찾아서 넣어두기
+	
 }
 
 void UGuide_GameInstance::TakeItemData(int itemIdx)
 {	// DefineItem의 데이터 추가
 	PictureItems.Add(DefineItem[itemIdx]);
+	
 	// 중복 체크 필요
 	 if(PictureItems.IsValidIndex(itemIdx)) // 아이템 인덱스가 유효하다면
 	 {
@@ -67,6 +72,8 @@ void UGuide_GameInstance::TakeItemData(int itemIdx)
 			PictureItemQueue.Enqueue(itemIdx); // 큐에 해당 인덱스 저장한다.
 		}
 	 }
+	 FString tagName = ParsecItemName(PictureItems[PictureItems.Num()-1].Element_name);
+	 if(potComp )potComp->CreateElementBP(tagName);
 }
 
 void UGuide_GameInstance::SetInitInfo(TMap<FString,TMap<FString,FString>> data,TArray<FString> key)
@@ -77,6 +84,19 @@ void UGuide_GameInstance::SetInitInfo(TMap<FString,TMap<FString,FString>> data,T
 
 TMap<FString,FString> UGuide_GameInstance::SetMyDataText(FString myName)
 {
+	if(ElementDataMap.IsEmpty() ) return TMap<FString, FString>();
+	FString name = ParsecItemName(myName);
+	TMap<FString,FString> result = ElementDataMap[name];
+	return result;
+}
+
+void UGuide_GameInstance::SetPot(class UKMK_GrabActorComp* comp)
+{
+	potComp = comp;
+}
+
+FString UGuide_GameInstance::ParsecItemName(FString myName)
+{
 	FString name;
 	// 영어만 남기기
 	for ( TCHAR Char : myName )
@@ -86,8 +106,8 @@ TMap<FString,FString> UGuide_GameInstance::SetMyDataText(FString myName)
 			name.AppendChar(Char);
 		}
 	}
-	TMap<FString,FString> result = ElementDataMap[name];
-	return result;
+	
+	return name;
 }
 
 void UGuide_GameInstance::Create()
