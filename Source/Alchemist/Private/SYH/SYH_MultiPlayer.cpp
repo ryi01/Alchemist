@@ -103,7 +103,6 @@ void ASYH_MultiPlayer::BeginPlay()
 		PlayerController = Cast<APlayerController>(Controller);
 		if(PlayerController)
 		{
-
 			if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
 			{
 				Subsystem->AddMappingContext(IMC_Player, 0);
@@ -457,6 +456,8 @@ void ASYH_MultiPlayer::Menu(const FInputActionValue& Value)
 {
 	if(MenuWidget)
 	{
+		PlayerController->SetShowMouseCursor(true);
+		PlayerController->SetInputMode(FInputModeUIOnly());
 		MenuWidget->AddToViewport();
 	}
 }
