@@ -39,13 +39,15 @@ public:
 	void CreateElementFailed();
 	UPROPERTY(BlueprintReadWrite)
 	int cnt = 0;
-
 	UPROPERTY()
 	FString json;
 	UPROPERTY()
 	class AKMK_HttpActorWithAI* httpActor;
 	UPROPERTY()
 	int count = 0;
+
+	UPROPERTY()
+	class UGuide_GameInstance* GI;
 
 	UFUNCTION()
 	void SetHttpActor(class AKMK_HttpActorWithAI* actor, const FString data)
@@ -56,4 +58,16 @@ public:
 	UFUNCTION()
 	// 오버랩 감지를 위한 함수 선언
 	virtual void BeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+	UFUNCTION()
+	void CreateElementBP(FString tag);
+
+	int32 collectionEle = -1;
+	// 위치
+	UPROPERTY(EditAnywhere)
+	TArray<FVector> elementPosArray;
+	UPROPERTY()
+	TArray<FString> collectionTag;
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<AActor> elementFactory;
 };

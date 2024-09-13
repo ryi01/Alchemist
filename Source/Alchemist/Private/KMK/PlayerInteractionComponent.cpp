@@ -10,6 +10,7 @@
 #include "PhysicsEngine/PhysicsHandleComponent.h"
 #include "KMK/KMK_SingleIntaraction.h"
 #include "Camera/CameraActor.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values for this component's properties
 UPlayerInteractionComponent::UPlayerInteractionComponent()
@@ -27,6 +28,28 @@ void UPlayerInteractionComponent::BeginPlay()
 {
 	Super::BeginPlay();
 	me = Cast<ASYH_MultiPlayer>(GetOwner());
+	if ( me->IsLocallyControlled() )
+	{
+		TArray<AActor*> FoundActors;
+		UGameplayStatics::GetAllActorsWithTag(GetWorld(),TEXT("Desk"),FoundActors);
+
+		for ( AActor* Actor : FoundActors )
+		{
+			if ( Actor )
+			{
+				auto desk = Actor->FindComponentByClass<UKMK_DeskComponent>();
+				deskMouse = Actor->FindComponentByClass<UKMK_PlayerMouse>();
+				if ( desk )
+				{
+					desk->FindDeskCam(Cast<APlayerController>(me->Controller));
+				}
+				if ( deskMouse )
+				{
+					deskMouse->me = Cast<APlayerController>(me->Controller);
+				}
+			}
+		}
+	}
 }
 
 
@@ -76,13 +99,14 @@ void UPlayerInteractionComponent::OnMyActionInteraction(const FInputActionValue&
 		{
 			auto* desk = HitActor->FindComponentByClass<UKMK_DeskComponent>();
 			auto* mouse = HitActor->FindComponentByClass<UKMK_PlayerMouse>();
-			if ( HitActor->ActorHasTag("Desk") )
+			if ( HitActor->ActorHasTag(TEXT("Desk")) )
 			{
 				if ( desk )
 				{
 					DeskActor = HitActor;
 					mouse->isDesk = true;
 					mouse->handle = me->FindComponentByClass<UPhysicsHandleComponent>();
+					me->PlayerController->SetShowMouseCursor(true);
 					
 					desk->ChangeMyCamera(true);
 				}

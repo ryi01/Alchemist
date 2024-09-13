@@ -33,7 +33,6 @@ void UKMK_PlayerMouse::BeginPlay()
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(),AKMK_HttpActorWithAI::StaticClass(),arrActor);
 	if ( arrActor[ 0 ] )HttpActor = arrActor[ 0 ];
 	httpComp = CastChecked<AKMK_HttpActorWithAI>(HttpActor);
-	me = CastChecked<APlayerController>(GetWorld()->GetFirstPlayerController());
 	for ( int i = 0; i < 5; i++ )
 	{
 		elementPos.Add(FVector(1890, -1970 + 90 * i, 80));
@@ -92,7 +91,6 @@ void UKMK_PlayerMouse::OnMyGrabComp()
 				eleCount++;
 				potComp->isCreate = false;
 				potComp->ElementArray.Empty();
-				GEngine->AddOnScreenDebugMessage(1, 1, FColor::Green, FString::Printf(TEXT("%d"), eleCount));
 			}
 			return;
 		}
@@ -130,7 +128,7 @@ void UKMK_PlayerMouse::OnMyGrabComp()
 			}
 			else
 			{
-				CopyNewActor(hitActor, outHit.ImpactPoint);
+      				CopyNewActor(hitActor, outHit.ImpactPoint);
 			}
 		}
 
@@ -197,7 +195,7 @@ TArray<FVector> UKMK_PlayerMouse::GetMouseWorldDirection()
 {
 	TArray<FVector> arr;
 	FVector WorldLocation, WorldDirection;
-
+	me->SetShowMouseCursor(true);
 	me->DeprojectMousePositionToWorld(WorldLocation, WorldDirection);
 	arr.Add(WorldLocation);
 	arr.Add(WorldDirection);

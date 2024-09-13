@@ -195,6 +195,7 @@ void AKMK_HttpActorWithAI::OnResRecommandEle(FHttpRequestPtr Request,FHttpRespon
 							FString s = result[ name[ i - 1 ] ][ TEXT("a)") ] + TEXT("\n\n") + TEXT("b)") + result[ name[ i - 1 ] ][ TEXT("b)") ];
 							wid->SetNameAndText(name[ i - 1 ],s);
 							mainPotWid->SetSlotChild(wid, this);
+							
 							isWidgetOn = true;
 						}
 					}

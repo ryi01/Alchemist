@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "Camera/CameraComponent.h"
+#include "SYH/SYH_MultiPlayer.h"
 #include "KMK_DeskComponent.generated.h"
 
 // 책상 위 클릭시 오브젝트가 펼쳐지게 만들 예정
@@ -44,17 +45,19 @@ public:
 		// 책상 클릭시 카메라 변경
 		if (OnClick)
 		{
-			player->SetShowMouseCursor(true);
 			// 데스크 카메라 활성화
 			if( DeskCameraComponent)player->SetViewTarget(DeskCameraComponent->GetOwner());
+			player->SetShowMouseCursor(true);
 		}
 		else
 		{
 			// 플레이어 카메라 활성화
 			if( PlayerCamera)player->SetViewTarget(PlayerCamera->GetOwner());
+			player->SetShowMouseCursor(false);
 		}
 	}
+	UFUNCTION()
 	// 카메라 찾는 함수
-	void FindDeskCam();
+	void FindDeskCam(class APlayerController* pc);
 
 };
