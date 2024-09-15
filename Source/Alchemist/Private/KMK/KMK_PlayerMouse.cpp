@@ -33,11 +33,7 @@ void UKMK_PlayerMouse::BeginPlay()
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(),AKMK_HttpActorWithAI::StaticClass(),arrActor);
 	if ( arrActor[ 0 ] )HttpActor = arrActor[ 0 ];
 	httpComp = CastChecked<AKMK_HttpActorWithAI>(HttpActor);
-	for ( int i = 0; i < 5; i++ )
-	{
-		elementPos.Add(FVector(1890, -1970 + 90 * i, 80));
-	}
-	
+
 }
 
 
@@ -50,12 +46,6 @@ void UKMK_PlayerMouse::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 	if( !IsRay ) OnMyPutComp(outHitComp);
 	else OnMyGrabComp();
 
-	//FHitResult HitResult;
-	//me->GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility,false,HitResult);
-	//if ( HitResult.GetActor() != nullptr && HitResult.bBlockingHit && HitResult.GetActor()->ActorHasTag(TEXT("NewEle")))
-	//{
-	//	OnMyCheckActor(HitResult);
-	//}
 	if ( outHitComp == nullptr ) return;
 
 	TArray<FVector> pos = GetMouseWorldDirection();
@@ -83,11 +73,11 @@ void UKMK_PlayerMouse::OnMyGrabComp()
 			// 엑터에 컴포넌트에 정보 업데이트
 			elementActor = hitActor->GetComponentByClass<UKMK_ElementGameActor>();
 			if(elementActor == nullptr ) return;
-			if ( !elementActor->isOnWidget && eleCount < elementPos.Num())
+			if ( !elementActor->isOnWidget)
 			{
 				elementActor->OnCreateWidget(true);
 				// Actor의 Comp에 정보 업데이트
-				elementActor->ChangeMyPos(elementPos[ eleCount ]);
+				elementActor->ChangeMyPos();
 				eleCount++;
 				potComp->isCreate = false;
 				potComp->ElementArray.Empty();
@@ -100,7 +90,7 @@ void UKMK_PlayerMouse::OnMyGrabComp()
 			if(potComp->ElementArray.IsEmpty() ) return;
 
 			FString result = TEXT("");
-			
+
 			if ( httpComp )
 			{
 				for ( const TPair<FString,int>& pair : potComp->ElementArray )

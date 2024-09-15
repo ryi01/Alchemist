@@ -14,5 +14,14 @@ class ALCHEMIST_API UMissionWidget : public UUserWidget
 {
 	GENERATED_BODY()
 public:
-	
+	UPROPERTY(meta = (BindWidget ))
+	class UTextBlock* MissionText;
+
+	UFUNCTION()
+	void SetMissionText(int32 index);
+
+	int32 num = 0;
+
+	UPROPERTY(EditDefaultsOnly)
+	TArray<FString> missionArray;
 };

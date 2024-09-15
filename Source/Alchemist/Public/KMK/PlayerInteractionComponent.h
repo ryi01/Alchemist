@@ -47,4 +47,14 @@ public:
    class UKMK_PlayerMouse* deskMouse;
 
    void OnMyCheckActor();
+
+	UPROPERTY()
+	TArray<FString> collectionTag;
+
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class UKMK_GrabActorComp* potComp;
+
+	UPROPERTY()
+	class UMissionWidget* missionWidget;
 };

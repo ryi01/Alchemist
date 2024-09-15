@@ -206,4 +206,11 @@ public:
 	class USYH_MenuWidget* MenuWidget;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	class UPlayerInteractionComponent* interactionComp;
+
+	UPROPERTY(BlueprintReadWrite)
+	bool isWidget = false;
+
+	UFUNCTION()
+	void SetShowMyMouse(bool isActive);
+
 };

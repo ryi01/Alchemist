@@ -11,6 +11,8 @@
 #include "KMK/KMK_SingleIntaraction.h"
 #include "Camera/CameraActor.h"
 #include "Kismet/GameplayStatics.h"
+#include "KMK/KMK_GrabActorComp.h"
+#include "KMK/MissionWidget.h"
 
 // Sets default values for this component's properties
 UPlayerInteractionComponent::UPlayerInteractionComponent()
@@ -48,6 +50,10 @@ void UPlayerInteractionComponent::BeginPlay()
 					deskMouse->me = Cast<APlayerController>(me->Controller);
 				}
 			}
+		}
+		if ( potComp != nullptr )
+		{
+			potComp->player = this;
 		}
 	}
 }
@@ -106,21 +112,38 @@ void UPlayerInteractionComponent::OnMyActionInteraction(const FInputActionValue&
 					DeskActor = HitActor;
 					mouse->isDesk = true;
 					mouse->handle = me->FindComponentByClass<UPhysicsHandleComponent>();
-					me->PlayerController->SetShowMouseCursor(true);
-					
+					me->SetShowMyMouse(true);
+					me->isWidget = true;
 					desk->ChangeMyCamera(true);
+
+					if(potComp != nullptr) potComp->player = this;
 				}
 				return;
 			}
 			count = 0;
 			auto* actorClass = HitActor->FindComponentByClass
-			<UKMK_SingleIntaraction>();
+				<UKMK_SingleIntaraction>();
+			// 못들어가는 곳 들어갈 수 있게 하기
+			if ( HitActor->ActorHasTag(TEXT("World")) && collectionTag.IsEmpty() == false )
+			{
+				actorClass->textWidget->Destroy();
+				HitActor->Destroy();
+				if(missionWidget != nullptr) missionWidget->SetMissionText(missionWidget->num + 1);
+				
+				return;
+			}
+			
 			if ( actorClass )
 			{
 				actorClass->CreatePlayerWidget(true,0,me->PlayerController);
-				me->PlayerController->SetPause(true);
+				if ( me->PlayerController->IsLocalController() )
+				{
+					me->PlayerController->SetIgnoreLookInput(true);
+					me->PlayerController->SetIgnoreMoveInput(true);
+				}
 				
 			}
+
 		}
 	}
 }

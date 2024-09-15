@@ -131,6 +131,7 @@ void ASYH_MultiPlayer::BeginPlay()
 void ASYH_MultiPlayer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	if(isWidget) return;
 	if (QuizWaitWidget != nullptr && QuizSelectWidget != nullptr && QuizWidget != nullptr && QuizResultWidget != nullptr)
 	{
 		if (IsLocallyControlled())
@@ -621,6 +622,12 @@ void ASYH_MultiPlayer::ClientRPC_ShowWaitResult_Implementation()
 {
 	QuizResultWidget->AddToViewport();
 	QuizResultWidget->SetWaitVisibility(true);
+}
+
+void ASYH_MultiPlayer::SetShowMyMouse(bool isActive)
+{
+	isActive = isWidget;
+	PlayerController->SetShowMouseCursor(isActive);
 }
 
 void ASYH_MultiPlayer::ClientRPC_ShowSameResult_Implementation()

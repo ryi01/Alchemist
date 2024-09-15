@@ -66,8 +66,23 @@ public:
 	// 위치
 	UPROPERTY(EditAnywhere)
 	TArray<FVector> elementPosArray;
-	UPROPERTY()
-	TArray<FString> collectionTag;
+
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<AActor> elementFactory;
+
+	UPROPERTY(EditDefaultsOnly)
+	TMap<FString, UMaterialInstance*> eleMeshMap;
+
+	// 필요한 원소를 키값 미션내용을 value값
+	UPROPERTY(EditDefaultsOnly)
+	TArray<FString> missionTag;
+
+	UFUNCTION()
+	void MissionComplete(const FString& missionEleTag,int32 num,AActor* actor);
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	class UMissionWidget* missionWidget;
+
+	UPROPERTY()
+	class UPlayerInteractionComponent* player;
 };

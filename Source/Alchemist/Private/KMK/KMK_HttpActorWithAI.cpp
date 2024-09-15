@@ -101,11 +101,12 @@ void AKMK_HttpActorWithAI::OnResElement(FHttpRequestPtr Request, FHttpResponsePt
 		{
 			s += TEXT("결과원소 : ") + result[ TEXT("Result") ] + TEXT("\n") + TEXT("이름 : ") + result[ TEXT("Name") ] + TEXT("\n") + TEXT("사용하는 곳 : ") + TEXT("\n") + result[ TEXT("Using") ] + TEXT("\n");
 			PotComp->CreateElementSucced(result[ TEXT("Result") ],s);
-			UE_LOG(LogTemp,Warning,TEXT("String Length: %s"),*result[ TEXT("Result") ]);
+			
 		}
 		else
 		{
-			PotComp->CreateElementFailed();
+			PotComp->CreateElementSucced(TEXT("Au"), TEXT("성공한 원소예요"));
+			// PotComp->CreateElementFailed();
 		}
 
 	}
