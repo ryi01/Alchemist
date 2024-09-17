@@ -103,7 +103,6 @@ void ASYH_MultiPlayer::BeginPlay()
 		PlayerController = Cast<APlayerController>(Controller);
 		if(PlayerController)
 		{
-
 			if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
 			{
 				Subsystem->AddMappingContext(IMC_Player, 0);
@@ -203,16 +202,15 @@ void ASYH_MultiPlayer::OnOffGuide(const FInputActionValue& Value)
 	// 인벤이 화면이 있으면 지우고
 	if (GuideWidget->IsInViewport())
 	{
-		FInputModeGameOnly Input;
-		PlayerController->SetInputMode(Input);
+		PlayerController->SetShowMouseCursor(false);
+		PlayerController->SetInputMode(FInputModeGameOnly());
 		GuideWidget->RemoveFromParent();
 	}
 	// 인벤이 화면에 없으면 생성
 	else
 	{
 		PlayerController->SetShowMouseCursor(true);
-		FInputModeGameAndUI Input;
-		PlayerController->SetInputMode(Input);
+		PlayerController->SetInputMode(FInputModeGameOnly());
 		GuideWidget->AddToViewport();
 	}
 }
@@ -363,8 +361,7 @@ void ASYH_MultiPlayer::Camera(const FInputActionValue& Value)
 						CameraManager->SetFOV(0);
 					}
 					PlayerController->SetShowMouseCursor(false);
-					FInputModeGameOnly InputMode;
-					PlayerController->SetInputMode(InputMode);
+					PlayerController->SetInputMode(FInputModeGameOnly());
 				}
 			}
 		}
@@ -458,6 +455,8 @@ void ASYH_MultiPlayer::Menu(const FInputActionValue& Value)
 {
 	if(MenuWidget)
 	{
+		PlayerController->SetShowMouseCursor(true);
+		PlayerController->SetInputMode(FInputModeUIOnly());
 		MenuWidget->AddToViewport();
 	}
 }
