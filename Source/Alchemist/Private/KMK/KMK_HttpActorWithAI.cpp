@@ -105,8 +105,7 @@ void AKMK_HttpActorWithAI::OnResElement(FHttpRequestPtr Request, FHttpResponsePt
 		}
 		else
 		{
-			PotComp->CreateElementSucced(TEXT("Au"), TEXT("성공한 원소예요"));
-			// PotComp->CreateElementFailed();
+			PotComp->CreateElementFailed();
 		}
 
 	}

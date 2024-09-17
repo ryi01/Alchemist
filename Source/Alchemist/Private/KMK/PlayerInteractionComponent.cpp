@@ -126,8 +126,11 @@ void UPlayerInteractionComponent::OnMyActionInteraction(const FInputActionValue&
 			// 못들어가는 곳 들어갈 수 있게 하기
 			if ( HitActor->ActorHasTag(TEXT("World")) && collectionTag.IsEmpty() == false )
 			{
-				actorClass->textWidget->Destroy();
-				HitActor->Destroy();
+				if ( collectionTag.Contains(HitActor->Tags[ 1 ]) )
+				{
+					// actorClass->textWidget->Destroy();
+					HitActor->Destroy();
+				}
 				if(missionWidget != nullptr) missionWidget->SetMissionText(missionWidget->num + 1);
 				
 				return;

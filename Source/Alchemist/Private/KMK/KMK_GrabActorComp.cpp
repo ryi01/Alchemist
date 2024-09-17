@@ -123,7 +123,7 @@ void UKMK_GrabActorComp::CreateElementBP(FString tag)
 	auto* mesh = eleActor->FindComponentByClass<UStaticMeshComponent>();
 	if ( mesh )
 	{
-		if ( eleMeshMap.Num() > 0 )
+		if ( eleMeshMap.Num() > 0 && eleMeshMap[ tag ] != nullptr)
 		{
 			mesh->SetMaterial(0, eleMeshMap[tag]);
 		}
