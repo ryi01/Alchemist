@@ -54,7 +54,9 @@ public:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	class UKMK_GrabActorComp* potComp;
-
 	UPROPERTY()
+	int textNum = 0;
+
+	UPROPERTY(BlueprintReadWrite)
 	class UMissionWidget* missionWidget;
 };

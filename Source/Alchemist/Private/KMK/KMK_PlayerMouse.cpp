@@ -57,7 +57,6 @@ void UKMK_PlayerMouse::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 void UKMK_PlayerMouse::OnMyGrabComp()
 {
 	if(count > 0) return;
-	if ( !isDesk ) return;
 	FHitResult outHit;
 	mousePos = GetMouseWorldDirection();
 	ECollisionChannel channel = ECollisionChannel::ECC_GameTraceChannel1;

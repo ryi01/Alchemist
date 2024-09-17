@@ -51,10 +51,7 @@ void UPlayerInteractionComponent::BeginPlay()
 				}
 			}
 		}
-		if ( potComp != nullptr )
-		{
-			potComp->player = this;
-		}
+
 	}
 }
 
@@ -63,11 +60,15 @@ void UPlayerInteractionComponent::BeginPlay()
 void UPlayerInteractionComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-	if ( me->IsLocallyControlled() )
+	if ( me->IsLocallyControlled())
 	{
+		if ( potComp != nullptr && potComp->player == nullptr )
+		{
+			potComp->player = this;
+		}
 		FHitResult OutHit;
 		FVector start = me->CameraCompFirst->GetComponentLocation();
-		FVector end = start + me->CameraCompFirst->GetForwardVector() * 800;
+		FVector end = start + me->CameraCompFirst->GetForwardVector() * 1500;
 		float Radius = 60.f;
 		ECollisionChannel TraceChannel = ECC_Visibility;
 		FCollisionQueryParams Params;
@@ -84,6 +85,12 @@ void UPlayerInteractionComponent::TickComponent(float DeltaTime, ELevelTick Tick
 		{
 			DrawDebugLine(GetWorld(),start,end, FColor::Blue);
 		}
+		
+        if ( missionWidget && textNum != 0 )
+        {
+            missionWidget->SetMissionText(textNum);
+			GEngine->AddOnScreenDebugMessage(1,1,FColor::Cyan,FString::Printf(TEXT("%d"),textNum));
+        }
 	}
 
 }
@@ -98,6 +105,7 @@ void UPlayerInteractionComponent::SetupInputBinding(class UEnhancedInputComponen
 
 void UPlayerInteractionComponent::OnMyActionInteraction(const FInputActionValue& Value)
 {
+	
 	if ( HitResult.bBlockingHit )
 	{
 		AActor* HitActor = HitResult.GetActor();
@@ -114,9 +122,21 @@ void UPlayerInteractionComponent::OnMyActionInteraction(const FInputActionValue&
 					mouse->handle = me->FindComponentByClass<UPhysicsHandleComponent>();
 					me->SetShowMyMouse(true);
 					me->isWidget = true;
+					if ( desk->player == nullptr )
+					{
+						desk->player = Cast<APlayerController>(me->GetController());
+					}
+					if ( desk->PlayerCamera == nullptr )
+					{
+						desk->PlayerCamera = me->CameraCompThird;
+					}
 					desk->ChangeMyCamera(true);
 
-					if(potComp != nullptr) potComp->player = this;
+					if ( potComp != nullptr )
+					{
+						potComp->player = this;
+						potComp->missionWidget = missionWidget;
+					}
 				}
 				return;
 			}

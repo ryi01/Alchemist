@@ -38,8 +38,6 @@ void UKMK_DeskComponent::FindDeskCam(APlayerController* pc)
 	player = pc;
 	if(!player) return;
 	AActor* viewTarget = player->GetViewTarget();
-	UE_LOG(LogTemp, Warning, TEXT("FInd"));
-	PlayerViewCam = Cast<ACameraActor>(viewTarget);
 	// 카메라 actor들을 담을 변수
 	TArray<AActor*> FoundActors;
 	// 레벨에서 카메라를 가진 엑터를 모두 찾기
@@ -62,7 +60,7 @@ void UKMK_DeskComponent::FindDeskCam(APlayerController* pc)
 					DeskCameraComponent = CamComp;
 					// 비활성화
 					DeskCameraComponent->SetActive(false);
-					if(PlayerViewCam)PlayerViewCam->GetComponentByClass<UCameraComponent>()->SetActive(true);
+					if( PlayerCamera )PlayerCamera->SetActive(true);
 				}
 			}
 		}

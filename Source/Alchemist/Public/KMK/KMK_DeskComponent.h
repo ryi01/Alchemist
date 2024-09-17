@@ -29,12 +29,10 @@ public:
 	// 책상 위를 찍고 있는 카메라
 	UPROPERTY()
 	class UCameraComponent* DeskCameraComponent;
-	UPROPERTY(EditAnywhere)
-	class ACameraActor* PlayerViewCam;
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	class UCameraComponent* PlayerCamera;
-	UPROPERTY()
-	class APlayerController* player;
+    UPROPERTY()
+    class APlayerController* player;
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	bool bActive = false;
 	// 클릭되면 활성화될 함수 = 인라인 함수사용
