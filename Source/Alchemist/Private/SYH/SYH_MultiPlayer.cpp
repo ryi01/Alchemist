@@ -463,17 +463,15 @@ void ASYH_MultiPlayer::Server_Quiz()
 void ASYH_MultiPlayer::Quiz(const FInputActionValue& Value)
 {
 	if (!QuizWaitWidget || !QuizWaitWidget->IsInViewport() || QuizSelectWidget->IsInViewport() || QuizWidget->IsInViewport() || QuizResultWidget->IsInViewport()) return;
-	if(TargetPlayer->InQuiz == true) return;
+	if(TargetPlayer&& TargetPlayer->InQuiz && TargetPlayer->InQuiz == true) return;
 	// F키를 누르면 요청을 보낸 사람과 받는 사람의 UI를 다르게 하고 싶다
 	// F키를 눌러 sweep trace를 사용하여 범위내에 있는 다른 플레이어에게 퀴즈 요청을 보내고 싶다.
 	if (HasAuthority())  // 서버에서만 이 로직이 실행됨
 	{
-		InQuiz = true;
 		Server_Quiz();  // 서버에서 퀴즈 요청을 처리함
 	}
 	else
 	{
-		InQuiz = true;
 		ServerRPC_Quiz();  // 클라이언트가 서버에 퀴즈 요청을 보냄
 	}
 	
