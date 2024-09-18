@@ -38,12 +38,12 @@ void AAluminum_Object::Tick(float DeltaTime)
 void AAluminum_Object::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	ACharacter* OtherPlayer = Cast<ACharacter>(OtherActor);
-	//캐릭터가 충돌 되었다면 가이드 컴포넌트의 데이터를 set 한다.
-	if(OtherPlayer)
-	{
-		GetItemData();
-	}
+	// ACharacter* OtherPlayer = Cast<ACharacter>(OtherActor);
+	// //캐릭터가 충돌 되었다면 가이드 컴포넌트의 데이터를 set 한다.
+	// if(OtherPlayer)
+	// {
+	// 	GetItemData();
+	// }
 }
 
 void AAluminum_Object::GetItemData()
