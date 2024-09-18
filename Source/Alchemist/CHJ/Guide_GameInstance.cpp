@@ -73,7 +73,7 @@ void UGuide_GameInstance::TakeItemData(int itemIdx)
 		}
 	 }
 	 FString tagName = ParsecItemName(PictureItems[PictureItems.Num()-1].Element_name);
-	 if(potComp )potComp->CreateElementBP(tagName);
+	if(!correctionTag.Contains(tagName)) correctionTag.Add(tagName);
 }
 
 void UGuide_GameInstance::SetInitInfo(TMap<FString,TMap<FString,FString>> data,TArray<FString> key)
@@ -88,11 +88,6 @@ TMap<FString,FString> UGuide_GameInstance::SetMyDataText(FString myName)
 	FString name = ParsecItemName(myName);
 	TMap<FString,FString> result = ElementDataMap[name];
 	return result;
-}
-
-void UGuide_GameInstance::SetPot(class UKMK_GrabActorComp* comp)
-{
-	potComp = comp;
 }
 
 FString UGuide_GameInstance::ParsecItemName(FString myName)

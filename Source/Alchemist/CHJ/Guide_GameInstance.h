@@ -45,12 +45,10 @@ public:
 	TMap<FString,FString> SetMyDataText(FString myName);
 
 	UFUNCTION()
-	void SetPot(class UKMK_GrabActorComp* comp);
-	UFUNCTION()
 	FString ParsecItemName(FString name);
-
 	UPROPERTY()
-	class UKMK_GrabActorComp* potComp;
+	TArray<FString> correctionTag;
+
 	// --------- session ------------------
 	// 세션 생성, 검색, 접속 함수
 	UFUNCTION(BlueprintCallable, Category = "Network")

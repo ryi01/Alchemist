@@ -35,8 +35,6 @@ void UKMK_GrabActorComp::BeginPlay()
 		box->OnComponentBeginOverlap.AddDynamic(this, &UKMK_GrabActorComp::BeginOverlap);
 	}
 
-	GI = Cast<UGuide_GameInstance>(GetWorld()->GetGameInstance());
-	if(GI ) GI->SetPot(this);
 }
 
 
@@ -141,12 +139,7 @@ void UKMK_GrabActorComp::MissionComplete(const FString& missionEleTag, int32 num
 		FTimerHandle handle;
 		GetWorld()->GetTimerManager().SetTimer(handle,FTimerDelegate::CreateLambda([this, actor, num]()
 			{
-				if ( missionWidget )
-				{
-					missionWidget->SetMissionText(missionWidget->num + 1);
-					player->textNum = missionWidget->num;
-				}
-
+				player->textNum = missionWidget->num;
 				actor->Destroy();
 
 			}), 5, false);

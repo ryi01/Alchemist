@@ -13,6 +13,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "KMK/KMK_GrabActorComp.h"
 #include "KMK/MissionWidget.h"
+#include "../CHJ/Guide_GameInstance.h"
 
 // Sets default values for this component's properties
 UPlayerInteractionComponent::UPlayerInteractionComponent()
@@ -60,37 +61,30 @@ void UPlayerInteractionComponent::BeginPlay()
 void UPlayerInteractionComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-	if ( me->IsLocallyControlled())
+	FHitResult OutHit;
+	FVector start = me->CameraCompFirst->GetComponentLocation();
+	FVector end = start + me->CameraCompFirst->GetForwardVector() * 1500;
+	float Radius = 60.f;
+	ECollisionChannel TraceChannel = ECC_Visibility;
+	FCollisionQueryParams Params;
+	Params.AddIgnoredActor(me);
+
+	// 카메라 앞방향으로 1KM 선을 쏘고 싶다
+	bool bHit = GetWorld()->LineTraceSingleByChannel(HitResult,start,end,TraceChannel,Params);
+
+	if ( HitResult.GetActor() != nullptr && HitResult.bBlockingHit )
 	{
-		if ( potComp != nullptr && potComp->player == nullptr )
-		{
-			potComp->player = this;
-		}
-		FHitResult OutHit;
-		FVector start = me->CameraCompFirst->GetComponentLocation();
-		FVector end = start + me->CameraCompFirst->GetForwardVector() * 1500;
-		float Radius = 60.f;
-		ECollisionChannel TraceChannel = ECC_Visibility;
-		FCollisionQueryParams Params;
-		Params.AddIgnoredActor(me);
+		OnMyCheckActor();
+	}
+	else
+	{
+		DrawDebugLine(GetWorld(),start,end,FColor::Blue);
+	}
 
-		// 카메라 앞방향으로 1KM 선을 쏘고 싶다
-		bool bHit = GetWorld()->LineTraceSingleByChannel(HitResult,start,end, TraceChannel,Params);
-
-		if ( HitResult.GetActor() != nullptr && HitResult.bBlockingHit )
-		{
-			OnMyCheckActor();
-		}
-		else
-		{
-			DrawDebugLine(GetWorld(),start,end, FColor::Blue);
-		}
-		
-        if ( missionWidget && textNum != 0 )
-        {
-            missionWidget->SetMissionText(textNum);
-			GEngine->AddOnScreenDebugMessage(1,1,FColor::Cyan,FString::Printf(TEXT("%d"),textNum));
-        }
+	if ( missionWidget && textNum != 0 )
+	{
+		missionWidget->SetMissionText(textNum);
+		GEngine->AddOnScreenDebugMessage(1,1,FColor::Cyan,FString::Printf(TEXT("TextNum : %d"),textNum));
 	}
 
 }
@@ -117,6 +111,14 @@ void UPlayerInteractionComponent::OnMyActionInteraction(const FInputActionValue&
 			{
 				if ( desk )
 				{
+					if ( potComp != nullptr )
+					{
+						potComp->player = this;
+						for ( int i = 0; i < me->GameInstance->correctionTag.Num(); i++ )
+						{
+							potComp->CreateElementBP(me->GameInstance->correctionTag[i]);
+						}
+					}
 					DeskActor = HitActor;
 					mouse->isDesk = true;
 					mouse->handle = me->FindComponentByClass<UPhysicsHandleComponent>();
@@ -132,11 +134,6 @@ void UPlayerInteractionComponent::OnMyActionInteraction(const FInputActionValue&
 					}
 					desk->ChangeMyCamera(true);
 
-					if ( potComp != nullptr )
-					{
-						potComp->player = this;
-						potComp->missionWidget = missionWidget;
-					}
 				}
 				return;
 			}
