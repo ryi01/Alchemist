@@ -140,6 +140,15 @@ void ASYH_MultiPlayer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	if(isWidget) return;
+	// 캐릭터 머리 위에 bool 값을 출력
+	FString BoolText = InQuiz ? TEXT("True") : TEXT("False");
+
+	// 텍스트를 캐릭터의 위치 + 오프셋(머리 위)에 표시
+	FVector TextLocation = GetActorLocation() + FVector(0, 0, 100);  // 캐릭터 머리 위 100 유닛
+
+	// DrawDebugString을 사용해 텍스트를 표시
+	DrawDebugString(GetWorld(), TextLocation, FString::Printf(TEXT("InQuiz: %s"), *BoolText), nullptr, FColor::Green, 0.0f, true);
+
 	if (QuizWaitWidget != nullptr && QuizSelectWidget != nullptr && QuizWidget != nullptr && QuizResultWidget != nullptr)
 	{
 		if (IsLocallyControlled())
@@ -184,7 +193,7 @@ void ASYH_MultiPlayer::CheckDist(bool bCheck)
 			}
 		}
 	}
-	if (bShowUI && bCheck && InQuiz == false)
+	if (bShowUI && bCheck && TargetPlayer->InQuiz == false)
 	{
 		ClientRPC_CallFKey(); // UI를 띄움 (client의 UI까지)
 	}
@@ -339,9 +348,9 @@ void ASYH_MultiPlayer::Look(const FInputActionValue& Value)
 
 void ASYH_MultiPlayer::Camera(const FInputActionValue& Value)
 {
-
 	if(IsLocallyControlled())
 	{
+		if(QuizWaitWidget->Request) QuizWaitWidget->SetRequestVisibility(false);
 		InQuiz = true; // 사진을 찍고 있으면 F키를 누르라는 Ui가 뜨지 않게함
 		// e키를 누르면 애니메이션이 출력되고 시점을 바꾸고 싶다.
 		if ( anim && anim->bIsPlayCameraAnim == true)
@@ -446,7 +455,7 @@ void ASYH_MultiPlayer::Server_Quiz()
 void ASYH_MultiPlayer::Quiz(const FInputActionValue& Value)
 {
 	if (!QuizWaitWidget || !QuizWaitWidget->IsInViewport() || QuizSelectWidget->IsInViewport() || QuizWidget->IsInViewport() || QuizResultWidget->IsInViewport()) return;
-
+	if(TargetPlayer->InQuiz == true) return;
 	// F키를 누르면 요청을 보낸 사람과 받는 사람의 UI를 다르게 하고 싶다
 	// F키를 눌러 sweep trace를 사용하여 범위내에 있는 다른 플레이어에게 퀴즈 요청을 보내고 싶다.
 	if (HasAuthority())  // 서버에서만 이 로직이 실행됨
@@ -479,6 +488,7 @@ void ASYH_MultiPlayer::ClientRPC_ShowQuizSelect_Implementation()
 	}
 	if(QuizSelectWidget)
 	{
+		InQuiz = true;
 		QuizSelectWidget->AddToViewport();
 	}
 }
@@ -691,4 +701,5 @@ void ASYH_MultiPlayer::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 	DOREPLIFETIME(ASYH_MultiPlayer,IsWin);
 	DOREPLIFETIME(ASYH_MultiPlayer,IsLose);
+	DOREPLIFETIME(ASYH_MultiPlayer,InQuiz);
 }

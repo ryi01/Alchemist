@@ -108,7 +108,7 @@ protected:
 	int count = 0;
 
 public:
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditDefaultsOnly,BlueprintReadWrite,Replicated)
 	bool InQuiz;
 	//UPROPERTY(EditDefaultsOnly,BlueprintReadWrite)
 	//bool bIsCamera = false;
