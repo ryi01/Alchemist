@@ -53,15 +53,7 @@ void UPlayerInteractionComponent::BeginPlay()
 			}
 		}
 
-		if ( widget )
-		{
-			missionWidget = Cast<UMissionWidget>(CreateWidget(GetWorld(),widget));
-			if ( missionWidget )
-			{
-				missionWidget->AddToViewport();
-				GEngine->AddOnScreenDebugMessage(3, 1,FColor::Red,FString::Printf(TEXT("Widget Make")));
-			}
-		}
+		CreateMainWidget();
 	}
 }
 
@@ -197,5 +189,27 @@ void UPlayerInteractionComponent::OnMyCheckActor()
 			interActor->OnCreateNameWidget(true);
 		}
 
+	}
+}
+
+void UPlayerInteractionComponent::CreateMainWidget()
+{
+	if ( widget && !bMakeMainWidget)
+	{
+		missionWidget = Cast<UMissionWidget>(CreateWidget(GetWorld(),widget));
+		bMakeMainWidget = true;
+		if ( missionWidget )
+		{
+			missionWidget->AddToViewport();
+		}
+	}
+}
+
+void UPlayerInteractionComponent::DeleteMainWidget()
+{
+	bMakeMainWidget = false;
+	if ( missionWidget )
+	{
+		missionWidget->RemoveFromParent();
 	}
 }

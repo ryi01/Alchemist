@@ -10,7 +10,7 @@
 
 void UKMK_MakeEleWidget::NativeConstruct()
 {
-    OutButt->OnClicked.AddDynamic(this,&UKMK_MakeEleWidget::ClickButt);
+    OutButt->OnPressed.AddDynamic(this,&UKMK_MakeEleWidget::ClickButt);
 }
 
 void UKMK_MakeEleWidget::ClickButt()
