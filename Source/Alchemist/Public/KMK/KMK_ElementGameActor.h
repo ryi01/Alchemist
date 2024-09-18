@@ -37,7 +37,7 @@ public:
 	bool isUp = false;
 	// 위치 수정할 수 있는 함수
 	UFUNCTION()
-	void ChangeMyPos(FVector myPos);
+	void ChangeMyPos();
 
 	UPROPERTY()
 	bool isOnWidget = false;

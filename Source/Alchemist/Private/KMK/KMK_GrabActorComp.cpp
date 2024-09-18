@@ -7,6 +7,10 @@
 #include "KMK/KMK_ElementGameActor.h"
 #include "Components/WidgetComponent.h"
 #include "KMK/KMK_MakeEleWidget.h"
+#include "../CHJ/Guide_GameInstance.h"
+#include "KMK/MissionWidget.h"
+#include "KMK/KMK_PlayerMouse.h"
+#include "KMK/PlayerInteractionComponent.h"
 
 // Sets default values for this component's properties
 UKMK_GrabActorComp::UKMK_GrabActorComp()
@@ -30,15 +34,7 @@ void UKMK_GrabActorComp::BeginPlay()
 	{
 		box->OnComponentBeginOverlap.AddDynamic(this, &UKMK_GrabActorComp::BeginOverlap);
 	}
-    auto* wid = GetOwner()->FindComponentByClass<UWidgetComponent>();
-    if ( wid != nullptr)
-	{
-		auto* mainPotWid = Cast<UKMK_MakeEleWidget>(wid->GetWidget());
-		if ( mainPotWid != nullptr )
-		{
-			mainPotWid->SetVisibility(ESlateVisibility::Hidden);
-		}
-	}
+
 }
 
 
@@ -59,10 +55,32 @@ void UKMK_GrabActorComp::CreateElementSucced(FString tagName, const FString& tex
 		auto* newText = newActor->GetComponentByClass<UKMK_ElementGameActor>();
 		if ( newText )
 		{
-			newText->SetTextWidget(text);
 			newText->OnCreateWidget(false);
+			newText->SetTextWidget(text);
 		}
-		count++;
+		// 중복 확인
+		if ( player != nullptr )
+		{
+			if ( !player->collectionTag.Contains(tagName) )
+			{
+				player->collectionTag.Add(*tagName);
+				if(missionWidget != nullptr) MissionComplete(tagName,count,newActor);
+				
+				count++;
+			}
+			else
+			{
+				FTimerHandle handle;
+				GetWorld()->GetTimerManager().SetTimer(handle,FTimerDelegate::CreateLambda([this]()
+					{
+
+						newActor->Destroy();
+
+					}),5,false);
+					
+			}
+		}
+
 	}
 }
 
@@ -86,6 +104,47 @@ void UKMK_GrabActorComp::BeginOverlap(UPrimitiveComponent* OverlappedComponent, 
 		else ElementArray.Add(checkTagName,1);
 
 		OtherActor->Destroy();
+	}
+
+}
+
+// 엘리먼트가 모아지면 태그 여부 확인하고 BP를 생성함
+void UKMK_GrabActorComp::CreateElementBP(FString tag)
+{
+	if(player == nullptr ) return;	
+	if(collectionEle >= elementPosArray.Num() ||( player != nullptr && player->collectionTag.Contains(tag)) ) return;
+	collectionEle++;
+	auto eleActor = GetWorld()->SpawnActor<AActor>(elementFactory,elementPosArray[ collectionEle ],FRotator::ZeroRotator);
+	eleActor->Tags.Add(FName(*tag));
+	eleActor->SetActorHiddenInGame(false);
+
+
+	auto* mesh = eleActor->FindComponentByClass<UStaticMeshComponent>();
+	if ( mesh )
+	{
+		if ( eleMeshMap.Num() > 0 && eleMeshMap[ tag ] != nullptr)
+		{
+			mesh->SetMaterial(0, eleMeshMap[tag]);
+		}
+	}
+}
+
+// 태그 검사하기
+void UKMK_GrabActorComp::MissionComplete(const FString& missionEleTag, int32 num, AActor* actor)
+{
+	if(missionTag.IsEmpty()) return;
+	if ( missionTag.Contains(missionEleTag) )
+	{
+
+		FTimerHandle handle;
+		GetWorld()->GetTimerManager().SetTimer(handle,FTimerDelegate::CreateLambda([this, actor, num]()
+			{
+				player->textNum = missionWidget->num;
+				actor->Destroy();
+
+			}), 5, false);
+		
+
 	}
 
 }

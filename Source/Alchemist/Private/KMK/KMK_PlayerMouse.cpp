@@ -33,12 +33,7 @@ void UKMK_PlayerMouse::BeginPlay()
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(),AKMK_HttpActorWithAI::StaticClass(),arrActor);
 	if ( arrActor[ 0 ] )HttpActor = arrActor[ 0 ];
 	httpComp = CastChecked<AKMK_HttpActorWithAI>(HttpActor);
-	me = CastChecked<APlayerController>(GetWorld()->GetFirstPlayerController());
-	for ( int i = 0; i < 5; i++ )
-	{
-		elementPos.Add(FVector(1890, -1970 + 90 * i, 80));
-	}
-	
+
 }
 
 
@@ -51,12 +46,6 @@ void UKMK_PlayerMouse::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 	if( !IsRay ) OnMyPutComp(outHitComp);
 	else OnMyGrabComp();
 
-	//FHitResult HitResult;
-	//me->GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility,false,HitResult);
-	//if ( HitResult.GetActor() != nullptr && HitResult.bBlockingHit && HitResult.GetActor()->ActorHasTag(TEXT("NewEle")))
-	//{
-	//	OnMyCheckActor(HitResult);
-	//}
 	if ( outHitComp == nullptr ) return;
 
 	TArray<FVector> pos = GetMouseWorldDirection();
@@ -68,7 +57,6 @@ void UKMK_PlayerMouse::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 void UKMK_PlayerMouse::OnMyGrabComp()
 {
 	if(count > 0) return;
-	if ( !isDesk ) return;
 	FHitResult outHit;
 	mousePos = GetMouseWorldDirection();
 	ECollisionChannel channel = ECollisionChannel::ECC_GameTraceChannel1;
@@ -84,15 +72,14 @@ void UKMK_PlayerMouse::OnMyGrabComp()
 			// 엑터에 컴포넌트에 정보 업데이트
 			elementActor = hitActor->GetComponentByClass<UKMK_ElementGameActor>();
 			if(elementActor == nullptr ) return;
-			if ( !elementActor->isOnWidget && eleCount < elementPos.Num())
+			if ( !elementActor->isOnWidget)
 			{
 				elementActor->OnCreateWidget(true);
 				// Actor의 Comp에 정보 업데이트
-				elementActor->ChangeMyPos(elementPos[ eleCount ]);
+				elementActor->ChangeMyPos();
 				eleCount++;
 				potComp->isCreate = false;
 				potComp->ElementArray.Empty();
-				GEngine->AddOnScreenDebugMessage(1, 1, FColor::Green, FString::Printf(TEXT("%d"), eleCount));
 			}
 			return;
 		}
@@ -102,7 +89,7 @@ void UKMK_PlayerMouse::OnMyGrabComp()
 			if(potComp->ElementArray.IsEmpty() ) return;
 
 			FString result = TEXT("");
-			
+
 			if ( httpComp )
 			{
 				for ( const TPair<FString,int>& pair : potComp->ElementArray )
@@ -130,7 +117,7 @@ void UKMK_PlayerMouse::OnMyGrabComp()
 			}
 			else
 			{
-				CopyNewActor(hitActor, outHit.ImpactPoint);
+      				CopyNewActor(hitActor, outHit.ImpactPoint);
 			}
 		}
 
@@ -197,7 +184,7 @@ TArray<FVector> UKMK_PlayerMouse::GetMouseWorldDirection()
 {
 	TArray<FVector> arr;
 	FVector WorldLocation, WorldDirection;
-
+	me->SetShowMouseCursor(true);
 	me->DeprojectMousePositionToWorld(WorldLocation, WorldDirection);
 	arr.Add(WorldLocation);
 	arr.Add(WorldDirection);

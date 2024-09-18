@@ -24,16 +24,16 @@ void UCameraWidget::NativeConstruct()
 	{
 		ZoomSlider->OnValueChanged.AddDynamic(this, &UCameraWidget::OnSliderValueChanged);
 	}
-	playercontroller = Cast<APlayerController>(GetOwningPlayer());
-	if(playercontroller)
-	{
-		playercontroller->SetShowMouseCursor(true);
-	}
 	me = CastChecked<ASYH_MultiPlayer>(GetOwningPlayerPawn());
 }
 void UCameraWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 {
 	Super::NativeTick(MyGeometry, InDeltaTime);
+	playercontroller = Cast<APlayerController>(GetOwningPlayer());
+	if(playercontroller)
+	{
+		playercontroller->SetShowMouseCursor(true);
+	}
 	UpdateTextVisibility();
 }
 

@@ -48,6 +48,6 @@ public:
 	void OnCreateNameWidget(bool bActive)
 	{
 		bMouseOnActor = bActive;
-		textWidget->FindComponentByClass<UStaticMeshComponent>()->SetVisibility(bActive);
+		if(textWidget != nullptr)textWidget->FindComponentByClass<UStaticMeshComponent>()->SetVisibility(bActive);
 	}
 };

@@ -26,7 +26,7 @@ public:
 
 	UPROPERTY()
 	class UPhysicsHandleComponent* handle;
-	UPROPERTY()
+	UPROPERTY(BlueprintReadWrite)
 	class APlayerController* me;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool IsRay = false;
@@ -59,9 +59,6 @@ public:
 	UFUNCTION()
 	void CopyNewActor(AActor* hitActor, FVector grabPos);
 
-	UPROPERTY(EditAnywhere, Category = NewElementPosisition)
-	TArray<FVector> elementPos;
-
 	UPROPERTY()
 	class UKMK_GrabActorComp* potComp;
 	UPROPERTY()
@@ -74,6 +71,7 @@ public:
 	class AKMK_HttpActorWithAI* httpComp;
 	UPROPERTY()
 	class UKMK_ElementGameActor* interActor;
+
 private:
 	void OnMyCheckActor(FHitResult HitResult);
 };

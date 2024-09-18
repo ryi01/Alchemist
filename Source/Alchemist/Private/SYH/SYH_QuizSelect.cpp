@@ -13,6 +13,7 @@ void USYH_QuizSelect::NativeConstruct()
 	Super::NativeConstruct();
 	PlayerController = Cast<APlayerController>(GetOwningPlayer());
 	PlayerController->SetInputMode(FInputModeUIOnly());
+	PlayerController->SetShowMouseCursor(true);
 	MultiPlayer = Cast<ASYH_MultiPlayer>(GetOwningPlayerPawn()); // 현재 요청을 받은 사람
 	// GameInstance = CastChecked<UGuide_GameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 	if (YesButt)

@@ -27,7 +27,7 @@ public:
 	/** Follow camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
 	UCameraComponent* CameraCompThird;
-	
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
 	class UCameraComponent* CameraCompFirst;
 	/** MappingContext */
@@ -48,11 +48,13 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* IA_Camera;
-	
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* IA_Guide;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* IA_Quiz;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* IA_Menu;
 
 	// Sets default values for this character's properties
 	ASYH_MultiPlayer();
@@ -60,8 +62,6 @@ public:
 
 	UPROPERTY()
 	class USYH_PlayerAnim* anim;
-	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = Animation)
-	UAnimMontage* Looking;
 	UPROPERTY()
 	class APlayerController* PlayerController;
 	UPROPERTY(BlueprintReadWrite, Category = "UI")
@@ -86,17 +86,21 @@ protected:
 
 	/** Called for looking input */
 	void Look(const FInputActionValue& Value);
-			
+
 	void Camera(const FInputActionValue& Value);
+
+	void MyJump(const FInputActionValue& Value);
 
 	void OnMyCheckActor();
 
 	void Quiz(const FInputActionValue& Value);
 
+	void Menu(const FInputActionValue& Value);
+
 	// void Quiz(const FInputActionValue& Value);
 	UPROPERTY()
 	class AAluminum_Object* Aluminum;
-	
+
 	int count = 0;
 
 public:
@@ -123,8 +127,8 @@ public:
 	class ASYH_MultiPlayer* TargetPlayer;
 	// 퀴즈 관련 함수
 	// 특정거리내에 들어오면 F키를 누르라는 안내 UI를 띄우고싶다.
-	UFUNCTION(Client,Reliable)
-	void ClientRPC_CallFKey(); 
+	UFUNCTION(NetMulticast,Reliable)
+	void ClientRPC_CallFKey();
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<UUserWidget> QuizWaitClass;
 	UPROPERTY()
@@ -157,7 +161,7 @@ public:
 	TSubclassOf<UUserWidget> QuizClass;
 	UPROPERTY()
 	class USYH_QuizWidget* QuizWidget;
-	
+
 	UFUNCTION(Server, Reliable, WithValidation)
 	void ServerRPC_AcceptQuiz();
 
@@ -177,7 +181,7 @@ public:
 	class USYH_QuizWidgetResult* QuizResultWidget;
 	UFUNCTION(Server, Reliable, WithValidation)
 	void ServerRPC_SendRightCount(int32 Count);
-	
+
 	int32 RightCount = -1;
 
 	void Server_Compare();
@@ -190,4 +194,23 @@ public:
 	void ClientRPC_ShowSameResult();
 	UFUNCTION(Client, Reliable)
 	void ClientRPC_ShowWaitResult();
+
+	UPROPERTY(EditDefaultsOnly,BlueprintReadWrite,Replicated)
+	bool IsWin;
+	UPROPERTY(EditDefaultsOnly,BlueprintReadWrite,Replicated)
+	bool IsLose;
+	//esc
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UUserWidget> MenuClass;
+	UPROPERTY()
+	class USYH_MenuWidget* MenuWidget;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class UPlayerInteractionComponent* interactionComp;
+
+	UPROPERTY(BlueprintReadWrite)
+	bool isWidget = false;
+
+	UFUNCTION()
+	void SetShowMyMouse(bool isActive);
+
 };

@@ -21,8 +21,6 @@ void UKMK_ElementGameActor::BeginPlay()
 	Super::BeginPlay();
 	textWidget = Cast<UKMK_TextWidget>(GetOwner()->GetComponentByClass<UWidgetComponent>()->GetWidget());
 	if(textWidget)textWidget->SetVisibility(ESlateVisibility::Hidden);
-	// ...
-	
 }
 
 
@@ -36,10 +34,8 @@ void UKMK_ElementGameActor::TickComponent(float DeltaTime, ELevelTick TickType, 
 
 
 
-void UKMK_ElementGameActor::ChangeMyPos(FVector myPos)
+void UKMK_ElementGameActor::ChangeMyPos()
 {
 	isUp = true;
-	GetOwner()->SetActorLocation(myPos); 
-	//GEngine->AddOnScreenDebugMessage(1,1,FColor::Cyan,FString::Printf(TEXT("HIIIIIIIIIIIIIIIII")));
 }
 

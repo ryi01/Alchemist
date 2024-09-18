@@ -2,8 +2,10 @@
 
 
 #include "Alchemist/CHJ/Guide_GameInstance.h"
-
+#include "Interfaces/OnlineSessionInterface.h"
+#include "OnlineSessionSettings.h"
 #include "SYH/SYH_QuizWaitWidget.h"
+#include "KMK/KMK_GrabActorComp.h"
 
 UGuide_GameInstance::UGuide_GameInstance()
 {
@@ -33,11 +35,34 @@ void UGuide_GameInstance::Init()
 	Super::Init();
 	//flag를 PictureItems 만큼 생성 / 디폴트 값은 false.
 	PictureItemFlags.Init(false, SlotsIndex);
+
+	//델리게이트 바인딩
+	IOnlineSubsystem* OnlineSubsystem = IOnlineSubsystem::Get();
+	if(OnlineSubsystem)
+	{
+		IOnlineSessionPtr SessionInterface = OnlineSubsystem->GetSessionInterface();
+		if(SessionInterface.IsValid())
+		{
+			OnCreateSessionCompleteDelegate = FOnCreateSessionCompleteDelegate::CreateUObject(this,&UGuide_GameInstance::OnCreateSessionComplete);
+			OnFindSessionsCompleteDelegate = FOnFindSessionsCompleteDelegate::CreateUObject(this,&UGuide_GameInstance::OnFindSessionComplete);
+			OnJoinSessionCompleteDelegate = FOnJoinSessionCompleteDelegate::CreateUObject(this,&UGuide_GameInstance::OnJoinSessionComplete);
+			OnDestroySessionCompleteDelegate = FOnDestroySessionCompleteDelegate::CreateUObject(this,&UGuide_GameInstance::OnDestroySessionComplete);
+
+			SessionInterface->OnCreateSessionCompleteDelegates.Add(OnCreateSessionCompleteDelegate);
+			SessionInterface->OnFindSessionsCompleteDelegates.Add(OnFindSessionsCompleteDelegate);
+			SessionInterface->OnJoinSessionCompleteDelegates.Add(OnJoinSessionCompleteDelegate);
+			SessionInterface->OnDestroySessionCompleteDelegates.Add(OnDestroySessionCompleteDelegate);
+		}
+	}
+
+	// 항아리 찾아서 넣어두기
+	
 }
 
 void UGuide_GameInstance::TakeItemData(int itemIdx)
 {	// DefineItem의 데이터 추가
 	PictureItems.Add(DefineItem[itemIdx]);
+	
 	// 중복 체크 필요
 	 if(PictureItems.IsValidIndex(itemIdx)) // 아이템 인덱스가 유효하다면
 	 {
@@ -47,6 +72,8 @@ void UGuide_GameInstance::TakeItemData(int itemIdx)
 			PictureItemQueue.Enqueue(itemIdx); // 큐에 해당 인덱스 저장한다.
 		}
 	 }
+	 FString tagName = ParsecItemName(PictureItems[PictureItems.Num()-1].Element_name);
+	if(!correctionTag.Contains(tagName)) correctionTag.Add(tagName);
 }
 
 void UGuide_GameInstance::SetInitInfo(TMap<FString,TMap<FString,FString>> data,TArray<FString> key)
@@ -57,6 +84,14 @@ void UGuide_GameInstance::SetInitInfo(TMap<FString,TMap<FString,FString>> data,T
 
 TMap<FString,FString> UGuide_GameInstance::SetMyDataText(FString myName)
 {
+	if(ElementDataMap.IsEmpty() ) return TMap<FString, FString>();
+	FString name = ParsecItemName(myName);
+	TMap<FString,FString> result = ElementDataMap[name];
+	return result;
+}
+
+FString UGuide_GameInstance::ParsecItemName(FString myName)
+{
 	FString name;
 	// 영어만 남기기
 	for ( TCHAR Char : myName )
@@ -66,6 +101,120 @@ TMap<FString,FString> UGuide_GameInstance::SetMyDataText(FString myName)
 			name.AppendChar(Char);
 		}
 	}
-	TMap<FString,FString> result = ElementDataMap[name];
-	return result;
+	
+	return name;
+}
+
+void UGuide_GameInstance::Create()
+{
+	IOnlineSubsystem* OnlineSubsystem = IOnlineSubsystem::Get();
+	if(OnlineSubsystem)
+	{
+		IOnlineSessionPtr SessionInterface = OnlineSubsystem->GetSessionInterface();
+		if(SessionInterface.IsValid())
+		{
+			FNamedOnlineSession* ExistingSession = SessionInterface->GetNamedSession(FName("Room"));
+			if(ExistingSession != nullptr)
+			{
+				SessionInterface->DestroySession(FName("Room"));
+			}
+			else
+			{
+				FOnlineSessionSettings SessionSettings;
+				SessionSettings.bIsLANMatch = true;
+				SessionSettings.NumPublicConnections = 5;
+				SessionSettings.bShouldAdvertise = true;
+				SessionSettings.bUsesPresence = true;
+
+				SessionInterface->CreateSession(0,FName("Room"), SessionSettings);
+			}
+		}
+	}
+}
+
+void UGuide_GameInstance::Find()
+{
+	IOnlineSubsystem* OnlineSubsystem = IOnlineSubsystem::Get();
+	if(OnlineSubsystem)
+	{
+		IOnlineSessionPtr SessionInterface = OnlineSubsystem->GetSessionInterface();
+		if(SessionInterface.IsValid())
+		{
+			SessionSearch = MakeShareable(new FOnlineSessionSearch());
+			SessionSearch->bIsLanQuery =true;
+			SessionSearch->MaxSearchResults = 5;
+
+			SessionInterface->FindSessions(0,SessionSearch.ToSharedRef());
+		}
+	}
+}
+
+void UGuide_GameInstance::Join()
+{
+	IOnlineSubsystem* OnlineSubsystem = IOnlineSubsystem::Get();
+	if(OnlineSubsystem)
+	{
+		IOnlineSessionPtr SessionInterface = OnlineSubsystem->GetSessionInterface();
+		if(SessionInterface.IsValid() && SessionSearch->SearchResults.Num()>0)
+		{
+			SessionInterface->JoinSession(0,FName("Room"), SessionSearch->SearchResults[0]);
+		}
+	}
+}
+
+void UGuide_GameInstance::OnCreateSessionComplete(FName SessionName, bool bWasSuccessful)
+{
+	if(bWasSuccessful)
+	{
+		UWorld* world = GetWorld();
+		if(world)
+		{
+			FString MapName = TEXT("Room?listen");
+			world->ServerTravel(MapName);
+		}
+	}
+}
+
+void UGuide_GameInstance::OnFindSessionComplete(bool bWasSuccessful)
+{
+	if(bWasSuccessful && SessionSearch.IsValid() && SessionSearch->SearchResults.Num()>0)
+	{
+		Join();
+	}
+}
+
+void UGuide_GameInstance::OnJoinSessionComplete(FName SessionName, EOnJoinSessionCompleteResult::Type Result)
+{
+	if(Result == EOnJoinSessionCompleteResult::Success)
+	{
+		IOnlineSubsystem* OnlineSubsystem = IOnlineSubsystem::Get();
+		if(OnlineSubsystem)
+		{
+			IOnlineSessionPtr SessionInterface = OnlineSubsystem->GetSessionInterface();
+			if(SessionInterface.IsValid())
+			{
+				FString ConnectString;
+				if(SessionInterface->GetResolvedConnectString(SessionName,ConnectString))
+				{
+					APlayerController* PlayerController = GetFirstLocalPlayerController();
+					if(PlayerController)
+					{
+						PlayerController->ClientTravel(ConnectString,TRAVEL_Absolute);
+					}
+				}
+			}
+		}
+	}
+}
+
+void UGuide_GameInstance::OnDestroySessionComplete(FName SessionName, bool bWasSuccessful)
+{
+	if(bWasSuccessful)
+	{
+		Create();
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Failed to destroy session: %s"), *SessionName.ToString());
+	}
 }

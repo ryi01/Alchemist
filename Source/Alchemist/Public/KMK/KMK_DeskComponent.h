@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "Camera/CameraComponent.h"
+#include "SYH/SYH_MultiPlayer.h"
 #include "KMK_DeskComponent.generated.h"
 
 // 책상 위 클릭시 오브젝트가 펼쳐지게 만들 예정
@@ -28,12 +29,10 @@ public:
 	// 책상 위를 찍고 있는 카메라
 	UPROPERTY()
 	class UCameraComponent* DeskCameraComponent;
-	UPROPERTY(EditAnywhere)
-	class ACameraActor* ToViewCamera;
-	UPROPERTY()
-	class UCameraComponent* TopViewCameraComponent;
-	UPROPERTY()
-	class APlayerController* player;
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	class UCameraComponent* PlayerCamera;
+    UPROPERTY()
+    class APlayerController* player;
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	bool bActive = false;
 	// 클릭되면 활성화될 함수 = 인라인 함수사용
@@ -46,14 +45,17 @@ public:
 		{
 			// 데스크 카메라 활성화
 			if( DeskCameraComponent)player->SetViewTarget(DeskCameraComponent->GetOwner());
+			player->SetShowMouseCursor(true);
 		}
 		else
 		{
 			// 플레이어 카메라 활성화
-			if( TopViewCameraComponent)player->SetViewTarget(TopViewCameraComponent->GetOwner());
+			if( PlayerCamera)player->SetViewTarget(PlayerCamera->GetOwner());
+			player->SetShowMouseCursor(false);
 		}
 	}
+	UFUNCTION()
 	// 카메라 찾는 함수
-	void FindDeskCam();
+	void FindDeskCam(class APlayerController* pc);
 
 };

@@ -101,7 +101,7 @@ void AKMK_HttpActorWithAI::OnResElement(FHttpRequestPtr Request, FHttpResponsePt
 		{
 			s += TEXT("결과원소 : ") + result[ TEXT("Result") ] + TEXT("\n") + TEXT("이름 : ") + result[ TEXT("Name") ] + TEXT("\n") + TEXT("사용하는 곳 : ") + TEXT("\n") + result[ TEXT("Using") ] + TEXT("\n");
 			PotComp->CreateElementSucced(result[ TEXT("Result") ],s);
-			UE_LOG(LogTemp,Warning,TEXT("String Length: %s"),*result[ TEXT("Result") ]);
+			
 		}
 		else
 		{
@@ -195,6 +195,7 @@ void AKMK_HttpActorWithAI::OnResRecommandEle(FHttpRequestPtr Request,FHttpRespon
 							FString s = result[ name[ i - 1 ] ][ TEXT("a)") ] + TEXT("\n\n") + TEXT("b)") + result[ name[ i - 1 ] ][ TEXT("b)") ];
 							wid->SetNameAndText(name[ i - 1 ],s);
 							mainPotWid->SetSlotChild(wid, this);
+							
 							isWidgetOn = true;
 						}
 					}
