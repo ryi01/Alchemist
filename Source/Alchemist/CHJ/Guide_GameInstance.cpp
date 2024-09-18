@@ -116,7 +116,7 @@ void UGuide_GameInstance::Create()
 			FNamedOnlineSession* ExistingSession = SessionInterface->GetNamedSession(FName("Room"));
 			if(ExistingSession != nullptr)
 			{
-				SessionInterface->DestroySession(FName("Room"));
+				SessionInterface->DestroySession(FName("Alpha"));
 			}
 			else
 			{
@@ -126,7 +126,7 @@ void UGuide_GameInstance::Create()
 				SessionSettings.bShouldAdvertise = true;
 				SessionSettings.bUsesPresence = true;
 
-				SessionInterface->CreateSession(0,FName("Room"), SessionSettings);
+				SessionInterface->CreateSession(0,FName("Alpha"), SessionSettings);
 			}
 		}
 	}
@@ -157,7 +157,7 @@ void UGuide_GameInstance::Join()
 		IOnlineSessionPtr SessionInterface = OnlineSubsystem->GetSessionInterface();
 		if(SessionInterface.IsValid() && SessionSearch->SearchResults.Num()>0)
 		{
-			SessionInterface->JoinSession(0,FName("Room"), SessionSearch->SearchResults[0]);
+			SessionInterface->JoinSession(0,FName("Alpha"), SessionSearch->SearchResults[0]);
 		}
 	}
 }
@@ -169,7 +169,7 @@ void UGuide_GameInstance::OnCreateSessionComplete(FName SessionName, bool bWasSu
 		UWorld* world = GetWorld();
 		if(world)
 		{
-			FString MapName = TEXT("Room?listen");
+			FString MapName = TEXT("Alpha?listen");
 			world->ServerTravel(MapName);
 		}
 	}

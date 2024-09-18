@@ -57,6 +57,7 @@ void USYH_PlayerAnim::AnimNotify_CameraEnd()
 	if (Multi_me->GetMesh())
 	{
 		Multi_me->GetMesh()->SetOwnerNoSee(true);
+		Multi_me->CameraComp->SetVisibility(false,true);
 	}
 	// 시점을 변경한 후 사진을 찍는 듯한 UI를 띄운다
 	if(CameraWidgetClass)

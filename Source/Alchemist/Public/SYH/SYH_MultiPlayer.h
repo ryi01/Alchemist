@@ -30,6 +30,10 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
 	class UCameraComponent* CameraCompFirst;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category = Camera)
+	class UStaticMeshComponent* CameraComp;
+	
 	/** MappingContext */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputMappingContext* IMC_Player;

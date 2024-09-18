@@ -68,7 +68,16 @@ ASYH_MultiPlayer::ASYH_MultiPlayer()
 	CameraCompFirst->SetRelativeLocationAndRotation(FVector(0, 20, 160), FRotator(0));
 
 	interactionComp = CreateDefaultSubobject<UPlayerInteractionComponent>(TEXT("Interaction"));
+	CameraComp= CreateDefaultSubobject<UStaticMeshComponent>(TEXT("CameraComp"));
+	CameraComp->SetupAttachment(GetMesh(),TEXT("RightHand"));
+	CameraComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
+	ConstructorHelpers::FObjectFinder<UStaticMesh>CameraCompMesh(TEXT("/Script/Engine.StaticMesh'/Game/Project/SYH/Camera/camera.camera'"));
+	if(CameraCompMesh.Succeeded())
+	{
+		CameraComp->SetStaticMesh(CameraCompMesh.Object);
+		
+	}
 }
 void ASYH_MultiPlayer::PossessedBy(AController* NewController) // server에서만 불림
 {
@@ -347,6 +356,7 @@ void ASYH_MultiPlayer::Camera(const FInputActionValue& Value)
 			CameraCompFirst->SetActive(false);
 			if (GetMesh())
 			{
+				CameraComp->SetVisibility(true,true);
 				GetMesh()->SetOwnerNoSee(false);
 			}
 			// UI도 끄고 싶다.
