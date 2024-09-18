@@ -45,8 +45,9 @@ public:
 
 	void ParsecNewInfo(FString& respon, bool isInit = false);
 
-	UPROPERTY(BlueprintReadWrite)
+	UPROPERTY()
 	class UKMK_GrabActorComp* PotComp;
+
 	UPROPERTY()
 	class UKMK_ChatBotWidget* HttpUI;
 

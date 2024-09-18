@@ -14,11 +14,18 @@ class ALCHEMIST_API UKMK_MakeEleWidget : public UUserWidget
 {
 	GENERATED_BODY()
 public:
+
+	virtual void NativeConstruct() override;
 	UPROPERTY(BlueprintReadWrite, Category = Http)
 	class AKMK_HttpActorWithAI* http;
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	class UHorizontalBox* DetailHorizontalBox;
 
+	UPROPERTY(meta = (BindWidget))
+	class UButton* OutButt;
+
+	UFUNCTION()
+	void ClickButt();
 	UFUNCTION()
 	void SetSlotChild(UWidget* wid, class AKMK_HttpActorWithAI* httpComp);
 };
