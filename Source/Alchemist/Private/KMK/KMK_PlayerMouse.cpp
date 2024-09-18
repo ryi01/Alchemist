@@ -138,7 +138,7 @@ void UKMK_PlayerMouse::OnMyPutComp(class UPrimitiveComponent* comp)
 void UKMK_PlayerMouse::CopyNewActor(AActor* hitActor, FVector grabPos)
 {
 	auto* ActorClass = hitActor->GetClass();
-	AActor* newActor = GetWorld()->SpawnActor<AActor>(ActorClass, hitActor->GetActorLocation(), FRotator::ZeroRotator);
+	AActor* newActor = GetWorld()->SpawnActor<AActor>(ActorClass, hitActor->GetActorLocation(), FRotator(0, 90, 0));
 	count++;
 	if ( newActor )
 	{
@@ -147,7 +147,7 @@ void UKMK_PlayerMouse::CopyNewActor(AActor* hitActor, FVector grabPos)
 		if ( handle )
 		{
 			auto* mat = newActor->GetComponentByClass<UStaticMeshComponent>();
-			mat->SetMaterial(0, hitActor->FindComponentByClass<UStaticMeshComponent>()->GetMaterial(0));
+			mat->SetStaticMesh(hitActor->FindComponentByClass<UStaticMeshComponent>()->GetStaticMesh());
 			outHitComp = newActor->FindComponentByClass<UPrimitiveComponent>();
 			check(outHitComp);
 			if ( outHitComp )

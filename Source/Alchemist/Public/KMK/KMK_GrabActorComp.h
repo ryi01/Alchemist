@@ -71,7 +71,7 @@ public:
 	TSubclassOf<AActor> elementFactory;
 
 	UPROPERTY(EditDefaultsOnly)
-	TMap<FString, UMaterialInstance*> eleMeshMap;
+	TMap<FString, UStaticMesh*> eleMeshMap;
 
 	// 필요한 원소를 키값 미션내용을 value값
 	UPROPERTY(EditDefaultsOnly)

@@ -26,6 +26,7 @@
 #include "SYH/SYH_QuizWidget.h"
 #include "SYH/SYH_QuizWidgetResult.h"
 #include "KMK/PlayerInteractionComponent.h"
+#include "KMK/MissionWidget.h"
 // Sets default values
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -139,6 +140,10 @@ void ASYH_MultiPlayer::Tick(float DeltaTime)
 			{
 				CheckDist(true);
 			}
+			else
+			{
+				interactionComp->DeleteMainWidget();
+			}
 		}
 	}
 	if(IsLocallyControlled())
@@ -177,6 +182,7 @@ void ASYH_MultiPlayer::CheckDist(bool bCheck)
 	}
 	if (bShowUI && bCheck && InQuiz == false)
 	{
+		if ( interactionComp->missionWidget ) interactionComp->DeleteMainWidget();
 		ClientRPC_CallFKey(); // UI를 띄움 (client의 UI까지)
 	}
 	else
@@ -184,6 +190,7 @@ void ASYH_MultiPlayer::CheckDist(bool bCheck)
 		if (QuizWaitWidget)
 			QuizWaitWidget->SetRequestVisibility(false); // UI를 숨깁니다.
 	}
+	if(!bShowUI ) interactionComp->CreateMainWidget();
 }
 
 // request text를 켜는 함수
@@ -426,6 +433,7 @@ void ASYH_MultiPlayer::Server_Quiz()
 		{
 			UE_LOG(LogTemp, Warning, TEXT("Server_Quiz: TargetPlayer is null after Sweep Trace"));
 		}
+		
 	}
 	else
 	{
@@ -449,6 +457,7 @@ void ASYH_MultiPlayer::Quiz(const FInputActionValue& Value)
 		InQuiz = true;
 		ServerRPC_Quiz();  // 클라이언트가 서버에 퀴즈 요청을 보냄
 	}
+	
 }
 
 void ASYH_MultiPlayer::Menu(const FInputActionValue& Value)
@@ -508,6 +517,7 @@ void ASYH_MultiPlayer::HideQuizReject()
 		QuizWaitWidget->SetRejectVisibility(false);
 		// 요청을 받은 사람
 		this->InQuiz = false;
+		interactionComp->CreateMainWidget();
 	}
 }
 void ASYH_MultiPlayer::ClientRPC_ShowQuiz_Implementation()
