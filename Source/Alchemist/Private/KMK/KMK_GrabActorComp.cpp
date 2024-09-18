@@ -112,12 +112,12 @@ void UKMK_GrabActorComp::BeginOverlap(UPrimitiveComponent* OverlappedComponent, 
 void UKMK_GrabActorComp::CreateElementBP(FString tag)
 {
 	if(player == nullptr ) return;	
-	if(collectionEle >= elementPosArray.Num() ||( player != nullptr && player->collectionTag.Contains(tag)) ) return;
+	if(collectionEle >= elementPosArray.Num() || createEletags.Contains(tag) ||( player != nullptr && player->collectionTag.Contains(tag))) return;
 	collectionEle++;
 	auto eleActor = GetWorld()->SpawnActor<AActor>(elementFactory,elementPosArray[ collectionEle ],FRotator::ZeroRotator);
 	eleActor->Tags.Add(FName(*tag));
+	createEletags.Add(tag);
 	eleActor->SetActorHiddenInGame(false);
-
 
 	auto* mesh = eleActor->FindComponentByClass<UStaticMeshComponent>();
 	if ( mesh )
@@ -125,7 +125,7 @@ void UKMK_GrabActorComp::CreateElementBP(FString tag)
 		if ( eleMeshMap.Num() > 0 && eleMeshMap.Contains(tag))
 		{
 			mesh->SetStaticMesh(eleMeshMap[tag]);
-			mesh->SetWorldRotation(FRotator(0, 90, 0));
+			mesh->SetWorldRotation(FRotator(0, -90, 0));
 		}
 	}
 }

@@ -67,6 +67,9 @@ public:
 	UPROPERTY(EditAnywhere)
 	TArray<FVector> elementPosArray;
 
+	UPROPERTY()
+	TArray<FString> createEletags;
+
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<AActor> elementFactory;
 
