@@ -53,6 +53,15 @@ void UPlayerInteractionComponent::BeginPlay()
 			}
 		}
 
+		if ( widget )
+		{
+			missionWidget = Cast<UMissionWidget>(CreateWidget(GetWorld(),widget));
+			if ( missionWidget )
+			{
+				missionWidget->AddToViewport();
+				GEngine->AddOnScreenDebugMessage(3, 1,FColor::Red,FString::Printf(TEXT("Widget Make")));
+			}
+		}
 	}
 }
 
@@ -148,7 +157,10 @@ void UPlayerInteractionComponent::OnMyActionInteraction(const FInputActionValue&
 					// actorClass->textWidget->Destroy();
 					HitActor->Destroy();
 				}
-				if(missionWidget != nullptr) missionWidget->SetMissionText(missionWidget->num + 1);
+				if ( missionWidget != nullptr )
+				{
+					textNum++;
+				}
 				
 				return;
 			}

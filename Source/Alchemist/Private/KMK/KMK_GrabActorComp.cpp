@@ -139,7 +139,7 @@ void UKMK_GrabActorComp::MissionComplete(const FString& missionEleTag, int32 num
 		FTimerHandle handle;
 		GetWorld()->GetTimerManager().SetTimer(handle,FTimerDelegate::CreateLambda([this, actor, num]()
 			{
-				player->textNum = missionWidget->num;
+				player->textNum++;
 				actor->Destroy();
 
 			}), 5, false);

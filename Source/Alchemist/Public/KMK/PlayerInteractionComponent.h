@@ -30,6 +30,9 @@ public:
 	UPROPERTY(EditDefaultsOnly)
 	class UInputAction* IA_Interaction;
 
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<class UUserWidget> widget;
+
 	void OnMyActionInteraction(const FInputActionValue& Value);
 	UPROPERTY()
 	FHitResult HitResult;
