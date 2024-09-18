@@ -9,7 +9,7 @@ public class Alchemist : ModuleRules
 		PrivateDependencyModuleNames.AddRange(new string[] { "OnlineSubsystem" });
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput", "UMG", "Json", "JsonUtilities", "HTTP" ,"SlateCore", "WebBrowser", "WebBrowserWidget", "MediaAssets","OnlineSubsystem"});
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput", "UMG", "Json", "JsonUtilities", "HTTP" ,"SlateCore", "WebBrowser", "WebBrowserWidget", "MediaAssets","OnlineSubsystem","OnlineSubsystemSteam","OnlineSubsystemUtils"});
 
 
 		// Uncomment if you are using Slate UI

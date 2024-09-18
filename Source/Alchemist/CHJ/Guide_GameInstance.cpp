@@ -37,12 +37,15 @@ void UGuide_GameInstance::Init()
 	PictureItemFlags.Init(false, SlotsIndex);
 
 	//델리게이트 바인딩
+	// 세션 인터페이스 가져오기
 	IOnlineSubsystem* OnlineSubsystem = IOnlineSubsystem::Get();
 	if(OnlineSubsystem)
 	{
 		IOnlineSessionPtr SessionInterface = OnlineSubsystem->GetSessionInterface();
 		if(SessionInterface.IsValid())
 		{
+			// 비동기 방식으로 움직임
+			// 비동기의 델리게이트
 			OnCreateSessionCompleteDelegate = FOnCreateSessionCompleteDelegate::CreateUObject(this,&UGuide_GameInstance::OnCreateSessionComplete);
 			OnFindSessionsCompleteDelegate = FOnFindSessionsCompleteDelegate::CreateUObject(this,&UGuide_GameInstance::OnFindSessionComplete);
 			OnJoinSessionCompleteDelegate = FOnJoinSessionCompleteDelegate::CreateUObject(this,&UGuide_GameInstance::OnJoinSessionComplete);
@@ -199,7 +202,7 @@ void UGuide_GameInstance::OnJoinSessionComplete(FName SessionName, EOnJoinSessio
 					APlayerController* PlayerController = GetFirstLocalPlayerController();
 					if(PlayerController)
 					{
-						PlayerController->ClientTravel(ConnectString,TRAVEL_Absolute);
+						PlayerController->ClientTravel(ConnectString,TRAVEL_Absolute); // 열려있는 리슨서버로 강제로 이동시킴
 					}
 				}
 			}

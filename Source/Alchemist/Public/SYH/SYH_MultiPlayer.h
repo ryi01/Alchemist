@@ -175,7 +175,7 @@ public:
 	UFUNCTION(Client, Reliable)
 	void ClientRPC_ShowQuiz();
 
-	UFUNCTION(Client, Reliable)
+	UFUNCTION(NetMulticast, Reliable)
 	void ClientRPC_ShowQuizReject();
 
 	// 승자 패자 구별

@@ -33,7 +33,7 @@ void USYH_QuizSelect::OnClickedYesButt()
 	// 요청을 받은 사람(this)의 화면에 퀴즈화면을 띄우고 싶다.
 	RemoveFromParent();
 	PlayerController->SetInputMode(FInputModeGameOnly());
-	if(MultiPlayer) // 요청을 받은 사람
+	if(MultiPlayer)
 	{
 		MultiPlayer->ServerRPC_AcceptQuiz();
 	}
@@ -44,7 +44,7 @@ void USYH_QuizSelect::OnClickedPausebutt()
 {
 	RemoveFromParent();
 	PlayerController->SetInputMode(FInputModeGameOnly());
-	if(MultiPlayer) // 요청을 받은 사람
+	if(MultiPlayer) 
 	{
 		MultiPlayer->ServerRPC_RejectQuiz();
 	}

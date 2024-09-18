@@ -424,7 +424,6 @@ void ASYH_MultiPlayer::OnMyCheckActor()
 
 void ASYH_MultiPlayer::Server_Quiz()
 {
-	InQuiz = true;
 	FHitResult OutHit;
 	FVector Start = CameraCompThird->GetComponentLocation();
 	FVector End = Start + CameraCompThird->GetForwardVector() * 1000.0f;
@@ -441,7 +440,8 @@ void ASYH_MultiPlayer::Server_Quiz()
 			me = this;
 			this->TargetPlayer = TargetPlayer;
 			TargetPlayer->TargetPlayer = me;
-
+			InQuiz = true;
+			TargetPlayer->InQuiz = true;
 			UE_LOG(LogTemp, Warning, TEXT("Server_Quiz: TargetPlayer set to %s"), *TargetPlayer->GetName());
 			UE_LOG(LogTemp, Warning, TEXT("Server_Quiz: TargetPlayer set to %s"), *me->GetName());
 			// 요청을 받은 플레이어에게 UI를 띄우도록 서버에서 클라이언트로 요청
@@ -532,11 +532,12 @@ void ASYH_MultiPlayer::ClientRPC_ShowQuizReject_Implementation()
 }
 void ASYH_MultiPlayer::HideQuizReject()
 {
+	// 요청을 받은 사람
+	this->InQuiz = false;
+	this->TargetPlayer->InQuiz = false;
 	if(QuizWaitWidget)
 	{
 		QuizWaitWidget->SetRejectVisibility(false);
-		// 요청을 받은 사람
-		this->InQuiz = false;
 		interactionComp->CreateMainWidget();
 	}
 }
@@ -576,6 +577,7 @@ void ASYH_MultiPlayer::ServerRPC_RejectQuiz_Implementation()
 	if(TargetPlayer)
 	{
 		TargetPlayer->ClientRPC_ShowQuizReject();
+		GetWorld()->GetTimerManager().SetTimer(Timer,this,&ASYH_MultiPlayer::HideQuizReject,3.0f,false);
 	}
 	else
 	{

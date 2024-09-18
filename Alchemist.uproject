@@ -26,6 +26,10 @@
 		{
 			"Name": "WebBrowserWidget",
 			"Enabled": true
+		},
+		{
+			"Name": "OnlineSubsystemSteam",
+			"Enabled": true
 		}
 	]
 }
