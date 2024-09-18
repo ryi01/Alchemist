@@ -62,4 +62,12 @@ public:
 
 	UPROPERTY(BlueprintReadWrite)
 	class UMissionWidget* missionWidget;
+
+	UFUNCTION()
+	void CreateMainWidget();
+
+	UFUNCTION()
+	void DeleteMainWidget();
+
+	bool bMakeMainWidget = false;
 };

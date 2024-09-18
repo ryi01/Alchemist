@@ -124,7 +124,8 @@ void UKMK_GrabActorComp::CreateElementBP(FString tag)
 	{
 		if ( eleMeshMap.Num() > 0 && eleMeshMap.Contains(tag))
 		{
-			mesh->SetMaterial(0, eleMeshMap[tag]);
+			mesh->SetStaticMesh(eleMeshMap[tag]);
+			mesh->SetWorldRotation(FRotator(0, 90, 0));
 		}
 	}
 }

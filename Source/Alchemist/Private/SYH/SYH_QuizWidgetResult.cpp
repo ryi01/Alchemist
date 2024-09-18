@@ -1,9 +1,10 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "SYH/SYH_QuizWidgetResult.h"
 
 #include "SYH/SYH_MultiPlayer.h"
+#include "KMK/PlayerInteractionComponent.h"
 
 void USYH_QuizWidgetResult::NativeConstruct()
 {
@@ -102,6 +103,7 @@ void USYH_QuizWidgetResult::DeleteWinUI()
 	MultiPlayer->IsWin = true;
 	MultiPlayer->TargetPlayer->IsLose = true;
 	RemoveFromParent();
+	MultiPlayer->interactionComp->CreateMainWidget();
 }
 
 void USYH_QuizWidgetResult::DeleteLoseUI()
@@ -109,8 +111,10 @@ void USYH_QuizWidgetResult::DeleteLoseUI()
 	MultiPlayer->IsLose = true;
 	MultiPlayer->TargetPlayer->IsWin = true;
 	RemoveFromParent();
+	MultiPlayer->interactionComp->CreateMainWidget();
 }
 void USYH_QuizWidgetResult::DeleteUI()
 {
 	RemoveFromParent();
+	MultiPlayer->interactionComp->CreateMainWidget();
 }
