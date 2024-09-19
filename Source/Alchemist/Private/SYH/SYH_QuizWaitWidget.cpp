@@ -31,6 +31,8 @@ void USYH_QuizWaitWidget::SetWaitVisibility(bool bshow)
 
 void USYH_QuizWaitWidget::SetRequestVisibility(bool bshow)
 {
+	if ( !bshow )MultiPlayer->interactionComp->CreateMainWidget();
+	else MultiPlayer->interactionComp->DeleteMainWidget();
 	if(Request && bshow)
 	{
 		Request->SetVisibility(ESlateVisibility::Visible);
