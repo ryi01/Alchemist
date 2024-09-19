@@ -69,5 +69,8 @@ public:
 	UFUNCTION()
 	void DeleteMainWidget();
 
+	UPROPERTY()
+	class UKMK_DeskComponent* desk;
+
 	bool bMakeMainWidget = false;
 };

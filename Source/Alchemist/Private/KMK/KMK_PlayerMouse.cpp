@@ -43,14 +43,15 @@ void UKMK_PlayerMouse::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
     if ( me == nullptr || httpComp == nullptr || httpComp->isWidgetOn ) return;
 
-	if( !IsRay ) OnMyPutComp(outHitComp);
-	else OnMyGrabComp();
+	if( IsRay ) OnMyGrabComp();
+	else OnMyPutComp(outHitComp);
 
-	if ( outHitComp == nullptr ) return;
+	if ( outHitComp )
+	{
+		TArray<FVector> pos = GetMouseWorldDirection();
 
-	TArray<FVector> pos = GetMouseWorldDirection();
-
-	handle->SetTargetLocation(pos[0] + pos[1] * distance);
+		handle->SetTargetLocation(pos[ 0 ] + pos[ 1 ] * distance);
+	}
 
 }
 // 원소 조합시에 사용되는 함수
@@ -117,7 +118,7 @@ void UKMK_PlayerMouse::OnMyGrabComp()
 			}
 			else
 			{
-      				CopyNewActor(hitActor, outHit.ImpactPoint);
+      			CopyNewActor(hitActor, outHit.ImpactPoint);
 			}
 		}
 

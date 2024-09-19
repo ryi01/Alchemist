@@ -18,6 +18,8 @@ void UKMK_MakeEleWidget::ClickButt()
     SetVisibility(ESlateVisibility::Hidden);
     DetailHorizontalBox->ClearChildren();
     http->PotComp->ElementArray.Empty();
+    http->PotComp->cnt = -1;
+    http->isWidgetOn = false;
 }
 
 void UKMK_MakeEleWidget::SetSlotChild(UWidget* wid,class AKMK_HttpActorWithAI* httpComp)
