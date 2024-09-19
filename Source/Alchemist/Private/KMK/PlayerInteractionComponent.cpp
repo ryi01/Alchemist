@@ -86,7 +86,6 @@ void UPlayerInteractionComponent::TickComponent(float DeltaTime, ELevelTick Tick
 	if ( missionWidget && textNum != 0 )
 	{
 		missionWidget->SetMissionText(textNum);
-		GEngine->AddOnScreenDebugMessage(1,1,FColor::Cyan,FString::Printf(TEXT("TextNum : %d"),textNum));
 	}
 
 }
