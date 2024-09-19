@@ -51,7 +51,7 @@ public:
 	UFUNCTION()
 	TArray<FVector> GetMouseWorldDirection();
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void OnMyGrabComp();
 	UFUNCTION()
 	void OnMyPutComp(class UPrimitiveComponent* comp);

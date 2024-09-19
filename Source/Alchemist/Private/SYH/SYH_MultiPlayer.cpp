@@ -200,7 +200,7 @@ void ASYH_MultiPlayer::CheckDist(bool bCheck)
 	}
 	if (bShowUI && bCheck && TargetPlayer->InQuiz == false)
 	{
-		if ( interactionComp->missionWidget ) interactionComp->DeleteMainWidget();
+		
 		ClientRPC_CallFKey(); // UI를 띄움 (client의 UI까지)
 	}
 	else
@@ -219,6 +219,7 @@ void ASYH_MultiPlayer::ClientRPC_CallFKey_Implementation()
 	if(QuizWaitWidget)
 	{
 		QuizWaitWidget->SetRequestVisibility(true);
+		
 	}
 }
 
