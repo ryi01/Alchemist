@@ -110,7 +110,7 @@ void UPlayerInteractionComponent::OnMyActionInteraction(const FInputActionValue&
 			auto* mouse = HitActor->FindComponentByClass<UKMK_PlayerMouse>();
 			if ( HitActor->ActorHasTag(TEXT("Desk")) )
 			{
-				if ( desk )
+				if ( desk && mouse )
 				{
 					if ( potComp != nullptr )
 					{
