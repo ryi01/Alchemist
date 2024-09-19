@@ -40,11 +40,11 @@ void UPlayerInteractionComponent::BeginPlay()
 		{
 			if ( Actor )
 			{
-				auto desk = Actor->FindComponentByClass<UKMK_DeskComponent>();
+				auto deskCam = Actor->FindComponentByClass<UKMK_DeskComponent>();
 				deskMouse = Actor->FindComponentByClass<UKMK_PlayerMouse>();
-				if ( desk )
+				if ( deskCam )
 				{
-					desk->FindDeskCam(Cast<APlayerController>(me->Controller));
+					deskCam->FindDeskCam(Cast<APlayerController>(me->Controller));
 				}
 				if ( deskMouse )
 				{
@@ -62,6 +62,7 @@ void UPlayerInteractionComponent::BeginPlay()
 void UPlayerInteractionComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+	if(desk != nullptr && desk->bActive ) return;
 	FHitResult OutHit;
 	FVector start = me->CameraCompFirst->GetComponentLocation();
 	FVector end = start + me->CameraCompFirst->GetForwardVector() * 1500;
@@ -106,7 +107,7 @@ void UPlayerInteractionComponent::OnMyActionInteraction(const FInputActionValue&
 		AActor* HitActor = HitResult.GetActor();
 		if ( HitActor )
 		{
-			auto* desk = HitActor->FindComponentByClass<UKMK_DeskComponent>();
+			desk = HitActor->FindComponentByClass<UKMK_DeskComponent>();
 			auto* mouse = HitActor->FindComponentByClass<UKMK_PlayerMouse>();
 			if ( HitActor->ActorHasTag(TEXT("Desk")) )
 			{
