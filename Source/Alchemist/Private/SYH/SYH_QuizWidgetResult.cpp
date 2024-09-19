@@ -33,6 +33,7 @@ void USYH_QuizWidgetResult::SetWinVisibility(bool bshow)
 		if(MultiPlayer) // 요청을 받은 사람
 		{
 			MultiPlayer->InQuiz = false;
+			MultiPlayer->TargetPlayer->InQuiz = false;
 			
 		}
 		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this ,&USYH_QuizWidgetResult::DeleteWinUI, 2.0f, false);
@@ -55,6 +56,8 @@ void USYH_QuizWidgetResult::SetLoseVisibility(bool bshow)
 		if(MultiPlayer)
 		{
 			MultiPlayer->InQuiz = false;
+			MultiPlayer->TargetPlayer->InQuiz = false;
+
 		}
 		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this ,&USYH_QuizWidgetResult::DeleteLoseUI, 2.0f, false);
 	}
@@ -77,6 +80,7 @@ void USYH_QuizWidgetResult::SetSameVisibility(bool bshow)
 		if(MultiPlayer) // 요청을 받은 사람
 		{
 			MultiPlayer->InQuiz = false;
+			MultiPlayer->TargetPlayer->InQuiz = false;
 		}
 		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this ,&USYH_QuizWidgetResult::DeleteUI, 2.0f, false);
 	}

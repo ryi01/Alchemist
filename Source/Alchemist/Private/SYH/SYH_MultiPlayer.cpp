@@ -574,8 +574,8 @@ void ASYH_MultiPlayer::ServerRPC_RejectQuiz_Implementation()
 	//  TargetPlayer 요청을 하고 대기중인 플레이어
 	if(TargetPlayer)
 	{
-		TargetPlayer->ClientRPC_ShowQuizReject();
 		GetWorld()->GetTimerManager().SetTimer(Timer,this,&ASYH_MultiPlayer::HideQuizReject,3.0f,false);
+		TargetPlayer->ClientRPC_ShowQuizReject();
 	}
 	else
 	{
