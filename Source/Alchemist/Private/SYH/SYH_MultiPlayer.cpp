@@ -371,6 +371,7 @@ void ASYH_MultiPlayer::Camera(const FInputActionValue& Value)
 			InQuiz = false;
 			CameraCompThird->SetActive(true);
 			CameraCompFirst->SetActive(false);
+			PlayerController->SetShowMouseCursor(false);
 			if (GetMesh())
 			{
 				CameraComp->SetVisibility(true,true);
@@ -387,7 +388,6 @@ void ASYH_MultiPlayer::Camera(const FInputActionValue& Value)
 					{
 						CameraManager->SetFOV(0);
 					}
-					PlayerController->SetShowMouseCursor(false);
 					PlayerController->SetInputMode(FInputModeGameOnly());
 				}
 			}
@@ -652,6 +652,7 @@ void ASYH_MultiPlayer::ClientRPC_ShowWaitResult_Implementation()
 {
 	QuizResultWidget->AddToViewport();
 	QuizResultWidget->SetWaitVisibility(true);
+	PlayerController->SetInputMode(FInputModeUIOnly());
 }
 
 void ASYH_MultiPlayer::SetShowMyMouse(bool isActive)

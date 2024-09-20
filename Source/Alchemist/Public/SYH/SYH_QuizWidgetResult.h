@@ -22,11 +22,11 @@ public:
 	UPROPERTY()
 	class ASYH_MultiPlayer* MultiPlayer;
 	UPROPERTY(EditAnywhere,meta=(bindWidget));
-	class UTextBlock* Win;
+	class UImage* WinImage;
 	UPROPERTY(EditAnywhere,meta=(bindWidget));
-	class UTextBlock* Lose;
+	class UImage* LoseImage;
 	UPROPERTY(EditAnywhere,meta=(bindWidget));
-	class UTextBlock* Same;
+	class UImage* SameImage;
 	UPROPERTY(EditAnywhere,meta=(bindWidget));
 	class UTextBlock* Wait;
 	UPROPERTY(EditAnywhere,meta=(bindWidget));

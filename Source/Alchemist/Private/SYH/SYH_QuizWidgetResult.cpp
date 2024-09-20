@@ -3,6 +3,7 @@
 
 #include "SYH/SYH_QuizWidgetResult.h"
 
+#include "Components/Image.h"
 #include "SYH/SYH_MultiPlayer.h"
 #include "KMK/PlayerInteractionComponent.h"
 
@@ -11,11 +12,11 @@ void USYH_QuizWidgetResult::NativeConstruct()
 	Super::NativeConstruct();
 	PlayerController = Cast<APlayerController>(GetOwningPlayer());
 	MultiPlayer = Cast<ASYH_MultiPlayer>(GetOwningPlayerPawn());
-	if(Win && Lose && Same)
+	if(WinImage && LoseImage && SameImage)
 	{
-		Win->SetVisibility(ESlateVisibility::Hidden);
-		Lose->SetVisibility(ESlateVisibility::Hidden);
-		Same->SetVisibility(ESlateVisibility::Hidden);
+		WinImage->SetVisibility(ESlateVisibility::Hidden);
+		LoseImage->SetVisibility(ESlateVisibility::Hidden);
+		SameImage->SetVisibility(ESlateVisibility::Hidden);
 		Wait->SetVisibility(ESlateVisibility::Hidden);
 		Result->SetVisibility(ESlateVisibility::Hidden);
 	}
@@ -26,7 +27,7 @@ void USYH_QuizWidgetResult::SetWinVisibility(bool bshow)
 	FTimerHandle TimerHandle;
 	if(bshow)
 	{
-		Win->SetVisibility(ESlateVisibility::Visible);
+		WinImage->SetVisibility(ESlateVisibility::Visible);
 		Result->SetVisibility(ESlateVisibility::Visible);
 		PlayerController->SetInputMode(FInputModeGameOnly());
 		PlayerController->SetShowMouseCursor(false);
@@ -40,7 +41,7 @@ void USYH_QuizWidgetResult::SetWinVisibility(bool bshow)
 	}
 	else
 	{
-		Win->SetVisibility(ESlateVisibility::Hidden);
+		WinImage->SetVisibility(ESlateVisibility::Hidden);
 	}
 }
 
@@ -49,7 +50,7 @@ void USYH_QuizWidgetResult::SetLoseVisibility(bool bshow)
 	FTimerHandle TimerHandle;
 	if(bshow)
 	{
-		Lose->SetVisibility(ESlateVisibility::Visible);
+		LoseImage->SetVisibility(ESlateVisibility::Visible);
 		Result->SetVisibility(ESlateVisibility::Visible);
 		PlayerController->SetInputMode(FInputModeGameOnly());
 		PlayerController->SetShowMouseCursor(false);
@@ -63,7 +64,7 @@ void USYH_QuizWidgetResult::SetLoseVisibility(bool bshow)
 	}
 	else
 	{
-		Lose->SetVisibility(ESlateVisibility::Hidden);
+		LoseImage->SetVisibility(ESlateVisibility::Hidden);
 	}
 }
 
@@ -72,7 +73,7 @@ void USYH_QuizWidgetResult::SetSameVisibility(bool bshow)
 	FTimerHandle TimerHandle;
 	if(bshow)
 	{
-		Same->SetVisibility(ESlateVisibility::Visible);
+		SameImage->SetVisibility(ESlateVisibility::Visible);
 		Result->SetVisibility(ESlateVisibility::Visible);
 		PlayerController->SetInputMode(FInputModeGameOnly());
 		PlayerController->SetShowMouseCursor(false);
@@ -86,7 +87,7 @@ void USYH_QuizWidgetResult::SetSameVisibility(bool bshow)
 	}
 	else
 	{
-		Same->SetVisibility(ESlateVisibility::Hidden);
+		SameImage->SetVisibility(ESlateVisibility::Hidden);
 	}
 }
 
