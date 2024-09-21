@@ -13,3 +13,8 @@ void UMissionWidget::SetMissionText(int32 index)
         MissionImage->SetBrushFromTexture(missionArray[ num ]);
     }
 }
+
+void UMissionWidget::SetClickImageVisi(ESlateVisibility visible)
+{
+    Click1Image->SetVisibility(visible);
+}

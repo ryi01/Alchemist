@@ -125,6 +125,7 @@ void UPlayerInteractionComponent::OnMyActionInteraction(const FInputActionValue&
 					mouse->handle = me->FindComponentByClass<UPhysicsHandleComponent>();
 					me->SetShowMyMouse(true);
 					me->isWidget = true;
+					missionWidget->SetClickImageVisi(ESlateVisibility::Visible);
 					if ( desk->player == nullptr )
 					{
 						desk->player = Cast<APlayerController>(me->GetController());
@@ -201,6 +202,7 @@ void UPlayerInteractionComponent::CreateMainWidget()
 		if ( missionWidget )
 		{
 			missionWidget->AddToViewport();
+			missionWidget->SetClickImageVisi(ESlateVisibility::Hidden);
 		}
 	}
 }
