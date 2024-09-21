@@ -126,7 +126,6 @@ TMap<FString,TMap<FString,FString>> UKMK_JsonParseLib::RecommandEleParsec(const 
 
         if ( response->TryGetStringField(TEXT("similar"),InputText) )
         {
-            UE_LOG(LogTemp,Warning,TEXT("Similar Field Found: %s"),*InputText);
             // 1. 먼저 각 항목을 1., 2., 3.으로 나눔
             TArray<FString> Sections;
             InputText.ParseIntoArray(Sections,TEXT("\n\n"),true); // 두 개의 개행으로 구분

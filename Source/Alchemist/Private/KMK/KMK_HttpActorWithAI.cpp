@@ -193,7 +193,19 @@ void AKMK_HttpActorWithAI::OnResRecommandEle(FHttpRequestPtr Request,FHttpRespon
 						if ( wid )
 						{
 							FString s = result[ name[ i - 1 ] ][ TEXT("a)") ] + TEXT("\n\n") + TEXT("b)") + result[ name[ i - 1 ] ][ TEXT("b)") ];
-							wid->SetNameAndText(name[ i - 1 ],s);
+
+							FString english = name[i - 1 ].TrimStartAndEnd(); // 각 섹션의 앞뒤 공백 제거
+
+							// 각 섹션의 제목을 추출 (예: "1. 리튬 (Lithium, Li)")
+							FString chemical;
+							int32 nameEnd = english.Find(TEXT("("));
+							if ( nameEnd != INDEX_NONE )
+							{
+								name[i-1] = english.Left(nameEnd).TrimStartAndEnd();
+								// 섹션 제목 다음 부분만 남김
+								chemical = english.Mid(nameEnd).TrimStartAndEnd();
+							}
+							wid->SetNameAndText(name[ i - 1 ],chemical,s);
 							mainPotWid->SetSlotChild(wid, this);
 							
 							isWidgetOn = true;
