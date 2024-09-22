@@ -14,6 +14,7 @@
 #include "KMK/KMK_GrabActorComp.h"
 #include "KMK/MissionWidget.h"
 #include "../CHJ/Guide_GameInstance.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 // Sets default values for this component's properties
 UPlayerInteractionComponent::UPlayerInteractionComponent()
@@ -149,6 +150,7 @@ void UPlayerInteractionComponent::OnMyActionInteraction(const FInputActionValue&
 				{
 					// actorClass->textWidget->Destroy();
 					HitActor->Destroy();
+					me->ChangeSpeed();
 				}
 				if ( missionWidget != nullptr )
 				{
@@ -203,6 +205,7 @@ void UPlayerInteractionComponent::CreateMainWidget()
 		{
 			missionWidget->AddToViewport();
 			missionWidget->SetClickImageVisi(ESlateVisibility::Hidden);
+			missionWidget->HiddenTime();
 		}
 	}
 }

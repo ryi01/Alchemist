@@ -15,7 +15,13 @@ class ALCHEMIST_API UMissionWidget : public UUserWidget
 	GENERATED_BODY()
 public:
 	UPROPERTY(meta = (BindWidget ))
+	class UTextBlock* SecText;
+	UPROPERTY(meta = (BindWidget ))
 	class UImage* MissionImage; 
+	UPROPERTY(meta = (BindWidget ))
+	class UHorizontalBox* TimeHorizonBox;
+	UPROPERTY(meta = (BindWidget ))
+	class USizeBox* TimeBox;
 	UPROPERTY(meta = (BindWidget ))
 	class UImage* Click1Image;
 	UFUNCTION()
@@ -28,4 +34,10 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void SetClickImageVisi(ESlateVisibility visible);
+
+	UFUNCTION()
+	void SetTimerEvent(int32 t);
+
+	UFUNCTION()
+	void HiddenTime();
 };

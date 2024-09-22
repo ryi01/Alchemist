@@ -107,6 +107,9 @@ protected:
 
 	int count = 0;
 
+	float currentSpeed = 0;
+
+
 public:
 	UPROPERTY(EditDefaultsOnly,BlueprintReadWrite,Replicated)
 	bool InQuiz;
@@ -216,5 +219,14 @@ public:
 
 	UFUNCTION()
 	void SetShowMyMouse(bool isActive);
+	
+	UFUNCTION()
+	void ChangeSpeed();
 
+	UFUNCTION()
+	void ResetSpeed();
+
+	float remainTime = 10.f;
+	bool isTime = false;
+	FTimerHandle SpeedResetTimerHandle;
 };
