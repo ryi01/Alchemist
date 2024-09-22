@@ -118,6 +118,7 @@ void ASYH_MultiPlayer::BeginPlay()
 				Subsystem->AddMappingContext(IMC_Player, 0);
 			}
 		}
+		currentSpeed = GetCharacterMovement()->MaxWalkSpeed;
 	}
 	// 클라이언트일 때의 위젯 생성
 	if(!HasAuthority())
@@ -166,6 +167,21 @@ void ASYH_MultiPlayer::Tick(float DeltaTime)
 	}
 	if(IsLocallyControlled())
 	{
+		if ( isTime )
+		{
+			// 타이머가 얼마나 남았는지 계산
+			remainTime = GetWorld()->GetTimerManager().GetTimerRemaining(SpeedResetTimerHandle);
+			if ( remainTime > 0.0f )
+			{
+				interactionComp->missionWidget->SetTimerEvent(remainTime);
+			}
+			else
+			{
+				// 타이머가 종료된 경우
+				interactionComp->missionWidget->HiddenTime();
+				isTime = false;
+			}
+		}
 		if(UGameplayStatics::GetCurrentLevelName(GetWorld())!=TEXT("SYHLevel"))
 		{
 			return;
@@ -176,6 +192,7 @@ void ASYH_MultiPlayer::Tick(float DeltaTime)
 		{
 			OnMyCheckActor();
 		}
+
 	}
 }
 // request를 보낼 수 있는 거리내에 있으면 UI를 띄우게 함
@@ -486,6 +503,18 @@ void ASYH_MultiPlayer::Menu(const FInputActionValue& Value)
 		PlayerController->SetInputMode(FInputModeUIOnly());
 		MenuWidget->AddToViewport();
 	}
+}
+
+void ASYH_MultiPlayer::ChangeSpeed()
+{
+	GetCharacterMovement()->MaxWalkSpeed *= 4;
+	isTime = true;
+	GetWorld()->GetTimerManager().SetTimer(SpeedResetTimerHandle,this,&ASYH_MultiPlayer::ResetSpeed,10.0f,false);
+}
+
+void ASYH_MultiPlayer::ResetSpeed()
+{
+	GetCharacterMovement()->MaxWalkSpeed = currentSpeed;
 }
 
 void ASYH_MultiPlayer::ClientRPC_ShowQuizSelect_Implementation()
