@@ -141,14 +141,14 @@ void ASYH_MultiPlayer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	if(isWidget) return;
-	// 캐릭터 머리 위에 bool 값을 출력
-	FString BoolText = InQuiz ? TEXT("True") : TEXT("False");
-
-	// 텍스트를 캐릭터의 위치 + 오프셋(머리 위)에 표시
-	FVector TextLocation = GetActorLocation() + FVector(0, 0, 100);  // 캐릭터 머리 위 100 유닛
-
-	// DrawDebugString을 사용해 텍스트를 표시
-	DrawDebugString(GetWorld(), TextLocation, FString::Printf(TEXT("InQuiz: %s"), *BoolText), nullptr, FColor::Green, 0.0f, true);
+	// // 캐릭터 머리 위에 bool 값을 출력
+	// FString BoolText = InQuiz ? TEXT("True") : TEXT("False");
+	//
+	// // 텍스트를 캐릭터의 위치 + 오프셋(머리 위)에 표시
+	// FVector TextLocation = GetActorLocation() + FVector(0, 0, 100);  // 캐릭터 머리 위 100 유닛
+	//
+	// // DrawDebugString을 사용해 텍스트를 표시
+	// DrawDebugString(GetWorld(), TextLocation, FString::Printf(TEXT("InQuiz: %s"), *BoolText), nullptr, FColor::Green, 0.0f, true);
 
 	if (QuizWaitWidget != nullptr && QuizSelectWidget != nullptr && QuizWidget != nullptr && QuizResultWidget != nullptr)
 	{
