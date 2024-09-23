@@ -63,6 +63,7 @@ void UKMK_PlayerMouse::OnMyGrabComp()
 	ECollisionChannel channel = ECollisionChannel::ECC_GameTraceChannel1;
 	FCollisionQueryParams params;
 	params.AddIgnoredActor(GetOwner());
+	params.AddIgnoredActor(me->GetOwner());
 
 	bool bHit = GetWorld()->LineTraceSingleByChannel(outHit, mousePos[0], mousePos[0] + mousePos[1] * RayDis, channel, params);
 	if ( bHit )
@@ -88,7 +89,6 @@ void UKMK_PlayerMouse::OnMyGrabComp()
 		{
 			potComp = hitActor->GetComponentByClass<UKMK_GrabActorComp>();
 			if(potComp->ElementArray.IsEmpty() ) return;
-
 			FString result = TEXT("");
 
 			if ( httpComp )
