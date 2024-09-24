@@ -61,6 +61,7 @@ FReply UCameraWidget::NativeOnMouseButtonDown(const FGeometry& MyGeometry, const
 		if(camera)
 		{
 			PlayAnimation(camera);
+			UGameplayStatics::PlaySound2D(GetWorld(),CameraSound);
 		}
 		if(me)
 		{

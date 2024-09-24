@@ -46,4 +46,8 @@ private:
 	bool IsTaggedActorInView();
 	void UpdateTextVisibility();
 
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sound")
+	class USoundBase* CameraSound;
+
 };

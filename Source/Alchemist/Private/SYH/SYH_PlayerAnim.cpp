@@ -5,6 +5,7 @@
 
 #include "Blueprint/UserWidget.h"
 #include "Camera/CameraComponent.h"
+#include "Kismet/GameplayStatics.h"
 #include "SYH/SYH_MultiPlayer.h"
 #include "SYH/SYH_Player.h"
 
@@ -84,4 +85,9 @@ void USYH_PlayerAnim::AnimNotify_WinEnd()
 void USYH_PlayerAnim::AnimNotify_LoseEnd()
 {
 	Multi_me->IsLose = false;
+}
+
+void USYH_PlayerAnim::AnimNotify_Walk()
+{
+	UGameplayStatics::PlaySoundAtLocation(GetWorld(),WalkSound,Multi_me->GetActorLocation());
 }
