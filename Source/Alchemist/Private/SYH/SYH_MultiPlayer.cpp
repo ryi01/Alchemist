@@ -77,13 +77,27 @@ ASYH_MultiPlayer::ASYH_MultiPlayer()
 	if(CameraCompMesh.Succeeded())
 	{
 		CameraComp->SetStaticMesh(CameraCompMesh.Object);
-		
 	}
+
 }
 void ASYH_MultiPlayer::PossessedBy(AController* NewController) // server에서만 불림
 {
 	Super::PossessedBy(NewController);
-
+	if(HasAuthority())
+	{
+		if(!IsLocallyControlled()) return;
+		ServerMesh = Cast<USkeletalMesh>(StaticLoadObject(USkeletalMesh::StaticClass(), nullptr, TEXT("/Script/Engine.SkeletalMesh'/Game/Project/SYR/character/Idle.Idle'")));
+		if (ServerMesh)
+		{
+			GetMesh()->SetSkeletalMesh(ServerMesh);
+		}
+		// 애니메이션 블루프린트 클래스 로드
+		ServerAnim = Cast<UClass>(StaticLoadClass(UAnimInstance::StaticClass(), nullptr, TEXT("/Script/Engine.AnimBlueprint'/Game/Project/SYH/Anim/ABP_Server.ABP_Server_C'")));
+		if (ServerAnim)
+		{
+			GetMesh()->SetAnimInstanceClass(ServerAnim);
+		}
+	}
 	// 서버일 때의 위젯 생성
 	if(HasAuthority())
 	{
@@ -96,19 +110,38 @@ void ASYH_MultiPlayer::PossessedBy(AController* NewController) // server에서�
 		QuizResultWidget = Cast<USYH_QuizWidgetResult>(CreateWidget(GetWorld(),QuizResultClass));
 		MenuWidget = Cast<USYH_MenuWidget>(CreateWidget(GetWorld(),MenuClass));
 	}
+
 }
+
 
 // Called when the game starts or when spawned
 void ASYH_MultiPlayer::BeginPlay()
 {
 	Super::BeginPlay();
+	if(!HasAuthority())
+	{
+		if(!IsLocallyControlled()) return;
+		ClientMesh = Cast<USkeletalMesh>(StaticLoadObject(USkeletalMesh::StaticClass(), nullptr, TEXT("/Script/Engine.SkeletalMesh'/Game/Project/SYR/character/character_friend/Sitting_Talking__1_.Sitting_Talking__1_'")));
+		if (ClientMesh)
+		{
+			GetMesh()->SetSkeletalMesh(ClientMesh);
+		}
+		// 애니메이션 블루프린트 클래스 로드
+		ClientAnim = Cast<UClass>(StaticLoadClass(UAnimInstance::StaticClass(), nullptr, TEXT("/Script/Engine.AnimBlueprint'/Game/Project/SYH/Anim/ABP_Client.ABP_Client_C'")));
+		if (ClientAnim)
+		{
+			GetMesh()->SetAnimInstanceClass(ClientAnim);
+		}
+		// 클라이언트의 메쉬와 애니메이션 설정을 서버에 알림 (RPC 호출)
+		ServerRPC_MeshAndAnim(ClientMesh, ClientAnim);
+	}
 	UAnimInstance* animinstance = GetMesh()->GetAnimInstance();
 	if ( animinstance )
 	{
 		anim = Cast<USYH_PlayerAnim>(animinstance);
 	}
-	if (IsLocallyControlled())
-		// 내가 컨트롤하는 즉, 내가 플레이하고 있는 캐릭터
+
+	if (IsLocallyControlled())// 내가 컨트롤하는 즉, 내가 플레이하고 있는 캐릭터
 	{
 		PlayerController = Cast<APlayerController>(Controller);
 		if(PlayerController)
@@ -118,7 +151,6 @@ void ASYH_MultiPlayer::BeginPlay()
 				Subsystem->AddMappingContext(IMC_Player, 0);
 			}
 		}
-		currentSpeed = GetCharacterMovement()->MaxWalkSpeed;
 	}
 	// 클라이언트일 때의 위젯 생성
 	if(!HasAuthority())
@@ -141,15 +173,31 @@ void ASYH_MultiPlayer::BeginPlay()
 void ASYH_MultiPlayer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	if ( isTime )
+	{
+		if(!interactionComp->missionWidget) return;
+		// 타이머가 얼마나 남았는지 계산
+		remainTime = GetWorld()->GetTimerManager().GetTimerRemaining(SpeedResetTimerHandle);
+		if ( !isReset )
+		{
+			interactionComp->missionWidget->SetTimerEvent(remainTime);
+		}
+		else
+		{
+			// 타이머가 종료된 경우
+			interactionComp->missionWidget->HiddenTime();
+			isTime = false;
+		}
+	}
 	if(isWidget) return;
-	// // 캐릭터 머리 위에 bool 값을 출력
-	// FString BoolText = InQuiz ? TEXT("True") : TEXT("False");
-	//
-	// // 텍스트를 캐릭터의 위치 + 오프셋(머리 위)에 표시
-	// FVector TextLocation = GetActorLocation() + FVector(0, 0, 100);  // 캐릭터 머리 위 100 유닛
-	//
-	// // DrawDebugString을 사용해 텍스트를 표시
-	// DrawDebugString(GetWorld(), TextLocation, FString::Printf(TEXT("InQuiz: %s"), *BoolText), nullptr, FColor::Green, 0.0f, true);
+	// 캐릭터 머리 위에 bool 값을 출력
+	FString BoolText = isTime ? TEXT("True") : TEXT("False");
+	
+	// 텍스트를 캐릭터의 위치 + 오프셋(머리 위)에 표시
+	FVector TextLocation = GetActorLocation() + FVector(0, 0, 100);  // 캐릭터 머리 위 100 유닛
+	
+	// DrawDebugString을 사용해 텍스트를 표시
+	DrawDebugString(GetWorld(), TextLocation, FString::Printf(TEXT("isTime: %s"), *BoolText), nullptr, FColor::Green, 0.0f, true);
 
 	if (QuizWaitWidget != nullptr && QuizSelectWidget != nullptr && QuizWidget != nullptr && QuizResultWidget != nullptr)
 	{
@@ -167,21 +215,6 @@ void ASYH_MultiPlayer::Tick(float DeltaTime)
 	}
 	if(IsLocallyControlled())
 	{
-		if ( isTime )
-		{
-			// 타이머가 얼마나 남았는지 계산
-			remainTime = GetWorld()->GetTimerManager().GetTimerRemaining(SpeedResetTimerHandle);
-			if ( remainTime > 0.0f )
-			{
-				interactionComp->missionWidget->SetTimerEvent(remainTime);
-			}
-			else
-			{
-				// 타이머가 종료된 경우
-				interactionComp->missionWidget->HiddenTime();
-				isTime = false;
-			}
-		}
 		if(UGameplayStatics::GetCurrentLevelName(GetWorld())!=TEXT("SYHLevel"))
 		{
 			return;
@@ -192,8 +225,8 @@ void ASYH_MultiPlayer::Tick(float DeltaTime)
 		{
 			OnMyCheckActor();
 		}
-
 	}
+
 }
 // request를 보낼 수 있는 거리내에 있으면 UI를 띄우게 함
 
@@ -334,6 +367,59 @@ void ASYH_MultiPlayer::ObjectDetect()
 	}
 }
 
+
+void ASYH_MultiPlayer::OnRep_ServerMesh()
+{
+	if (ServerMesh)
+	{
+		GetMesh()->SetSkeletalMesh(ServerMesh);
+	}
+}
+
+void ASYH_MultiPlayer::OnRep_ClientMesh()
+{
+	if (ClientMesh)
+	{
+		GetMesh()->SetSkeletalMesh(ClientMesh);
+	}
+}
+
+void ASYH_MultiPlayer::OnRep_ServerAnim()
+{
+	if (ServerAnim)
+	{
+		GetMesh()->SetAnimInstanceClass(ServerAnim);
+	}
+}
+
+void ASYH_MultiPlayer::OnRep_ClientAnim()
+{
+	if (ClientAnim)
+	{
+		GetMesh()->SetAnimInstanceClass(ClientAnim);
+	}
+}
+
+void ASYH_MultiPlayer::ServerRPC_MeshAndAnim_Implementation(USkeletalMesh* InMesh, TSubclassOf<UAnimInstance> InAnim)
+{
+	// 서버에서 클라이언트가 요청한 메쉬와 애니메이션을 복제 변수에 설정
+	if (InMesh)
+	{
+		ClientMesh = InMesh;
+		OnRep_ClientMesh();
+	}
+
+	if (InAnim)
+	{
+		ClientAnim = InAnim;
+		OnRep_ClientAnim();
+	}
+}
+
+bool ASYH_MultiPlayer::ServerRPC_MeshAndAnim_Validate(USkeletalMesh* InMesh, TSubclassOf<UAnimInstance> InAnim)
+{
+	return true;
+}
 
 void ASYH_MultiPlayer::Move(const FInputActionValue& Value)
 {
@@ -504,17 +590,83 @@ void ASYH_MultiPlayer::Menu(const FInputActionValue& Value)
 		MenuWidget->AddToViewport();
 	}
 }
+void ASYH_MultiPlayer::ServerRPC_ChangeSpeed_Implementation()
+{
+	ClientRPC_ChangeSpeed();
+}
+
+bool ASYH_MultiPlayer::ServerRPC_ChangeSpeed_Validate()
+{
+	return true;
+}
+
+void ASYH_MultiPlayer::ClientRPC_ChangeSpeed_Implementation()
+{
+	// 클라이언트 속도 변경
+	GetCharacterMovement()->MaxWalkSpeed *= 4;
+
+	// 10초 후 속도를 리셋하는 타이머 설정
+	GetWorld()->GetTimerManager().SetTimer(SpeedResetTimerHandle, this, &ASYH_MultiPlayer::ResetSpeed, 10.0f, false);
+}
 
 void ASYH_MultiPlayer::ChangeSpeed()
 {
-	GetCharacterMovement()->MaxWalkSpeed *= 4;
 	isTime = true;
-	GetWorld()->GetTimerManager().SetTimer(SpeedResetTimerHandle,this,&ASYH_MultiPlayer::ResetSpeed,10.0f,false);
+	if (HasAuthority()) // 만약 서버 권한을 가진 경우(서버라면)
+	{
+		// 바로 속도를 변경
+		GetCharacterMovement()->MaxWalkSpeed *= 4;
+
+		// 10초 후 속도를 리셋하는 타이머 설정
+		GetWorld()->GetTimerManager().SetTimer(SpeedResetTimerHandle, this, &ASYH_MultiPlayer::ResetSpeed, 10.0f, false);
+	}
+	else // 클라이언트라면
+	{
+		// 서버에게 속도 변경 요청
+		ServerRPC_ChangeSpeed(); // 4배 속도로 증가
+	}
+}
+
+void ASYH_MultiPlayer::ServerRPC_ResetSpeed_Implementation()
+{
+	ClientRPC_ResetSpeed();
+}
+
+bool ASYH_MultiPlayer::ServerRPC_ResetSpeed_Validate()
+{
+	return true;
+}
+
+void ASYH_MultiPlayer::ClientRPC_ResetSpeed_Implementation()
+{
+	GetCharacterMovement()->MaxWalkSpeed = currentSpeed;
 }
 
 void ASYH_MultiPlayer::ResetSpeed()
 {
-	GetCharacterMovement()->MaxWalkSpeed = currentSpeed;
+	isReset = true;
+	if (HasAuthority()) // 만약 서버 권한을 가진 경우(서버라면)
+	{
+		GetCharacterMovement()->MaxWalkSpeed = currentSpeed;
+	}
+	else // 클라이언트라면
+	{
+		// 서버에게 속도 변경 요청
+		ServerRPC_ResetSpeed();
+	}
+}
+
+
+void ASYH_MultiPlayer::DestroySection(AActor* HitActor)
+{
+	if (HasAuthority()) // 만약 서버 권한을 가진 경우(서버라면)
+	{
+		HitActor->Destroy();
+	}
+	else // 클라이언트라면
+	{
+		HitActor->Destroy();
+	}
 }
 
 void ASYH_MultiPlayer::ClientRPC_ShowQuizSelect_Implementation()
@@ -690,6 +842,8 @@ void ASYH_MultiPlayer::SetShowMyMouse(bool isActive)
 	PlayerController->SetShowMouseCursor(isActive);
 }
 
+
+
 void ASYH_MultiPlayer::ClientRPC_ShowSameResult_Implementation()
 {
 	if(QuizResultWidget->IsInViewport())
@@ -743,4 +897,11 @@ void ASYH_MultiPlayer::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty
 	DOREPLIFETIME(ASYH_MultiPlayer,IsWin);
 	DOREPLIFETIME(ASYH_MultiPlayer,IsLose);
 	DOREPLIFETIME(ASYH_MultiPlayer,InQuiz);
+	DOREPLIFETIME(ASYH_MultiPlayer,isTime);
+	DOREPLIFETIME(ASYH_MultiPlayer,isWidget);
+	DOREPLIFETIME(ASYH_MultiPlayer,isReset);
+	DOREPLIFETIME(ASYH_MultiPlayer,ServerMesh);
+	DOREPLIFETIME(ASYH_MultiPlayer,ServerAnim);
+	DOREPLIFETIME(ASYH_MultiPlayer,ClientMesh);
+	DOREPLIFETIME(ASYH_MultiPlayer,ClientAnim);
 }
