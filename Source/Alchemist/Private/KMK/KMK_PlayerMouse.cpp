@@ -69,28 +69,27 @@ void UKMK_PlayerMouse::OnMyGrabComp()
 	if ( bHit )
 	{
 		auto* hitActor = outHit.GetActor();
-		if ( hitActor->ActorHasTag("NewEle") && outHitComp == nullptr )
-		{
-			// 엑터에 컴포넌트에 정보 업데이트
-			elementActor = hitActor->GetComponentByClass<UKMK_ElementGameActor>();
-			if(elementActor == nullptr ) return;
-			if ( !elementActor->isOnWidget)
-			{
-				elementActor->OnCreateWidget(true);
-				// Actor의 Comp에 정보 업데이트
-				elementActor->ChangeMyPos();
-				eleCount++;
-				potComp->isCreate = false;
-				potComp->ElementArray.Empty();
-			}
-			return;
-		}
+		//if ( hitActor->ActorHasTag("NewEle") && outHitComp == nullptr )
+		//{
+		//	// 엑터에 컴포넌트에 정보 업데이트
+		//	elementActor = hitActor->GetComponentByClass<UKMK_ElementGameActor>();
+		//	if(elementActor == nullptr ) return;
+		//	if ( !elementActor->isOnWidget)
+		//	{
+		//		elementActor->OnCreateWidget(true);
+		//		// Actor의 Comp에 정보 업데이트
+		//		elementActor->ChangeMyPos();
+		//		eleCount++;
+		//		potComp->isCreate = false;
+		//		potComp->ElementArray.Empty();
+		//	}
+		//	return;
+		//}
 		if ( hitActor->ActorHasTag(TEXT("Pot")) && outHitComp == nullptr )
 		{
 			potComp = hitActor->GetComponentByClass<UKMK_GrabActorComp>();
 			if(potComp->ElementArray.IsEmpty() ) return;
 			FString result = TEXT("");
-
 			if ( httpComp )
 			{
 				for ( const TPair<FString,int>& pair : potComp->ElementArray )

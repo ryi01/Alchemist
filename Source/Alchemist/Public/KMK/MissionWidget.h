@@ -24,6 +24,8 @@ public:
 	class USizeBox* TimeBox;
 	UPROPERTY(meta = (BindWidget ))
 	class UImage* Click1Image;
+	UPROPERTY(meta = (BindWidget ))
+	class UTextBlock* ClickText;
 	UFUNCTION()
 	void SetMissionText(int32 index);
 

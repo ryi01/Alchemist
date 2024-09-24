@@ -19,6 +19,7 @@ void UMissionWidget::SetMissionText(int32 index)
 void UMissionWidget::SetClickImageVisi(ESlateVisibility visible)
 {
     Click1Image->SetVisibility(visible);
+    ClickText->SetVisibility(visible);
 }
 
 void UMissionWidget::SetTimerEvent(int32 t)

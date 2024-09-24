@@ -55,7 +55,7 @@ void UKMK_GrabActorComp::CreateElementSucced(FString tagName, const FString& tex
 		auto* newText = newActor->GetComponentByClass<UKMK_ElementGameActor>();
 		if ( newText )
 		{
-			newText->OnCreateWidget(false);
+			newText->OnCreateWidget(true);
 			newText->SetTextWidget(text);
 		}
 		// 중복 확인
@@ -90,6 +90,14 @@ void UKMK_GrabActorComp::CreateElementFailed()
 	{
 		httpActor->ReqRecommandEle(json);
 		cnt++;
+		for ( int i = 0; i < actorArray.Num(); i++ )
+		{
+			actorArray[ i ]->Destroy();
+		}
+		actorArray.Empty();
+		isCreate = false;
+		ElementArray.Empty();
+		createNum = 0;
 	}
 }
 
@@ -102,7 +110,21 @@ void UKMK_GrabActorComp::BeginOverlap(UPrimitiveComponent* OverlappedComponent, 
 		if(checkTagName == "" ) return;
 		if ( ElementArray.Contains(checkTagName) ) ElementArray[ checkTagName ]++;
 		else ElementArray.Add(checkTagName,1);
+		// ( X = 7250.000000,Y = 52745.403291,Z = -15495.000000 )
+		auto eleActor = GetWorld()->SpawnActor<AActor>(noCollsionFact,createPos[createNum],FRotator::ZeroRotator);
+		eleActor->SetActorHiddenInGame(false);
+		actorArray.Add(eleActor);
 
+		auto* mesh = eleActor->FindComponentByClass<UStaticMeshComponent>();
+		if ( mesh )
+		{
+			if ( eleMeshMap.Num() > 0 && eleMeshMap.Contains(checkTagName) )
+			{
+				mesh->SetStaticMesh(eleMeshMap[ checkTagName ]);
+				mesh->SetWorldRotation(FRotator(0,-90,0));
+			}
+		}
+		createNum++;
 		OtherActor->Destroy();
 	}
 
@@ -146,7 +168,14 @@ void UKMK_GrabActorComp::MissionComplete(const FString& missionEleTag, int32 num
 
 			}), 5, false);
 		
-
+		for ( int i = 0; i < actorArray.Num(); i++ )
+		{
+			actorArray[ i ]->Destroy();
+		}
+		actorArray.Empty();
+		isCreate = false;
+		ElementArray.Empty();
+		createNum = 0;
 	}
 	else
 	{
@@ -157,6 +186,14 @@ void UKMK_GrabActorComp::MissionComplete(const FString& missionEleTag, int32 num
 
 			}),5,false);
 
+		for ( int i = 0; i < actorArray.Num(); i++ )
+		{
+			actorArray[ i ]->Destroy();
+		}
+		actorArray.Empty();
+		isCreate = false;
+		ElementArray.Empty();
+		createNum = 0;
 	}
 
 }

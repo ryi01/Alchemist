@@ -80,6 +80,16 @@ public:
 	UPROPERTY(EditDefaultsOnly)
 	TArray<FString> missionTag;
 
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<AActor> noCollsionFact;
+	UPROPERTY()
+	TArray<AActor*> actorArray;
+
+	UPROPERTY(EditDefaultsOnly)
+	TArray<FVector> createPos;
+
+	int createNum = 0;
+
 	UFUNCTION()
 	void MissionComplete(const FString& missionEleTag,int32 num,AActor* actor);
 
