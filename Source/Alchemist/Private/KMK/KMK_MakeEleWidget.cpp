@@ -17,6 +17,14 @@ void UKMK_MakeEleWidget::ClickButt()
 {
     SetVisibility(ESlateVisibility::Hidden);
     DetailHorizontalBox->ClearChildren();
+    for ( int i = 0; i < http->PotComp->actorArray.Num(); i++ )
+    {
+        http->PotComp->actorArray[ i ]->Destroy();
+    }
+    http->PotComp->actorArray.Empty();
+    http->PotComp->isCreate = false;
+    http->PotComp->createNum = 0;
+
     http->PotComp->ElementArray.Empty();
     http->PotComp->cnt = -1;
     http->isWidgetOn = false;

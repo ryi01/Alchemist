@@ -42,7 +42,6 @@ void UKMK_GrabActorComp::BeginPlay()
 void UKMK_GrabActorComp::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
 }
 
 void UKMK_GrabActorComp::CreateElementSucced(FString tagName, const FString& text)
@@ -90,14 +89,6 @@ void UKMK_GrabActorComp::CreateElementFailed()
 	{
 		httpActor->ReqRecommandEle(json);
 		cnt++;
-		for ( int i = 0; i < actorArray.Num(); i++ )
-		{
-			actorArray[ i ]->Destroy();
-		}
-		actorArray.Empty();
-		isCreate = false;
-		ElementArray.Empty();
-		createNum = 0;
 	}
 }
 

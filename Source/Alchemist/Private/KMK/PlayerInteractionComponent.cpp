@@ -149,6 +149,7 @@ void UPlayerInteractionComponent::OnMyActionInteraction(const FInputActionValue&
 				if ( collectionTag.Contains(HitActor->Tags[ 1 ]) )
 				{
 					// actorClass->textWidget->Destroy();
+					HitActor->SetReplicates(false);
 					HitActor->Destroy();
 					me->ChangeSpeed();
 				}
