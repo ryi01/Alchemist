@@ -278,5 +278,6 @@ public:
 
 	UFUNCTION()
 	void DestroySection(AActor* HitActor);
-	
+
+
 };
