@@ -84,6 +84,33 @@ public:
 	class UGuide_MainWidget* GuideWidget;
 
 
+	UPROPERTY(ReplicatedUsing = OnRep_ServerMesh)
+	USkeletalMesh* ServerMesh;
+
+	UPROPERTY(ReplicatedUsing = OnRep_ClientMesh)
+	USkeletalMesh* ClientMesh;
+
+	UPROPERTY(ReplicatedUsing = OnRep_ServerAnim)
+	TSubclassOf<UAnimInstance> ServerAnim;
+
+	UPROPERTY(ReplicatedUsing = OnRep_ClientAnim)
+	TSubclassOf<UAnimInstance> ClientAnim;
+
+	// OnRep 함수 선언
+	UFUNCTION()
+	void OnRep_ServerMesh();
+
+	UFUNCTION()
+	void OnRep_ClientMesh();
+
+	UFUNCTION()
+	void OnRep_ServerAnim();
+
+	UFUNCTION()
+	void OnRep_ClientAnim();
+
+	UFUNCTION(Server,Reliable,withValidation)
+	void ServerRPC_MeshAndAnim(USkeletalMesh* InMesh, TSubclassOf<UAnimInstance> InAnim);
 protected:
 
 	/** Called for movement input */
@@ -108,7 +135,7 @@ protected:
 
 	int count = 0;
 
-	float currentSpeed = 0;
+	float currentSpeed = 500.0f;
 
 
 public:
@@ -160,6 +187,9 @@ public:
 	void HideQuizReject();
 	UFUNCTION(Server,Reliable,withValidation)
 	void ServerRPC_Quiz();
+
+
+	
 
 	void Server_Quiz();
 
@@ -215,21 +245,38 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	class UPlayerInteractionComponent* interactionComp;
 
-	UPROPERTY(BlueprintReadWrite)
+	UPROPERTY(BlueprintReadWrite,Replicated)
 	bool isWidget = false;
 
 	UFUNCTION()
 	void SetShowMyMouse(bool isActive);
+
+	// 헤더 파일에 RPC 함수 선언 추가
+	UFUNCTION(Server, Reliable, WithValidation)
+	void ServerRPC_ChangeSpeed();
+
+	UFUNCTION(NetMulticast,Reliable)
+	void ClientRPC_ChangeSpeed();
 	
 	UFUNCTION()
 	void ChangeSpeed();
-
+	
+	// 헤더 파일에 RPC 함수 선언 추가
+	UFUNCTION(Server, Reliable, WithValidation)
+	void ServerRPC_ResetSpeed();
+	UPROPERTY(Replicated)
+	bool isReset = false;
+	UFUNCTION(NetMulticast,Reliable)
+	void ClientRPC_ResetSpeed();
 	UFUNCTION()
 	void ResetSpeed();
 
 	float remainTime = 10.f;
+	UPROPERTY(Replicated)
 	bool isTime = false;
 	FTimerHandle SpeedResetTimerHandle;
 
-
+	UFUNCTION()
+	void DestroySection(AActor* HitActor);
+	
 };

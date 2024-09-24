@@ -48,7 +48,7 @@ void USYH_QuizWidget::SetQuestionText(int32 Num)
 		Question->SetText(FText::FromString(TEXT("원소는 무엇일까요?")));
 		break;
 	case 2:
-		Question->SetText(FText::FromString(TEXT("다음 중 공기 중에 있는 원소는 무엇일까요?")));
+		Question->SetText(FText::FromString(TEXT("산소의 원소기호는 무엇일까요?")));
 		break;
 		// 다른 질문 추가 가능
 	case 3:
@@ -72,7 +72,7 @@ void USYH_QuizWidget::SetAnswer_1Text(int32 Num)
 		Answer_1->SetText(FText::FromString(TEXT("큰 돌")));
 		break;
 	case 2:
-		Answer_1->SetText(FText::FromString(TEXT("철")));
+		Answer_1->SetText(FText::FromString(TEXT("O")));
 		break;
 		// 다른 질문 추가 가능
 	case 3:
@@ -96,7 +96,7 @@ void USYH_QuizWidget::SetAnswer_2Text(int32 Num)
 		Answer_2->SetText(FText::FromString(TEXT("아주 작은 물질")));
 		break;
 	case 2:
-		Answer_2->SetText(FText::FromString(TEXT("산소")));
+		Answer_2->SetText(FText::FromString(TEXT("H")));
 		break;
 	case 3:
 		Answer_2->SetText(FText::FromString(TEXT("빛")));
@@ -119,7 +119,7 @@ void USYH_QuizWidget::SetAnswer_3Text(int32 Num)
 		Answer_3->SetText(FText::FromString(TEXT("나무")));
 		break;
 	case 2:
-		Answer_3->SetText(FText::FromString(TEXT("금")));
+		Answer_3->SetText(FText::FromString(TEXT("P")));
 		break;
 	case 3:
 		Answer_3->SetText(FText::FromString(TEXT("물")));
