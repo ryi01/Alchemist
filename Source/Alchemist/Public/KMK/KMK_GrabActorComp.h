@@ -35,6 +35,11 @@ public:
 	AActor* newActor; 
 	UFUNCTION()
 	void CreateElementSucced(FString tagName,const FString& text);
+
+	UPROPERTY(EditDefaultsOnly)
+	TArray<class USoundBase*> sounds;
+	UPROPERTY(EditDefaultsOnly)
+	TArray<class UParticleSystem*> particle;
 	UFUNCTION()
 	void CreateElementFailed();
 	UPROPERTY(BlueprintReadWrite)

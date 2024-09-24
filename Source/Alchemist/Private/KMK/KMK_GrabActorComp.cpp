@@ -11,6 +11,8 @@
 #include "KMK/MissionWidget.h"
 #include "KMK/KMK_PlayerMouse.h"
 #include "KMK/PlayerInteractionComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "Particles/ParticleSystemComponent.h"
 
 // Sets default values for this component's properties
 UKMK_GrabActorComp::UKMK_GrabActorComp()
@@ -88,6 +90,7 @@ void UKMK_GrabActorComp::CreateElementFailed()
 	if ( httpActor != nullptr && cnt < 1 )
 	{
 		httpActor->ReqRecommandEle(json);
+		
 		cnt++;
 	}
 }
@@ -147,6 +150,19 @@ void UKMK_GrabActorComp::CreateElementBP(FString tag)
 void UKMK_GrabActorComp::MissionComplete(const FString& missionEleTag, int32 num, AActor* actor)
 {
 	if(missionTag.IsEmpty()) return;
+	UGameplayStatics::PlaySound2D(GetWorld(),sounds[ 0 ]);
+	// 파티클 시스템 스폰
+	UParticleSystemComponent* ParticleComponent = UGameplayStatics::SpawnEmitterAtLocation(
+		GetWorld(),  // 파티클을 스폰할 월드
+		particle[0],  // 재생할 파티클 시스템
+		GetOwner()->GetActorLocation()+FVector(300, 0, 0),  // 파티클이 생성될 위치
+		FRotator::ZeroRotator  // 파티클의 회전
+	);
+
+	if ( ParticleComponent )
+	{
+		ParticleComponent->ActivateSystem();  // 파티클 재생
+	}
 	if ( missionTag.Contains(missionEleTag) )
 	{
 
@@ -174,7 +190,6 @@ void UKMK_GrabActorComp::MissionComplete(const FString& missionEleTag, int32 num
 		GetWorld()->GetTimerManager().SetTimer(handle,FTimerDelegate::CreateLambda([this,actor,num]()
 			{
 				actor->Destroy();
-
 			}),5,false);
 
 		for ( int i = 0; i < actorArray.Num(); i++ )

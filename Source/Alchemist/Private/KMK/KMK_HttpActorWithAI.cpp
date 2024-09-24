@@ -11,6 +11,7 @@
 #include "Components/WidgetComponent.h"
 #include "KMK/KMK_RecommandWidget.h"
 #include "KMK/KMK_MakeEleWidget.h"
+#include "Kismet/GameplayStatics.h"
 // Sets default values
 AKMK_HttpActorWithAI::AKMK_HttpActorWithAI()
 {
@@ -205,7 +206,7 @@ void AKMK_HttpActorWithAI::OnResRecommandEle(FHttpRequestPtr Request,FHttpRespon
 							}
 							wid->SetNameAndText(name[ i - 1 ],chemical,s);
 							mainPotWid->SetSlotChild(wid, this);
-							
+							UGameplayStatics::PlaySound2D(GetWorld(),PotComp->sounds[ 1 ]);
 							isWidgetOn = true;
 						}
 					}
