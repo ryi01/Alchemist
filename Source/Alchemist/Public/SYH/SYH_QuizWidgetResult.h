@@ -45,4 +45,9 @@ public:
 	void DeleteLoseUI();
 	UFUNCTION()
 	void DeleteUI();
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "Sound")
+	class USoundBase* WinSound;
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "Sound")
+	class USoundBase* LoseSound;
 };
