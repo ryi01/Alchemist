@@ -77,7 +77,6 @@ void AKMK_HttpActorWithAI::ReqElement(FString data, UKMK_GrabActorComp* comp)
 	PotComp = comp;
 	TMap<FString,FString> maps;
 	maps.Add(TEXT("key"),data);
-
 	req->SetURL("https://absolute-logically-hagfish.ngrok-free.app/basic");
 	req->SetVerb(TEXT("POST"));
 	req->SetHeader(TEXT("content-type"), TEXT("application/json"));
@@ -93,7 +92,7 @@ void AKMK_HttpActorWithAI::OnResElement(FHttpRequestPtr Request, FHttpResponsePt
 {
 	if ( bConnectedSuccessfully )
 	{
-		// 성공
+		// 성공'
 		FString respon = Response->GetContentAsString();
 		TMap<FString, FString> result = UKMK_JsonParseLib::ResultAlchemistParsec(respon);
 		FString s;
@@ -101,7 +100,6 @@ void AKMK_HttpActorWithAI::OnResElement(FHttpRequestPtr Request, FHttpResponsePt
 		{
 			s += TEXT("결과원소 : ") + result[ TEXT("Result") ] + TEXT("\n") + TEXT("이름 : ") + result[ TEXT("Name") ] + TEXT("\n") + TEXT("사용하는 곳 : ") + TEXT("\n") + result[ TEXT("Using") ] + TEXT("\n");
 			PotComp->CreateElementSucced(result[ TEXT("Result") ],s);
-			
 		}
 		else
 		{

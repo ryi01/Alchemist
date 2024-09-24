@@ -142,7 +142,6 @@ void UKMK_GrabActorComp::MissionComplete(const FString& missionEleTag, int32 num
 			{
 				player->textNum += 1;
 				player->missionWidget->SetMissionText(player->textNum);
-				GEngine->AddOnScreenDebugMessage(4, 5, FColor::Green, FString::Printf(TEXT("%d"), player->textNum));
 				actor->Destroy();
 
 			}), 5, false);
