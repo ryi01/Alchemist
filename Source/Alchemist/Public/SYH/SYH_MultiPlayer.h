@@ -66,6 +66,7 @@ public:
 
 	UPROPERTY()
 	class USYH_PlayerAnim* anim;
+
 	UPROPERTY()
 	class APlayerController* PlayerController;
 	UPROPERTY(BlueprintReadWrite, Category = "UI")
@@ -229,4 +230,6 @@ public:
 	float remainTime = 10.f;
 	bool isTime = false;
 	FTimerHandle SpeedResetTimerHandle;
+
+
 };
