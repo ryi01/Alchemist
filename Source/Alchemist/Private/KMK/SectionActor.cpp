@@ -3,6 +3,7 @@
 
 #include "KMK/SectionActor.h"
 #include "KMK/PlayerInteractionComponent.h"
+#include "SYH/SYH_MultiPlayer.h"
 
 // Sets default values
 ASectionActor::ASectionActor()
@@ -16,13 +17,16 @@ ASectionActor::ASectionActor()
 void ASectionActor::BeginPlay()
 {
 	Super::BeginPlay();
-    if ( comp )
+    if ( !comp )
     {
-
-        // OnComponentHit 델리게이트에 함수 바인딩
-        comp->OnComponentHit.AddDynamic(this,&ASectionActor::OnHit);
+        comp = FindComponentByClass<UStaticMeshComponent>();
     }
 
+    // 필요할 경우 추가 설정
+    if ( comp )
+    {
+        comp->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+    }
 }
 
 // Called every frame
@@ -30,6 +34,32 @@ void ASectionActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+
+
+void ASectionActor::MultiRPCPlayerIgnore_Implementation(class AActor* player)
+{
+    if ( comp && player )
+    {
+        comp->IgnoreActorWhenMoving(player,true);
+    }
+}
+
+void ASectionActor::SetPlayerIgnore(class AActor* player)
+{
+    if ( HasAuthority() ) // 서버에서만 실행
+    {
+        // 서버에서 Multicast RPC 호출하여 모든 클라이언트에게 전파
+        MultiRPCPlayerIgnore(player);
+    }
+}
+
+
+
+void ASectionActor::ServerRPCPassSection_Implementation(class AActor* player)
+{
+    SetPlayerIgnore(player);
 }
 
 void ASectionActor::SetCollisionMesh()

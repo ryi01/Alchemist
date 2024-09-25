@@ -150,10 +150,14 @@ void UPlayerInteractionComponent::OnMyActionInteraction(const FInputActionValue&
 				if ( collectionTag.Contains(HitActor->Tags[ 1 ]) )
 				{
 					// actorClass->textWidget->Destroy();
-					auto* comp = Cast<ASectionActor>(HitActor);
+					ASectionActor* comp = Cast<ASectionActor>(HitActor);
+
 					if ( comp )
 					{
-						comp->SetCollisionMesh();
+						// 태그가 포함되면 서버에게 섹션의 isPass를 변경하라고 알려줘야함
+						comp->ServerRPCPassSection(GetOwner());
+						GEngine->AddOnScreenDebugMessage(4, 1, FColor::Yellow, FString::Printf(TEXT("%s"), *comp->GetName()));
+                        // comp->SetCollisionMesh();
 						me->ChangeSpeed();
 					}
 				}
@@ -223,3 +227,4 @@ void UPlayerInteractionComponent::DeleteMainWidget()
 		missionWidget->RemoveFromParent();
 	}
 }
+
