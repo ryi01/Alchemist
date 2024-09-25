@@ -41,6 +41,10 @@ public:
 	class UWidgetAnimation* WrongAnim;
 	UPROPERTY(meta = (BindWidgetAnim), Transient)
 	class UWidgetAnimation* RightAnim;
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	class USoundBase* RightSound;
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	class USoundBase* WrongSound;
 	int32 TextNum;
 	UFUNCTION()
 	void SetQuestionText(int32 Num);
@@ -60,5 +64,8 @@ public:
 	void ChangeQandA(int32 Num);
 
 	int32 RightCount = 0;
+
+	UFUNCTION()
+	void LastQ();
 	
 };

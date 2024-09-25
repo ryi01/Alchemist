@@ -50,4 +50,10 @@ public:
 	class USoundBase* WinSound;
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "Sound")
 	class USoundBase* LoseSound;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "Sound")
+	class USoundBase* WinResult;
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "Sound")
+	class USoundBase* LoseResult;
+	
 };
