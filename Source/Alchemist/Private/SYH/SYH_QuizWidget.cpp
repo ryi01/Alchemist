@@ -72,7 +72,7 @@ void USYH_QuizWidget::SetAnswer_1Text(int32 Num)
 		Answer_1->SetText(FText::FromString(TEXT("큰 돌")));
 		break;
 	case 2:
-		Answer_1->SetText(FText::FromString(TEXT("O")));
+		Answer_1->SetText(FText::FromString(TEXT("H")));
 		break;
 		// 다른 질문 추가 가능
 	case 3:
@@ -96,7 +96,7 @@ void USYH_QuizWidget::SetAnswer_2Text(int32 Num)
 		Answer_2->SetText(FText::FromString(TEXT("아주 작은 물질")));
 		break;
 	case 2:
-		Answer_2->SetText(FText::FromString(TEXT("H")));
+		Answer_2->SetText(FText::FromString(TEXT("O")));
 		break;
 	case 3:
 		Answer_2->SetText(FText::FromString(TEXT("빛")));

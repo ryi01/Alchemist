@@ -4,6 +4,7 @@
 #include "SYH/SYH_QuizWidgetResult.h"
 
 #include "Components/Image.h"
+#include "Kismet/GameplayStatics.h"
 #include "SYH/SYH_MultiPlayer.h"
 #include "KMK/PlayerInteractionComponent.h"
 
@@ -35,8 +36,8 @@ void USYH_QuizWidgetResult::SetWinVisibility(bool bshow)
 		{
 			MultiPlayer->InQuiz = false;
 			MultiPlayer->TargetPlayer->InQuiz = false;
-			
 		}
+
 		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this ,&USYH_QuizWidgetResult::DeleteWinUI, 2.0f, false);
 	}
 	else
@@ -58,7 +59,6 @@ void USYH_QuizWidgetResult::SetLoseVisibility(bool bshow)
 		{
 			MultiPlayer->InQuiz = false;
 			MultiPlayer->TargetPlayer->InQuiz = false;
-
 		}
 		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this ,&USYH_QuizWidgetResult::DeleteLoseUI, 2.0f, false);
 	}
@@ -107,6 +107,7 @@ void USYH_QuizWidgetResult::DeleteWinUI()
 {
 	MultiPlayer->IsWin = true;
 	MultiPlayer->TargetPlayer->IsLose = true;
+	UGameplayStatics::PlaySound2D(GetWorld(),WinSound);
 	RemoveFromParent();
 	MultiPlayer->interactionComp->CreateMainWidget();
 }
@@ -115,6 +116,7 @@ void USYH_QuizWidgetResult::DeleteLoseUI()
 {
 	MultiPlayer->IsLose = true;
 	MultiPlayer->TargetPlayer->IsWin = true;
+	UGameplayStatics::PlaySound2D(GetWorld(),LoseSound);
 	RemoveFromParent();
 	MultiPlayer->interactionComp->CreateMainWidget();
 }
