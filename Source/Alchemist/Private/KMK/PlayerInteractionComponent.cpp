@@ -15,6 +15,7 @@
 #include "KMK/MissionWidget.h"
 #include "../CHJ/Guide_GameInstance.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "KMK/SectionActor.h"
 
 // Sets default values for this component's properties
 UPlayerInteractionComponent::UPlayerInteractionComponent()
@@ -149,9 +150,12 @@ void UPlayerInteractionComponent::OnMyActionInteraction(const FInputActionValue&
 				if ( collectionTag.Contains(HitActor->Tags[ 1 ]) )
 				{
 					// actorClass->textWidget->Destroy();
-					HitActor->SetReplicates(false);
-					HitActor->Destroy();
-					me->ChangeSpeed();
+					auto* comp = Cast<ASectionActor>(HitActor);
+					if ( comp )
+					{
+						comp->SetCollisionMesh();
+						me->ChangeSpeed();
+					}
 				}
 				if ( missionWidget != nullptr )
 				{
