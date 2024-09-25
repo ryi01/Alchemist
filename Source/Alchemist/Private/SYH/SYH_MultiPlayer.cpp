@@ -19,6 +19,7 @@
 #include "Alchemist/CHJ/Illustrated_Guide/Guide_Widget/Guide_MainWidget.h"
 #include "Components/TextBlock.h"
 #include "Kismet/GameplayStatics.h"
+#include "Kismet/KismetMathLibrary.h"
 #include "Net/UnrealNetwork.h"
 #include "SYH/SYH_MenuWidget.h"
 #include "SYH/SYH_QuizSelect.h"
@@ -547,6 +548,15 @@ void ASYH_MultiPlayer::Server_Quiz()
 			TargetPlayer->InQuiz = true;
 			UE_LOG(LogTemp, Warning, TEXT("Server_Quiz: TargetPlayer set to %s"), *TargetPlayer->GetName());
 			UE_LOG(LogTemp, Warning, TEXT("Server_Quiz: TargetPlayer set to %s"), *me->GetName());
+
+			// 서로를 마주보도록 회전값 적용 
+			FVector TargetLocation = TargetPlayer->GetActorLocation();
+			FVector MyLocation = GetActorLocation();
+			FRotator LookRotation = UKismetMathLibrary::FindLookAtRotation(MyLocation,TargetLocation);
+			FRotator TargetLookRotation = UKismetMathLibrary::FindLookAtRotation(TargetLocation,MyLocation);
+			this->SetActorRotation(LookRotation);
+			TargetPlayer->SetActorRotation(TargetLookRotation);
+
 			// 요청을 받은 플레이어에게 UI를 띄우도록 서버에서 클라이언트로 요청
 			this->ClientRPC_ShowQuizWait();
 			TargetPlayer->ClientRPC_ShowQuizSelect();
