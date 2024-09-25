@@ -51,7 +51,7 @@ public:
 
    void OnMyCheckActor();
 
-	UPROPERTY()
+	UPROPERTY(BlueprintReadWrite)
 	TArray<FString> collectionTag;
 
 	

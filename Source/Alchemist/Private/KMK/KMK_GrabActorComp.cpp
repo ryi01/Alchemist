@@ -115,7 +115,7 @@ void UKMK_GrabActorComp::BeginOverlap(UPrimitiveComponent* OverlappedComponent, 
 			if ( eleMeshMap.Num() > 0 && eleMeshMap.Contains(checkTagName) )
 			{
 				mesh->SetStaticMesh(eleMeshMap[ checkTagName ]);
-				mesh->SetWorldRotation(FRotator(0,-90,0));
+				mesh->SetWorldRotation(FRotator(0,-90,90));
 			}
 		}
 		createNum++;
@@ -141,7 +141,7 @@ void UKMK_GrabActorComp::CreateElementBP(FString tag)
 		if ( eleMeshMap.Num() > 0 && eleMeshMap.Contains(tag))
 		{
 			mesh->SetStaticMesh(eleMeshMap[tag]);
-			mesh->SetWorldRotation(FRotator(0, -90, 0));
+			mesh->SetWorldRotation(FRotator(0, -90, 90));
 		}
 	}
 }

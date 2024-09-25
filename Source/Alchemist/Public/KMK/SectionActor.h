@@ -28,7 +28,14 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 	class UStaticMeshComponent* comp;
 
+	FName myTag;
 
 	UFUNCTION()
 	void SetCollisionMesh();
+
+    // Hit 이벤트 처리 함수
+    UFUNCTION()
+    void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, 
+               UPrimitiveComponent* OtherComp, FVector NormalImpulse, 
+               const FHitResult& Hit);
 };

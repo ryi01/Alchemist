@@ -2,6 +2,7 @@
 
 
 #include "KMK/SectionActor.h"
+#include "KMK/PlayerInteractionComponent.h"
 
 // Sets default values
 ASectionActor::ASectionActor()
@@ -15,6 +16,13 @@ ASectionActor::ASectionActor()
 void ASectionActor::BeginPlay()
 {
 	Super::BeginPlay();
+    if ( comp )
+    {
+
+        // OnComponentHit 델리게이트에 함수 바인딩
+        comp->OnComponentHit.AddDynamic(this,&ASectionActor::OnHit);
+    }
+
 }
 
 // Called every frame
@@ -32,4 +40,17 @@ void ASectionActor::SetCollisionMesh()
         Destroy();
     }
 }
+
+void ASectionActor::OnHit(UPrimitiveComponent* HitComponent,AActor* OtherActor,UPrimitiveComponent* OtherComp,FVector NormalImpulse,const FHitResult& Hit)
+{
+    auto* player = OtherActor->FindComponentByClass<UPlayerInteractionComponent>();
+    if ( player )
+    {
+        if ( player->collectionTag.Contains(Tags[ 1 ]) )
+        {
+            GEngine->AddOnScreenDebugMessage(3,5,FColor::White,FString::Printf(TEXT("slkdajfld")));
+        }
+    }
+}
+
 
