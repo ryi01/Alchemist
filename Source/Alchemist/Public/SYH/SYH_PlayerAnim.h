@@ -55,4 +55,10 @@ public:
 	void AnimNotify_WinEnd();
 	UFUNCTION()
 	void AnimNotify_LoseEnd();
+	UFUNCTION()
+	void AnimNotify_SameEnd();
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Sound")
+	class USoundBase* WalkSound;
+	UFUNCTION()
+	void AnimNotify_Walk();
 };

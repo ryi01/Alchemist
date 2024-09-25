@@ -44,6 +44,7 @@ void USYH_QuizSelect::OnClickedPausebutt()
 {
 	RemoveFromParent();
 	PlayerController->SetInputMode(FInputModeGameOnly());
+	PlayerController->SetShowMouseCursor(false);
 	if(MultiPlayer) 
 	{
 		MultiPlayer->ServerRPC_RejectQuiz();

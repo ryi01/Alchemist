@@ -8,6 +8,8 @@
 #include "SYH/SYH_MultiPlayer.h"
 #include <windows.h>
 
+#include "Kismet/GameplayStatics.h"
+
 
 void USYH_QuizWidget::NativeConstruct()
 {
@@ -72,7 +74,7 @@ void USYH_QuizWidget::SetAnswer_1Text(int32 Num)
 		Answer_1->SetText(FText::FromString(TEXT("큰 돌")));
 		break;
 	case 2:
-		Answer_1->SetText(FText::FromString(TEXT("O")));
+		Answer_1->SetText(FText::FromString(TEXT("H")));
 		break;
 		// 다른 질문 추가 가능
 	case 3:
@@ -96,7 +98,7 @@ void USYH_QuizWidget::SetAnswer_2Text(int32 Num)
 		Answer_2->SetText(FText::FromString(TEXT("아주 작은 물질")));
 		break;
 	case 2:
-		Answer_2->SetText(FText::FromString(TEXT("H")));
+		Answer_2->SetText(FText::FromString(TEXT("O")));
 		break;
 	case 3:
 		Answer_2->SetText(FText::FromString(TEXT("빛")));
@@ -145,6 +147,7 @@ void USYH_QuizWidget::OnClickedButton_1()
 
 		// 정답 애니메이션 출력
 		PlayAnimation(RightAnim);
+		UGameplayStatics::PlaySound2D(GetWorld(),RightSound);
 		// 2초 딜레이 후 ChangeQandA(1) 호출
 		GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateUObject(this, &USYH_QuizWidget::ChangeQandA, 1), 2.0f, false);
 	}
@@ -153,6 +156,7 @@ void USYH_QuizWidget::OnClickedButton_1()
 	{
 		// 오답 애니메이션 출력
 		PlayAnimation(WrongAnim);
+		UGameplayStatics::PlaySound2D(GetWorld(),WrongSound);
 		// 2초 딜레이 후 ChangeQandA(2) 호출
 		GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateUObject(this, &USYH_QuizWidget::ChangeQandA, 2), 2.0f, false);
 	}
@@ -161,6 +165,7 @@ void USYH_QuizWidget::OnClickedButton_1()
 	{
 		// 오답 애니메이션 출력
 		PlayAnimation(WrongAnim);
+		UGameplayStatics::PlaySound2D(GetWorld(),WrongSound);
 		// 2초 딜레이 후 ChangeQandA(3) 호출
 		GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateUObject(this, &USYH_QuizWidget::ChangeQandA, 3), 2.0f, false);
 	}
@@ -169,6 +174,7 @@ void USYH_QuizWidget::OnClickedButton_1()
 	{
 		// 오답 애니메이션 출력
 		PlayAnimation(WrongAnim);
+		UGameplayStatics::PlaySound2D(GetWorld(),WrongSound);
 		// 2초 딜레이 후 ChangeQandA(4) 호출
 		GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateUObject(this, &USYH_QuizWidget::ChangeQandA, 4), 2.0f, false);
 	}
@@ -179,13 +185,8 @@ void USYH_QuizWidget::OnClickedButton_1()
 		UE_LOG(LogTemp,Error,TEXT("quiz count : %d"),RightCount);
 		// 정답 애니메이션 출력
 		PlayAnimation(RightAnim);
-		RemoveFromParent();
-		PlayerController->SetInputMode(FInputModeGameOnly());
-		if(MultiPlayer) // 요청을 받은 사람
-		{
-			MultiPlayer->ServerRPC_SendRightCount(RightCount);
-			RightCount = 0;
-		}
+		UGameplayStatics::PlaySound2D(GetWorld(),RightSound);
+		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this,&USYH_QuizWidget::LastQ, 2.0f,false);
 	}
 }
 
@@ -201,6 +202,7 @@ void USYH_QuizWidget::OnClickedButton_2()
 	{
 		// 오답 애니메이션 출력
 		PlayAnimation(WrongAnim);
+		UGameplayStatics::PlaySound2D(GetWorld(),WrongSound);
 		// 2초 딜레이 후 ChangeQandA(1) 호출
 		GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateUObject(this, &USYH_QuizWidget::ChangeQandA, 1), 2.0f, false);
 	}
@@ -212,6 +214,8 @@ void USYH_QuizWidget::OnClickedButton_2()
 		
 		// 정답 애니메이션 출력
 		PlayAnimation(RightAnim);
+		UGameplayStatics::PlaySound2D(GetWorld(),RightSound);
+
 		// 2초 딜레이 후 ChangeQandA(2) 호출
 		GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateUObject(this, &USYH_QuizWidget::ChangeQandA, 2), 2.0f, false);
 	}
@@ -223,6 +227,7 @@ void USYH_QuizWidget::OnClickedButton_2()
 
 		// 정답 애니메이션 출력
 		PlayAnimation(RightAnim);
+		UGameplayStatics::PlaySound2D(GetWorld(),RightSound);
 		// 2초 딜레이 후 ChangeQandA(3) 호출
 		GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateUObject(this, &USYH_QuizWidget::ChangeQandA, 3), 2.0f, false);
 	}
@@ -231,6 +236,7 @@ void USYH_QuizWidget::OnClickedButton_2()
 	{
 		// 오답 애니메이션 출력
 		PlayAnimation(WrongAnim);
+		UGameplayStatics::PlaySound2D(GetWorld(),WrongSound);
 		// 2초 딜레이 후 ChangeQandA(4) 호출
 		GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateUObject(this, &USYH_QuizWidget::ChangeQandA, 4), 2.0f, false);
 	}
@@ -239,13 +245,8 @@ void USYH_QuizWidget::OnClickedButton_2()
 	{
 		// 오답 애니메이션 출력
 		PlayAnimation(WrongAnim);
-		RemoveFromParent();
-		PlayerController->SetInputMode(FInputModeGameOnly());
-		if(MultiPlayer) // 요청을 받은 사람
-		{
-			MultiPlayer->ServerRPC_SendRightCount(RightCount);
-			RightCount = 0;
-		}
+		UGameplayStatics::PlaySound2D(GetWorld(),WrongSound);
+		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this,&USYH_QuizWidget::LastQ, 2.0f,false);
 	}
 }
 
@@ -259,6 +260,8 @@ void USYH_QuizWidget::OnClickedButton_3()
 	{
 		// 오답 애니메이션 출력
 		PlayAnimation(WrongAnim);
+		UGameplayStatics::PlaySound2D(GetWorld(),WrongSound);
+
 		// 2초 딜레이 후 ChangeQandA(1) 호출
 		GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateUObject(this, &USYH_QuizWidget::ChangeQandA, 1), 2.0f, false);
 	}
@@ -267,6 +270,8 @@ void USYH_QuizWidget::OnClickedButton_3()
 	{
 		// 오답 애니메이션 출력
 		PlayAnimation(WrongAnim);
+		UGameplayStatics::PlaySound2D(GetWorld(),WrongSound);
+
 		// 2초 딜레이 후 ChangeQandA(2) 호출
 		GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateUObject(this, &USYH_QuizWidget::ChangeQandA, 2), 2.0f, false);
 	}
@@ -275,6 +280,8 @@ void USYH_QuizWidget::OnClickedButton_3()
 	{
 		// 오답 애니메이션 출력
 		PlayAnimation(WrongAnim);
+		UGameplayStatics::PlaySound2D(GetWorld(),WrongSound);
+
 		// 2초 딜레이 후 ChangeQandA(3) 호출
 		GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateUObject(this, &USYH_QuizWidget::ChangeQandA, 3), 2.0f, false);
 	}
@@ -286,6 +293,8 @@ void USYH_QuizWidget::OnClickedButton_3()
 
 		// 정답 애니메이션 출력
 		PlayAnimation(RightAnim);
+		UGameplayStatics::PlaySound2D(GetWorld(),RightSound);
+
 		// 2초 딜레이 후 ChangeQandA(4) 호출
 		GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateUObject(this, &USYH_QuizWidget::ChangeQandA, 4), 2.0f, false);
 	}
@@ -294,13 +303,9 @@ void USYH_QuizWidget::OnClickedButton_3()
 	{
 		// 오답 애니메이션 출력
 		PlayAnimation(WrongAnim);
-		RemoveFromParent();
-		PlayerController->SetInputMode(FInputModeGameOnly());
-		if(MultiPlayer) // 요청을 받은 사람
-		{
-			MultiPlayer->ServerRPC_SendRightCount(RightCount);
-			RightCount = 0;
-		}
+		UGameplayStatics::PlaySound2D(GetWorld(),WrongSound);
+		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this,&USYH_QuizWidget::LastQ, 2.0f,false);
+
 	}
 }
 
@@ -313,4 +318,14 @@ void USYH_QuizWidget::ChangeQandA(int32 Num)
 	SetAnswer_1Text(Num);
 	SetAnswer_2Text(Num);
 	SetAnswer_3Text(Num);
+}
+
+void USYH_QuizWidget::LastQ()
+{
+	RemoveFromParent();
+	if(MultiPlayer) // 요청을 받은 사람
+	{
+		MultiPlayer->ServerRPC_SendRightCount(RightCount);
+		RightCount = 0;
+	}
 }

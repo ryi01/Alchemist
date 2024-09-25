@@ -188,7 +188,10 @@ public:
 	UFUNCTION(Server,Reliable,withValidation)
 	void ServerRPC_Quiz();
 
-
+	UFUNCTION(Server,Reliable)
+	void ServerRPC_Rotate();
+	UFUNCTION(NetMulticast,Reliable)
+	void ClientRPC_Rotate();
 	
 
 	void Server_Quiz();
@@ -237,6 +240,8 @@ public:
 	bool IsWin;
 	UPROPERTY(EditDefaultsOnly,BlueprintReadWrite,Replicated)
 	bool IsLose;
+	UPROPERTY(EditDefaultsOnly,BlueprintReadWrite,Replicated)
+	bool IsSame;
 	//esc
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<UUserWidget> MenuClass;
@@ -278,5 +283,6 @@ public:
 
 	UFUNCTION()
 	void DestroySection(AActor* HitActor);
-	
+
+
 };

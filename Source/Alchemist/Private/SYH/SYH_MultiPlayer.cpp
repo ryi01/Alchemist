@@ -19,6 +19,7 @@
 #include "Alchemist/CHJ/Illustrated_Guide/Guide_Widget/Guide_MainWidget.h"
 #include "Components/TextBlock.h"
 #include "Kismet/GameplayStatics.h"
+#include "Kismet/KismetMathLibrary.h"
 #include "Net/UnrealNetwork.h"
 #include "SYH/SYH_MenuWidget.h"
 #include "SYH/SYH_QuizSelect.h"
@@ -191,13 +192,13 @@ void ASYH_MultiPlayer::Tick(float DeltaTime)
 	}
 	if(isWidget) return;
 	// 캐릭터 머리 위에 bool 값을 출력
-	FString BoolText = isTime ? TEXT("True") : TEXT("False");
+	FString BoolText = IsSame ? TEXT("True") : TEXT("False");
 	
 	// 텍스트를 캐릭터의 위치 + 오프셋(머리 위)에 표시
 	FVector TextLocation = GetActorLocation() + FVector(0, 0, 100);  // 캐릭터 머리 위 100 유닛
 	
 	// DrawDebugString을 사용해 텍스트를 표시
-	DrawDebugString(GetWorld(), TextLocation, FString::Printf(TEXT("isTime: %s"), *BoolText), nullptr, FColor::Green, 0.0f, true);
+	DrawDebugString(GetWorld(), TextLocation, FString::Printf(TEXT("IsSame: %s"), *BoolText), nullptr, FColor::Green, 0.0f, true);
 
 	if (QuizWaitWidget != nullptr && QuizSelectWidget != nullptr && QuizWidget != nullptr && QuizResultWidget != nullptr)
 	{
@@ -425,7 +426,6 @@ void ASYH_MultiPlayer::Move(const FInputActionValue& Value)
 {
 	// input is a Vector2D
 	FVector2D MovementVector = Value.Get<FVector2D>();
-
 	if (Controller != nullptr)
 	{
 		// find out which way is forward
@@ -525,7 +525,6 @@ void ASYH_MultiPlayer::OnMyCheckActor()
 }
 
 
-
 void ASYH_MultiPlayer::Server_Quiz()
 {
 	FHitResult OutHit;
@@ -548,6 +547,8 @@ void ASYH_MultiPlayer::Server_Quiz()
 			TargetPlayer->InQuiz = true;
 			UE_LOG(LogTemp, Warning, TEXT("Server_Quiz: TargetPlayer set to %s"), *TargetPlayer->GetName());
 			UE_LOG(LogTemp, Warning, TEXT("Server_Quiz: TargetPlayer set to %s"), *me->GetName());
+			TargetPlayer->GetCharacterMovement()->bUseControllerDesiredRotation = false;
+			TargetPlayer->ServerRPC_Rotate();
 			// 요청을 받은 플레이어에게 UI를 띄우도록 서버에서 클라이언트로 요청
 			this->ClientRPC_ShowQuizWait();
 			TargetPlayer->ClientRPC_ShowQuizSelect();
@@ -562,6 +563,25 @@ void ASYH_MultiPlayer::Server_Quiz()
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Server_Quiz: No player hit by Sweep Trace"));
 	}
+}
+
+void ASYH_MultiPlayer::ClientRPC_Rotate_Implementation()
+{
+	// 서로를 마주보도록 회전값 적용
+	if(!TargetPlayer) return;
+	FVector TargetLocation = TargetPlayer->GetActorLocation();
+	FVector MyLocation = GetActorLocation();
+	FRotator LookRotation = UKismetMathLibrary::FindLookAtRotation(MyLocation,TargetLocation);
+	this->SetActorRotation(LookRotation);
+	if(Controller)
+	{
+		Controller->SetControlRotation(LookRotation);
+	}
+}
+
+void ASYH_MultiPlayer::ServerRPC_Rotate_Implementation()
+{
+	ClientRPC_Rotate();
 }
 
 void ASYH_MultiPlayer::Quiz(const FInputActionValue& Value)
@@ -703,6 +723,7 @@ bool ASYH_MultiPlayer::ServerRPC_Quiz_Validate()
 
 void ASYH_MultiPlayer::ClientRPC_ShowQuizReject_Implementation()
 {
+	GetCharacterMovement()->bUseControllerDesiredRotation = true;
 	if(QuizWaitWidget)
 	{
 		QuizWaitWidget->SetWaitVisibility(false);
@@ -721,6 +742,7 @@ void ASYH_MultiPlayer::HideQuizReject()
 		interactionComp->CreateMainWidget();
 	}
 }
+
 void ASYH_MultiPlayer::ClientRPC_ShowQuiz_Implementation()
 {
 	if(QuizWaitWidget)
@@ -753,6 +775,7 @@ bool ASYH_MultiPlayer::ServerRPC_AcceptQuiz_Validate()
 
 void ASYH_MultiPlayer::ServerRPC_RejectQuiz_Implementation()
 {
+	GetCharacterMovement()->bUseControllerDesiredRotation = true;
 	//  TargetPlayer 요청을 하고 대기중인 플레이어
 	if(TargetPlayer)
 	{
@@ -778,8 +801,7 @@ void ASYH_MultiPlayer::Server_Compare()
 		ASYH_MultiPlayer* OtherPlayer = *It;
 		if (OtherPlayer && OtherPlayer != this)
 		{
-
-			if(OtherPlayer->RightCount == -1)
+			if(TargetPlayer->RightCount == -1)
 			{
 				ClientRPC_ShowWaitResult();
 			}
@@ -896,6 +918,7 @@ void ASYH_MultiPlayer::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 	DOREPLIFETIME(ASYH_MultiPlayer,IsWin);
 	DOREPLIFETIME(ASYH_MultiPlayer,IsLose);
+	DOREPLIFETIME(ASYH_MultiPlayer,IsSame);
 	DOREPLIFETIME(ASYH_MultiPlayer,InQuiz);
 	DOREPLIFETIME(ASYH_MultiPlayer,isTime);
 	DOREPLIFETIME(ASYH_MultiPlayer,isWidget);
