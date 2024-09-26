@@ -43,8 +43,12 @@ void USYH_StartWidget::OnClickedCreateButt()
 		FInputModeGameOnly input;
 		PlayerController->SetInputMode(input);
 		PlayerController->SetShowMouseCursor(false);
-		GameInstance->PlayerName = Edit_PlayerName->GetText().ToString();
-		GameInstance->Create();
+		FString newPlayerName = Edit_PlayerName->GetText().ToString();
+		if(false == newPlayerName.IsEmpty())
+		{
+			GameInstance->PlayerName = Edit_PlayerName->GetText().ToString();
+			GameInstance->Create();
+		}
 	}
 }
 
@@ -55,8 +59,12 @@ void USYH_StartWidget::OnClickedJoinButt()
 		FInputModeGameOnly input;
     	PlayerController->SetInputMode(input);
     	PlayerController->SetShowMouseCursor(false);
-		GameInstance->PlayerName = Edit_PlayerName->GetText().ToString();
-		GameInstance->Find();
+		FString newPlayerName = Edit_PlayerName->GetText().ToString();
+		if(false == newPlayerName.IsEmpty())
+		{
+			GameInstance->PlayerName = Edit_PlayerName->GetText().ToString();
+			GameInstance->Create();
+		}
 	}
 }
 
