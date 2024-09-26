@@ -115,7 +115,7 @@ void UKMK_GrabActorComp::BeginOverlap(UPrimitiveComponent* OverlappedComponent, 
 			if ( eleMeshMap.Num() > 0 && eleMeshMap.Contains(checkTagName) )
 			{
 				mesh->SetStaticMesh(eleMeshMap[ checkTagName ]);
-				mesh->SetWorldRotation(FRotator(0,-90,0));
+				mesh->SetWorldRotation(FRotator(0,-90,90));
 			}
 		}
 		createNum++;
@@ -141,7 +141,7 @@ void UKMK_GrabActorComp::CreateElementBP(FString tag)
 		if ( eleMeshMap.Num() > 0 && eleMeshMap.Contains(tag))
 		{
 			mesh->SetStaticMesh(eleMeshMap[tag]);
-			mesh->SetWorldRotation(FRotator(0, -90, 0));
+			mesh->SetWorldRotation(FRotator(0, -90, 90));
 		}
 	}
 }
@@ -152,16 +152,25 @@ void UKMK_GrabActorComp::MissionComplete(const FString& missionEleTag, int32 num
 	if(missionTag.IsEmpty()) return;
 	UGameplayStatics::PlaySound2D(GetWorld(),sounds[ 0 ]);
 	// 파티클 시스템 스폰
+
 	UParticleSystemComponent* ParticleComponent = UGameplayStatics::SpawnEmitterAtLocation(
 		GetWorld(),  // 파티클을 스폰할 월드
 		particle[0],  // 재생할 파티클 시스템
-		GetOwner()->GetActorLocation()+FVector(300, 0, 0),  // 파티클이 생성될 위치
-		FRotator::ZeroRotator  // 파티클의 회전
+		FVector(7308.000000,52745.403291 + y,-15557.000000),  // 파티클이 생성될 위치
+		FRotator(0, 0, -45)  // 파티클의 회전
 	);
 
-	if ( ParticleComponent )
+	// 파티클 시스템 스폰
+	UParticleSystemComponent* ParticleComponent1 = UGameplayStatics::SpawnEmitterAtLocation(
+		GetWorld(),  // 파티클을 스폰할 월드
+		particle[ 1 ],  // 재생할 파티클 시스템
+		FVector(7308.000000,52745.403291 - y,-15557.000000 ),  // 파티클이 생성될 위치
+		FRotator(0,0,45)  // 파티클의 회전
+	);
+	if ( ParticleComponent && ParticleComponent1 )
 	{
 		ParticleComponent->ActivateSystem();  // 파티클 재생
+		ParticleComponent1->ActivateSystem();  // 파티클 재생
 	}
 	if ( missionTag.Contains(missionEleTag) )
 	{

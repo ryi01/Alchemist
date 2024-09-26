@@ -36,8 +36,11 @@ public:
 	UFUNCTION()
 	void CreateElementSucced(FString tagName,const FString& text);
 
+	UPROPERTY(EditAnywhere)
+	float y = 200;
 	UPROPERTY(EditDefaultsOnly)
 	TArray<class USoundBase*> sounds;
+
 	UPROPERTY(EditDefaultsOnly)
 	TArray<class UParticleSystem*> particle;
 	UFUNCTION()

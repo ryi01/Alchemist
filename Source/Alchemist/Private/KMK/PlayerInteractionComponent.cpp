@@ -15,6 +15,7 @@
 #include "KMK/MissionWidget.h"
 #include "../CHJ/Guide_GameInstance.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "KMK/SectionActor.h"
 
 // Sets default values for this component's properties
 UPlayerInteractionComponent::UPlayerInteractionComponent()
@@ -149,9 +150,16 @@ void UPlayerInteractionComponent::OnMyActionInteraction(const FInputActionValue&
 				if ( collectionTag.Contains(HitActor->Tags[ 1 ]) )
 				{
 					// actorClass->textWidget->Destroy();
-					HitActor->SetReplicates(false);
-					HitActor->Destroy();
-					me->ChangeSpeed();
+					ASectionActor* comp = Cast<ASectionActor>(HitActor);
+
+					if ( comp )
+					{
+						// 태그가 포함되면 서버에게 섹션의 isPass를 변경하라고 알려줘야함
+                        ServerRPCSectionOpen(comp);
+                        comp->comp->SetVisibility(false);
+                        // comp->SetCollisionMesh();
+						me->ChangeSpeed();
+					}
 				}
 				if ( missionWidget != nullptr )
 				{
@@ -219,3 +227,27 @@ void UPlayerInteractionComponent::DeleteMainWidget()
 		missionWidget->RemoveFromParent();
 	}
 }
+
+void UPlayerInteractionComponent::ServerRPCSectionOpen_Implementation(class ASectionActor* target)
+{
+	if ( me->HasAuthority() )
+	{
+		MultiRPCSecionOpen(target);
+	}
+}
+
+void UPlayerInteractionComponent::MultiRPCSecionOpen_Implementation(class ASectionActor* target)
+{
+	UE_LOG(LogTemp,Warning,TEXT("MultiRPCSecionOpen called"));
+	RemoveCollision(target);
+}
+
+void UPlayerInteractionComponent::RemoveCollision(class ASectionActor* target)
+{
+	if ( target && target->comp && me )
+	{
+		target->comp->IgnoreActorWhenMoving(me,true);
+		me->MoveIgnoreActorAdd(target);
+	}
+}
+

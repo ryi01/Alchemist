@@ -11,6 +11,7 @@
 void UKMK_MakeEleWidget::NativeConstruct()
 {
     OutButt->OnPressed.AddDynamic(this,&UKMK_MakeEleWidget::ClickButt);
+    SetVisibility(ESlateVisibility::Hidden);
 }
 
 void UKMK_MakeEleWidget::ClickButt()
