@@ -7,6 +7,7 @@
 #include "Components/Button.h"
 #include "KMK/KMK_HttpActorWithAI.h"
 #include "KMK/KMK_GrabActorComp.h"
+#include "Components/WidgetComponent.h"
 
 void UKMK_MakeEleWidget::NativeConstruct()
 {
@@ -16,6 +17,7 @@ void UKMK_MakeEleWidget::NativeConstruct()
 
 void UKMK_MakeEleWidget::ClickButt()
 {
+    http->PotComp->widComp->SetRenderInMainPass(false);
     SetVisibility(ESlateVisibility::Hidden);
     DetailHorizontalBox->ClearChildren();
     for ( int i = 0; i < http->PotComp->actorArray.Num(); i++ )
@@ -29,6 +31,8 @@ void UKMK_MakeEleWidget::ClickButt()
     http->PotComp->ElementArray.Empty();
     http->PotComp->cnt = -1;
     http->isWidgetOn = false;
+
+   
 }
 
 void UKMK_MakeEleWidget::SetSlotChild(UWidget* wid,class AKMK_HttpActorWithAI* httpComp)

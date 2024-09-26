@@ -31,10 +31,12 @@ void UKMK_GrabActorComp::BeginPlay()
 	Super::BeginPlay();
 
 	auto* box = GetOwner()->FindComponentByClass<UBoxComponent>();
+	widComp = GetOwner()->FindComponentByClass<UWidgetComponent>();
 	check(box);
-	if ( box )
+	if ( box && widComp)
 	{
 		box->OnComponentBeginOverlap.AddDynamic(this, &UKMK_GrabActorComp::BeginOverlap);
+		widComp->SetRenderInMainPass(false);
 	}
 
 }
@@ -100,7 +102,9 @@ void UKMK_GrabActorComp::BeginOverlap(UPrimitiveComponent* OverlappedComponent, 
 	// 액터 중에 tag = element인것만 넣기
 	if ( OtherActor->ActorHasTag(TEXT("element")) )
 	{
-		FString checkTagName = OtherActor->Tags[1].ToString();
+
+		FString checkTagName;
+		if( OtherActor->Tags[ 1 ].IsValid() ) checkTagName = OtherActor->Tags[1].ToString();
 		if(checkTagName == "" ) return;
 		if ( ElementArray.Contains(checkTagName) ) ElementArray[ checkTagName ]++;
 		else ElementArray.Add(checkTagName,1);
