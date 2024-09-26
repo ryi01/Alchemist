@@ -6,6 +6,7 @@
 #include <string>
 
 #include "Interfaces/OnlineSessionInterface.h"
+#include "Online/OnlineSessionNames.h"
 #include "OnlineSessionSettings.h"
 #include "SYH/SYH_QuizWaitWidget.h"
 #include "KMK/KMK_GrabActorComp.h"
@@ -41,7 +42,7 @@ void UGuide_GameInstance::Init()
 
 	//델리게이트 바인딩
 	// 세션 인터페이스 가져오기
-	IOnlineSubsystem* OnlineSubsystem = IOnlineSubsystem::Get();
+	IOnlineSubsystem* OnlineSubsystem = IOnlineSubsystem::Get(); 
 	if(OnlineSubsystem)
 	{
 		IOnlineSessionPtr SessionInterface = OnlineSubsystem->GetSessionInterface();
@@ -141,7 +142,7 @@ void UGuide_GameInstance::Create()
 				SessionSettings.bUsesPresence = true;// 로비기능을 활성화한다. (Host 하려면 필요)
 				SessionSettings.bUseLobbiesIfAvailable = true; // 로비기능을 활성화한다. (Host 하려면 필요)
 				SessionSettings.Set(FName("Player_Name"),StringBase64Encode(PlayerName),EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
-				SessionInterface->CreateSession(0,FName(PlayerName), SessionSettings);
+				SessionInterface->CreateSession(0, FName("Alpha"), SessionSettings);
 			}
 		}
 	}
@@ -156,9 +157,9 @@ void UGuide_GameInstance::Find()
 		if(SessionInterface.IsValid())
 		{
 			SessionSearch = MakeShareable(new FOnlineSessionSearch());
-			SessionSearch->bIsLanQuery =true;
+			SessionSearch->bIsLanQuery = false;
 			SessionSearch->MaxSearchResults = 5;
-
+			SessionSearch->QuerySettings.Set(SEARCH_PRESENCE, true, EOnlineComparisonOp::Equals);
 			SessionInterface->FindSessions(0,SessionSearch.ToSharedRef());
 		}
 	}
@@ -172,7 +173,7 @@ void UGuide_GameInstance::Join()
 		IOnlineSessionPtr SessionInterface = OnlineSubsystem->GetSessionInterface();
 		if(SessionInterface.IsValid() && SessionSearch->SearchResults.Num()>0)
 		{
-			SessionInterface->JoinSession(0,FName(PlayerName), SessionSearch->SearchResults[0]);
+			SessionInterface->JoinSession(0, FName("Alpha"), SessionSearch->SearchResults[0]);
 		}
 	}
 }
@@ -192,10 +193,31 @@ void UGuide_GameInstance::OnCreateSessionComplete(FName SessionName, bool bWasSu
 
 void UGuide_GameInstance::OnFindSessionComplete(bool bWasSuccessful)
 {
-	if(bWasSuccessful && SessionSearch.IsValid() && SessionSearch->SearchResults.Num()>0)
+	if (bWasSuccessful && SessionSearch.IsValid())
 	{
-		Join();
+		int32 NumResults = SessionSearch->SearchResults.Num();
+		UE_LOG(LogTemp, Warning, TEXT("Found %d sessions"), NumResults);
+
+		if (NumResults > 0)
+		{
+			// 검색된 세션 정보를 출력
+			for (int32 i = 0; i < NumResults; i++)
+			{
+				const FOnlineSessionSearchResult& SearchResult = SessionSearch->SearchResults[i];
+				UE_LOG(LogTemp, Warning, TEXT("Session %d: %s"), i, *SearchResult.GetSessionIdStr());
+			}
+			Join();  // 첫 번째 세션에 Join
+		}
+		else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("No sessions found"));
+		}
 	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("Session search failed"));
+	}
+
 }
 
 void UGuide_GameInstance::OnJoinSessionComplete(FName SessionName, EOnJoinSessionCompleteResult::Type Result)
