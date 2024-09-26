@@ -63,7 +63,7 @@ void USYH_StartWidget::OnClickedJoinButt()
 		if(false == newPlayerName.IsEmpty())
 		{
 			GameInstance->PlayerName = Edit_PlayerName->GetText().ToString();
-			GameInstance->Create();
+			GameInstance->Find();
 		}
 	}
 }

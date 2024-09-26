@@ -119,7 +119,7 @@ void UGuide_GameInstance::Create()
 		IOnlineSessionPtr SessionInterface = OnlineSubsystem->GetSessionInterface();
 		if(SessionInterface.IsValid())
 		{
-			FNamedOnlineSession* ExistingSession = SessionInterface->GetNamedSession(FName("Room"));
+			FNamedOnlineSession* ExistingSession = SessionInterface->GetNamedSession(FName("Alpha"));
 			if(ExistingSession != nullptr)
 			{
 				SessionInterface->DestroySession(FName("Alpha"));
