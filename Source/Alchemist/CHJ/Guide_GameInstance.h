@@ -59,7 +59,12 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Network")
 	void Join();
+	// 스팀으로 한글 이름 방을 만들어서 조회하면 한글이 깨지는 이슈 발생!!
+	// Base64 인코딩으로 해결하고자함!
+	FString PlayerName = TEXT("Alpha");
 
+	FString StringBase64Encode(const FString& str);
+	FString StringBase64Decode(const FString& str);
 protected:
 	TSharedPtr<class FOnlineSessionSearch> SessionSearch;
 private:
@@ -73,4 +78,6 @@ private:
 	FOnFindSessionsCompleteDelegate OnFindSessionsCompleteDelegate;
 	FOnJoinSessionCompleteDelegate OnJoinSessionCompleteDelegate;
 	FOnDestroySessionCompleteDelegate OnDestroySessionCompleteDelegate;
+
+	
 };

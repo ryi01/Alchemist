@@ -25,7 +25,8 @@ public:
 
 	UPROPERTY(EditAnywhere,meta = (BindWidget))
 	class UButton* PauseButt;
-	
+	UPROPERTY(EditAnywhere,meta = (BindWidget))
+	class UEditableText* Edit_PlayerName;
 	UFUNCTION()
 	void OnClickedCreateButt();
 	UFUNCTION()

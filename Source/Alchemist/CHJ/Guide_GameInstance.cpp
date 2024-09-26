@@ -2,6 +2,9 @@
 
 
 #include "Alchemist/CHJ/Guide_GameInstance.h"
+
+#include <string>
+
 #include "Interfaces/OnlineSessionInterface.h"
 #include "OnlineSessionSettings.h"
 #include "SYH/SYH_QuizWaitWidget.h"
@@ -137,8 +140,8 @@ void UGuide_GameInstance::Create()
 				SessionSettings.bShouldAdvertise = true;// 온라인에서 세션을 볼 수 있도록함. '광고한다'
 				SessionSettings.bUsesPresence = true;// 로비기능을 활성화한다. (Host 하려면 필요)
 				SessionSettings.bUseLobbiesIfAvailable = true; // 로비기능을 활성화한다. (Host 하려면 필요)
-
-				SessionInterface->CreateSession(0,FName("Alpha"), SessionSettings);
+				SessionSettings.Set(FName("Player_Name"),StringBase64Encode(PlayerName),EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
+				SessionInterface->CreateSession(0,FName(PlayerName), SessionSettings);
 			}
 		}
 	}
@@ -169,7 +172,7 @@ void UGuide_GameInstance::Join()
 		IOnlineSessionPtr SessionInterface = OnlineSubsystem->GetSessionInterface();
 		if(SessionInterface.IsValid() && SessionSearch->SearchResults.Num()>0)
 		{
-			SessionInterface->JoinSession(0,FName("Alpha"), SessionSearch->SearchResults[0]);
+			SessionInterface->JoinSession(0,FName(PlayerName), SessionSearch->SearchResults[0]);
 		}
 	}
 }
@@ -229,4 +232,23 @@ void UGuide_GameInstance::OnDestroySessionComplete(FName SessionName, bool bWasS
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Failed to destroy session: %s"), *SessionName.ToString());
 	}
+}
+// 보낼 때
+FString UGuide_GameInstance::StringBase64Encode(const FString& str)
+{
+	// Set 할 때 : FString -> UTF8 (std::string) -> TArray<uint8> -> base64 로 Encode
+	std::string utf8String = TCHAR_TO_UTF8(*str);
+	TArray<uint8> arrayData = TArray<uint8>((uint8*)(utf8String.c_str()),
+	utf8String.length());
+	return FBase64::Encode(arrayData);
+}
+
+// 받을 때
+FString UGuide_GameInstance::StringBase64Decode(const FString& str)
+{
+	// Get 할 때 : base64 로 Decode -> TArray<uint8> -> TCHAR
+	TArray<uint8> arrayData;
+	FBase64::Decode(str, arrayData);
+	std::string ut8String((char*)(arrayData.GetData()), arrayData.Num());
+	return UTF8_TO_TCHAR(ut8String.c_str());
 }

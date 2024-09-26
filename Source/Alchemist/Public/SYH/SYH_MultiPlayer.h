@@ -21,6 +21,8 @@ class ASYH_MultiPlayer : public ACharacter
 	GENERATED_BODY()
 
 public:
+
+	
 	/** Camera boom positioning the camera behind the character */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	USpringArmComponent* SpringArmComp;
@@ -33,7 +35,11 @@ public:
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category = Camera)
 	class UStaticMeshComponent* CameraComp;
-	
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	class USceneComponent* NamePoint;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	class UTextRenderComponent* PlayerNameText;
 	/** MappingContext */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputMappingContext* IMC_Player;
@@ -83,34 +89,10 @@ public:
 	UPROPERTY()
 	class UGuide_MainWidget* GuideWidget;
 
-
-	UPROPERTY(ReplicatedUsing = OnRep_ServerMesh)
-	USkeletalMesh* ServerMesh;
-
-	UPROPERTY(ReplicatedUsing = OnRep_ClientMesh)
-	USkeletalMesh* ClientMesh;
-
-	UPROPERTY(ReplicatedUsing = OnRep_ServerAnim)
-	TSubclassOf<UAnimInstance> ServerAnim;
-
-	UPROPERTY(ReplicatedUsing = OnRep_ClientAnim)
-	TSubclassOf<UAnimInstance> ClientAnim;
-
-	// OnRep 함수 선언
-	UFUNCTION()
-	void OnRep_ServerMesh();
-
-	UFUNCTION()
-	void OnRep_ClientMesh();
-
-	UFUNCTION()
-	void OnRep_ServerAnim();
-
-	UFUNCTION()
-	void OnRep_ClientAnim();
-
-	UFUNCTION(Server,Reliable,withValidation)
-	void ServerRPC_MeshAndAnim(USkeletalMesh* InMesh, TSubclassOf<UAnimInstance> InAnim);
+	UPROPERTY(Replicated,BlueprintReadOnly)
+	FString PlayerName;
+	UFUNCTION(Server,reliable)
+	void ServerRPC_SetPlayerName(const FString& NewPlayerName);
 protected:
 
 	/** Called for movement input */
@@ -285,4 +267,31 @@ public:
 	void DestroySection(AActor* HitActor);
 
 
+	UPROPERTY(ReplicatedUsing = OnRep_ServerMesh)
+	USkeletalMesh* ServerMesh;
+
+	UPROPERTY(ReplicatedUsing = OnRep_ClientMesh)
+	USkeletalMesh* ClientMesh;
+
+	UPROPERTY(ReplicatedUsing = OnRep_ServerAnim)
+	TSubclassOf<UAnimInstance> ServerAnim;
+
+	UPROPERTY(ReplicatedUsing = OnRep_ClientAnim)
+	TSubclassOf<UAnimInstance> ClientAnim;
+
+	// OnRep 함수 선언
+	UFUNCTION()
+	void OnRep_ServerMesh();
+
+	UFUNCTION()
+	void OnRep_ClientMesh();
+
+	UFUNCTION()
+	void OnRep_ServerAnim();
+
+	UFUNCTION()
+	void OnRep_ClientAnim();
+
+	UFUNCTION(Server,Reliable,withValidation)
+	void ServerRPC_MeshAndAnim(USkeletalMesh* InMesh, TSubclassOf<UAnimInstance> InAnim);
 };

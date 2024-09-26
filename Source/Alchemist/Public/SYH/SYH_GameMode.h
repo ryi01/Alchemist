@@ -13,6 +13,7 @@ class ASYH_GameMode : public AGameModeBase
 
 public:
 	ASYH_GameMode();
+
 };
 
 

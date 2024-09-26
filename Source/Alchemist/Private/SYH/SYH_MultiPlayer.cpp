@@ -18,6 +18,7 @@
 #include "Alchemist/CHJ/Illustrated_Guide/GuideObject/Aluminum_Object.h"
 #include "Alchemist/CHJ/Illustrated_Guide/Guide_Widget/Guide_MainWidget.h"
 #include "Components/TextBlock.h"
+#include "Components/TextRenderComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Net/UnrealNetwork.h"
@@ -79,11 +80,17 @@ ASYH_MultiPlayer::ASYH_MultiPlayer()
 	{
 		CameraComp->SetStaticMesh(CameraCompMesh.Object);
 	}
+	NamePoint = CreateDefaultSubobject<USceneComponent>(TEXT("NamePoint"));
+	NamePoint->SetupAttachment(RootComponent);
+	PlayerNameText = CreateDefaultSubobject<UTextRenderComponent>(TEXT("PlayerNameText"));
+	PlayerNameText->SetupAttachment(NamePoint);  // 캐릭터의 루트 컴포넌트에 부착
 
+	
 }
 void ASYH_MultiPlayer::PossessedBy(AController* NewController) // server에서만 불림
 {
 	Super::PossessedBy(NewController);
+	// 서버일 때의 위젯 생성
 	if(HasAuthority())
 	{
 		if(!IsLocallyControlled()) return;
@@ -99,7 +106,6 @@ void ASYH_MultiPlayer::PossessedBy(AController* NewController) // server에서�
 			GetMesh()->SetAnimInstanceClass(ServerAnim);
 		}
 	}
-	// 서버일 때의 위젯 생성
 	if(HasAuthority())
 	{
 		if (!IsLocallyControlled() || GuideWidget != nullptr || QuizWaitWidget != nullptr || QuizSelectWidget != nullptr || QuizWidget != nullptr ||QuizResultWidget != nullptr) return;
@@ -192,14 +198,11 @@ void ASYH_MultiPlayer::Tick(float DeltaTime)
 	}
 	if(isWidget) return;
 	// 캐릭터 머리 위에 bool 값을 출력
-	FString BoolText = IsSame ? TEXT("True") : TEXT("False");
-	
-	// 텍스트를 캐릭터의 위치 + 오프셋(머리 위)에 표시
-	FVector TextLocation = GetActorLocation() + FVector(0, 0, 100);  // 캐릭터 머리 위 100 유닛
-	
-	// DrawDebugString을 사용해 텍스트를 표시
-	DrawDebugString(GetWorld(), TextLocation, FString::Printf(TEXT("IsSame: %s"), *BoolText), nullptr, FColor::Green, 0.0f, true);
-
+	// PlayerName이 비어 있지 않으면 캐릭터 머리 위에 표시
+	if (!PlayerName.IsEmpty())
+	{
+		PlayerNameText->SetText(FText::FromString(PlayerName)); 
+	}
 	if (QuizWaitWidget != nullptr && QuizSelectWidget != nullptr && QuizWidget != nullptr && QuizResultWidget != nullptr)
 	{
 		if (IsLocallyControlled())
@@ -231,6 +234,14 @@ void ASYH_MultiPlayer::Tick(float DeltaTime)
 }
 // request를 보낼 수 있는 거리내에 있으면 UI를 띄우게 함
 
+void ASYH_MultiPlayer::ServerRPC_SetPlayerName_Implementation(const FString& NewPlayerName)
+{
+	if(HasAuthority())
+	{
+		PlayerName = NewPlayerName;
+	}
+}
+
 void ASYH_MultiPlayer::CheckDist(bool bCheck)
 {
 	if(QuizSelectWidget->IsInViewport() || QuizWidget->IsInViewport() || QuizResultWidget->IsInViewport() || QuizWaitWidget->Reject->IsInViewport() || QuizWaitWidget->Wait->IsInViewport()) return;
@@ -260,6 +271,58 @@ void ASYH_MultiPlayer::CheckDist(bool bCheck)
 			QuizWaitWidget->SetRequestVisibility(false); // UI를 숨깁니다.
 	}
 	if(!bShowUI ) interactionComp->CreateMainWidget();
+}
+void ASYH_MultiPlayer::OnRep_ServerMesh()
+{
+	if (ServerMesh)
+	{
+		GetMesh()->SetSkeletalMesh(ServerMesh);
+	}
+}
+
+void ASYH_MultiPlayer::OnRep_ClientMesh()
+{
+	if (ClientMesh)
+	{
+		GetMesh()->SetSkeletalMesh(ClientMesh);
+	}
+}
+
+void ASYH_MultiPlayer::OnRep_ServerAnim()
+{
+	if (ServerAnim)
+	{
+		GetMesh()->SetAnimInstanceClass(ServerAnim);
+	}
+}
+
+void ASYH_MultiPlayer::OnRep_ClientAnim()
+{
+	if (ClientAnim)
+	{
+		GetMesh()->SetAnimInstanceClass(ClientAnim);
+	}
+}
+
+void ASYH_MultiPlayer::ServerRPC_MeshAndAnim_Implementation(USkeletalMesh* InMesh, TSubclassOf<UAnimInstance> InAnim)
+{
+	// 서버에서 클라이언트가 요청한 메쉬와 애니메이션을 복제 변수에 설정
+	if (InMesh)
+	{
+		ClientMesh = InMesh;
+		OnRep_ClientMesh();
+	}
+
+	if (InAnim)
+	{
+		ClientAnim = InAnim;
+		OnRep_ClientAnim();
+	}
+}
+
+bool ASYH_MultiPlayer::ServerRPC_MeshAndAnim_Validate(USkeletalMesh* InMesh, TSubclassOf<UAnimInstance> InAnim)
+{
+	return true;
 }
 
 // request text를 켜는 함수
@@ -366,60 +429,6 @@ void ASYH_MultiPlayer::ObjectDetect()
 	{
 		UE_LOG(LogTemp,Error,TEXT("no bhit"));
 	}
-}
-
-
-void ASYH_MultiPlayer::OnRep_ServerMesh()
-{
-	if (ServerMesh)
-	{
-		GetMesh()->SetSkeletalMesh(ServerMesh);
-	}
-}
-
-void ASYH_MultiPlayer::OnRep_ClientMesh()
-{
-	if (ClientMesh)
-	{
-		GetMesh()->SetSkeletalMesh(ClientMesh);
-	}
-}
-
-void ASYH_MultiPlayer::OnRep_ServerAnim()
-{
-	if (ServerAnim)
-	{
-		GetMesh()->SetAnimInstanceClass(ServerAnim);
-	}
-}
-
-void ASYH_MultiPlayer::OnRep_ClientAnim()
-{
-	if (ClientAnim)
-	{
-		GetMesh()->SetAnimInstanceClass(ClientAnim);
-	}
-}
-
-void ASYH_MultiPlayer::ServerRPC_MeshAndAnim_Implementation(USkeletalMesh* InMesh, TSubclassOf<UAnimInstance> InAnim)
-{
-	// 서버에서 클라이언트가 요청한 메쉬와 애니메이션을 복제 변수에 설정
-	if (InMesh)
-	{
-		ClientMesh = InMesh;
-		OnRep_ClientMesh();
-	}
-
-	if (InAnim)
-	{
-		ClientAnim = InAnim;
-		OnRep_ClientAnim();
-	}
-}
-
-bool ASYH_MultiPlayer::ServerRPC_MeshAndAnim_Validate(USkeletalMesh* InMesh, TSubclassOf<UAnimInstance> InAnim)
-{
-	return true;
 }
 
 void ASYH_MultiPlayer::Move(const FInputActionValue& Value)
@@ -923,6 +932,7 @@ void ASYH_MultiPlayer::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty
 	DOREPLIFETIME(ASYH_MultiPlayer,isTime);
 	DOREPLIFETIME(ASYH_MultiPlayer,isWidget);
 	DOREPLIFETIME(ASYH_MultiPlayer,isReset);
+	DOREPLIFETIME(ASYH_MultiPlayer,PlayerName);
 	DOREPLIFETIME(ASYH_MultiPlayer,ServerMesh);
 	DOREPLIFETIME(ASYH_MultiPlayer,ServerAnim);
 	DOREPLIFETIME(ASYH_MultiPlayer,ClientMesh);

@@ -5,6 +5,7 @@
 
 #include "Alchemist/CHJ/Guide_GameInstance.h"
 #include "Components/Button.h"
+#include "Components/EditableText.h"
 #include "Kismet/GameplayStatics.h"
 
 
@@ -42,6 +43,7 @@ void USYH_StartWidget::OnClickedCreateButt()
 		FInputModeGameOnly input;
 		PlayerController->SetInputMode(input);
 		PlayerController->SetShowMouseCursor(false);
+		GameInstance->PlayerName = Edit_PlayerName->GetText().ToString();
 		GameInstance->Create();
 	}
 }
@@ -53,6 +55,7 @@ void USYH_StartWidget::OnClickedJoinButt()
 		FInputModeGameOnly input;
     	PlayerController->SetInputMode(input);
     	PlayerController->SetShowMouseCursor(false);
+		GameInstance->PlayerName = Edit_PlayerName->GetText().ToString();
 		GameInstance->Find();
 	}
 }
