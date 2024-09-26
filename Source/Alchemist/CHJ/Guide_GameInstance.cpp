@@ -129,7 +129,7 @@ void UGuide_GameInstance::Create()
 				FOnlineSessionSettings SessionSettings;
 				if (IOnlineSubsystem::Get()->GetSubsystemName() == "NULL") // OnlineSubsystem 이 NULL 로 세팅되면 (NULL : 로컬 연결 설정)
 				{
-					SessionSettings.bIsLANMatch = true; // true 시 : 같은 네트워크에 있는 사람을 찾음 (로컬 연결 설정) 
+					SessionSettings.bIsLANMatch = false; // true 시 : 같은 네트워크에 있는 사람을 찾음 (로컬 연결 설정) 
 				}
 
 				else
@@ -166,12 +166,14 @@ void UGuide_GameInstance::Find()
 
 void UGuide_GameInstance::Join()
 {
+	UE_LOG(LogTemp, Warning, TEXT("Join"));
 	IOnlineSubsystem* OnlineSubsystem = IOnlineSubsystem::Get();
 	if(OnlineSubsystem)
 	{
 		IOnlineSessionPtr SessionInterface = OnlineSubsystem->GetSessionInterface();
 		if(SessionInterface.IsValid() && SessionSearch->SearchResults.Num()>0)
 		{
+			UE_LOG(LogTemp, Warning, TEXT("Join"));
 			SessionInterface->JoinSession(0, FName("Alpha"), SessionSearch->SearchResults[0]);
 		}
 	}
