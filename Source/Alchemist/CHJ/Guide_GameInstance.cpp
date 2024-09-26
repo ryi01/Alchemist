@@ -30,6 +30,7 @@ UGuide_GameInstance::UGuide_GameInstance()
 	 		DefineItem.Add(*itemData);
 	 	}
 	 }
+	
 }
 
 
@@ -62,8 +63,6 @@ void UGuide_GameInstance::Init()
 		}
 	}
 
-	// 항아리 찾아서 넣어두기
-	
 }
 
 void UGuide_GameInstance::TakeItemData(int itemIdx)
@@ -255,6 +254,9 @@ void UGuide_GameInstance::OnDestroySessionComplete(FName SessionName, bool bWasS
 		UE_LOG(LogTemp, Warning, TEXT("Failed to destroy session: %s"), *SessionName.ToString());
 	}
 }
+
+
+
 // 보낼 때
 FString UGuide_GameInstance::StringBase64Encode(const FString& str)
 {
