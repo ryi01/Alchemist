@@ -81,18 +81,33 @@ void USYH_PlayerAnim::AnimNotify_CameraEnd()
 void USYH_PlayerAnim::AnimNotify_WinEnd()
 {
 	Multi_me->IsWin = false;
+	if(Multi_me->Controller != nullptr) player = CastChecked<APlayerController>(Multi_me->Controller);
+	if(player)
+	{
+		player->SetInputMode(FInputModeGameOnly());
+	}
 	Multi_me->GetCharacterMovement()->bUseControllerDesiredRotation = true;
 }
 
 void USYH_PlayerAnim::AnimNotify_LoseEnd()
 {
 	Multi_me->IsLose = false;
+	if(Multi_me->Controller != nullptr) player = CastChecked<APlayerController>(Multi_me->Controller);
+	if(player)
+	{
+		player->SetInputMode(FInputModeGameOnly());
+	}
 	Multi_me->GetCharacterMovement()->bUseControllerDesiredRotation = true;
 }
 
 void USYH_PlayerAnim::AnimNotify_SameEnd()
 {
 	Multi_me->IsSame = false;
+	if(Multi_me->Controller != nullptr) player = CastChecked<APlayerController>(Multi_me->Controller);
+	if(player)
+	{
+		player->SetInputMode(FInputModeGameOnly());
+	}
 	Multi_me->GetCharacterMovement()->bUseControllerDesiredRotation = true;
 }
 

@@ -107,7 +107,6 @@ void USYH_QuizWidgetResult::DeleteWinUI()
 {
 	MultiPlayer->IsWin = true;
 	MultiPlayer->TargetPlayer->IsLose = true;
-	PlayerController->SetInputMode(FInputModeGameOnly());
 	UGameplayStatics::PlaySound2D(GetWorld(),WinSound);
 	RemoveFromParent();
 	MultiPlayer->interactionComp->CreateMainWidget();
@@ -117,7 +116,6 @@ void USYH_QuizWidgetResult::DeleteLoseUI()
 {
 	MultiPlayer->IsLose = true;
 	MultiPlayer->TargetPlayer->IsWin = true;
-	PlayerController->SetInputMode(FInputModeGameOnly());
 	UGameplayStatics::PlaySound2D(GetWorld(),LoseSound);
 	RemoveFromParent();
 	MultiPlayer->interactionComp->CreateMainWidget();
@@ -126,7 +124,6 @@ void USYH_QuizWidgetResult::DeleteUI()
 {
 	MultiPlayer->IsSame = true;
 	MultiPlayer->TargetPlayer->IsSame = true;
-	PlayerController->SetInputMode(FInputModeGameOnly());
 	RemoveFromParent();
 	MultiPlayer->interactionComp->CreateMainWidget();
 }
