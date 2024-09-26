@@ -106,4 +106,7 @@ public:
 
 	UPROPERTY()
 	class UPlayerInteractionComponent* player;
+
+	UPROPERTY()
+	class UWidgetComponent* widComp;
 };

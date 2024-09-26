@@ -45,7 +45,7 @@ void AKMK_HttpActorWithAI::ReqChatBot(FString json)
 	MyData = json;
 	data.Add(TEXT("key"), json);
 
-	req->SetURL("https://absolute-logically-hagfish.ngrok-free.app/posttest");
+	req->SetURL("https://singular-swine-deeply.ngrok-free.app/posttest");
 	req->SetVerb(TEXT("POST"));
 	req->SetHeader(TEXT("content-type"), TEXT("application/json"));
 	req->SetContentAsString(UKMK_JsonParseLib::MakeJson(data));
@@ -78,7 +78,7 @@ void AKMK_HttpActorWithAI::ReqElement(FString data, UKMK_GrabActorComp* comp)
 	PotComp = comp;
 	TMap<FString,FString> maps;
 	maps.Add(TEXT("key"),data);
-	req->SetURL("https://absolute-logically-hagfish.ngrok-free.app/basic");
+	req->SetURL("https://singular-swine-deeply.ngrok-free.app/basic");
 	req->SetVerb(TEXT("POST"));
 	req->SetHeader(TEXT("content-type"), TEXT("application/json"));
 	req->SetContentAsString(UKMK_JsonParseLib::MakeJson(maps));
@@ -119,7 +119,7 @@ void AKMK_HttpActorWithAI::ReqInitInfo()
 	// HTTP 모듈 생성
 	FHttpModule& httpModule = FHttpModule::Get();
 	TSharedRef<IHttpRequest> req = httpModule.CreateRequest();
-	req->SetURL("https://absolute-logically-hagfish.ngrok-free.app/base_info");
+	req->SetURL("https://singular-swine-deeply.ngrok-free.app/base_info");
 	req->SetVerb(TEXT("GET"));
 	req->SetHeader(TEXT("content-type"),TEXT("application/json"));
 	// 응답받을 함수를 연결
@@ -154,7 +154,7 @@ void AKMK_HttpActorWithAI::ReqRecommandEle(FString data)
 	TMap<FString,FString> maps;
 	maps.Add(TEXT("key"),data);
 
-	req->SetURL("https://absolute-logically-hagfish.ngrok-free.app/similar_elements");
+	req->SetURL("https://singular-swine-deeply.ngrok-free.app/similar_elements");
 	req->SetVerb(TEXT("POST"));
 	req->SetHeader(TEXT("content-type"),TEXT("application/json"));
 	req->SetContentAsString(UKMK_JsonParseLib::MakeJson(maps));
@@ -184,6 +184,7 @@ void AKMK_HttpActorWithAI::OnResRecommandEle(FHttpRequestPtr Request,FHttpRespon
 				auto* widComp = PotComp->GetOwner()->FindComponentByClass<UWidgetComponent>();
 				if ( widComp )
 				{
+					widComp->SetRenderInMainPass(true);
 					auto* mainPotWid = Cast<UKMK_MakeEleWidget>(widComp->GetWidget());
 					if ( mainPotWid )
 					{
