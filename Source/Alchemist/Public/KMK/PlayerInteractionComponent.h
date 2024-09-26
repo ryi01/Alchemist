@@ -73,4 +73,12 @@ public:
 	class UKMK_DeskComponent* desk;
 
 	bool bMakeMainWidget = false;
+
+	// ===========================================================
+	UFUNCTION(Server, Reliable)
+	void ServerRPCSectionOpen(class ASectionActor* target);
+	UFUNCTION(NetMulticast, Reliable)
+	void MultiRPCSecionOpen(class ASectionActor* target);
+
+	void RemoveCollision(class ASectionActor* target);
 };

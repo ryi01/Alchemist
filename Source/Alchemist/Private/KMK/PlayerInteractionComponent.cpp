@@ -155,8 +155,8 @@ void UPlayerInteractionComponent::OnMyActionInteraction(const FInputActionValue&
 					if ( comp )
 					{
 						// 태그가 포함되면 서버에게 섹션의 isPass를 변경하라고 알려줘야함
-						comp->ServerRPCPassSection(GetOwner());
-						GEngine->AddOnScreenDebugMessage(4, 1, FColor::Yellow, FString::Printf(TEXT("%s"), *comp->GetName()));
+                        ServerRPCSectionOpen(comp);
+                        comp->comp->SetVisibility(false);
                         // comp->SetCollisionMesh();
 						me->ChangeSpeed();
 					}
@@ -225,6 +225,29 @@ void UPlayerInteractionComponent::DeleteMainWidget()
 	if ( missionWidget )
 	{
 		missionWidget->RemoveFromParent();
+	}
+}
+
+void UPlayerInteractionComponent::ServerRPCSectionOpen_Implementation(class ASectionActor* target)
+{
+	if ( me->HasAuthority() )
+	{
+		MultiRPCSecionOpen(target);
+	}
+}
+
+void UPlayerInteractionComponent::MultiRPCSecionOpen_Implementation(class ASectionActor* target)
+{
+	UE_LOG(LogTemp,Warning,TEXT("MultiRPCSecionOpen called"));
+	RemoveCollision(target);
+}
+
+void UPlayerInteractionComponent::RemoveCollision(class ASectionActor* target)
+{
+	if ( target && target->comp && me )
+	{
+		target->comp->IgnoreActorWhenMoving(me,true);
+		me->MoveIgnoreActorAdd(target);
 	}
 }
 

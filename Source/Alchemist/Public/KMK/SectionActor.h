@@ -27,12 +27,6 @@ public:
 	bool isCollisionOn = false;
 	UPROPERTY(BlueprintReadWrite)
 	class UStaticMeshComponent* comp;
-	UFUNCTION(NetMulticast, Reliable)
-	void MultiRPCPlayerIgnore(class AActor* player);
-	UFUNCTION()
-	void SetPlayerIgnore(class AActor* player);
-	UFUNCTION(Server,Reliable)
-    void ServerRPCPassSection( class AActor* player);
 
 	FName myTag;
 
