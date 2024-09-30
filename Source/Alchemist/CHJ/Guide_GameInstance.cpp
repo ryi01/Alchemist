@@ -127,15 +127,16 @@ void UGuide_GameInstance::Create()
 			else
 			{
 				FOnlineSessionSettings SessionSettings;
-				if (IOnlineSubsystem::Get()->GetSubsystemName() == "NULL") // OnlineSubsystem 이 NULL 로 세팅되면 (NULL : 로컬 연결 설정)
-				{
-					SessionSettings.bIsLANMatch = false; // true 시 : 같은 네트워크에 있는 사람을 찾음 (로컬 연결 설정) 
-				}
+				//if (IOnlineSubsystem::Get()->GetSubsystemName() == "NULL") // OnlineSubsystem 이 NULL 로 세팅되면 (NULL : 로컬 연결 설정)
+				//{
+				//	SessionSettings.bIsLANMatch = false; // true 시 : 같은 네트워크에 있는 사람을 찾음 (로컬 연결 설정) 
+				//}
 
-				else
-				{
-					SessionSettings.bIsLANMatch = false; // false 시 : 다른 네트워크와 연결 가능하도록 함. (Steam, XBox 등 공식플랫폼 연결 설정)
-				}
+				//else
+				//{
+				//	SessionSettings.bIsLANMatch = false; // false 시 : 다른 네트워크와 연결 가능하도록 함. (Steam, XBox 등 공식플랫폼 연결 설정)
+				//}
+				SessionSettings.bIsLANMatch = false; // false 시 : 다른 네트워크와 연결 가능하도록 함. (Steam, XBox 등 공식플랫폼 연결 설정)
 				SessionSettings.NumPublicConnections = 5;// 플레이어 수
 				SessionSettings.bShouldAdvertise = true;// 온라인에서 세션을 볼 수 있도록함. '광고한다'
 				SessionSettings.bUsesPresence = true;// 로비기능을 활성화한다. (Host 하려면 필요)
